@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Facelocation</string>
+    <string name="localing">ЛОКАЛІЗУЙСЯ</string>
+    <string name="tos_hint">Скориставшись цим додатком Ви\n погоджуєтесь з політикою надання послуг</string>
+    <string name="main_descriptor">дозволяє легко планувати події,\n та заохочувати на них людей</string>
+    <string name="rules">Правила надання послуг та\n користування мобільним додатком</string>
+    <string name="app_name_uppercase">FACELOCATION</string>
+    <string name="tos_cancel">НЕ ПОГОДЖУЮСЬ</string>
+    <string name="tos_accept">ПОГОДЖУЮСЬ</string>
+    <string name="title_activity_maps">Map</string>
+</resources>
