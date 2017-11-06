@@ -49,6 +49,8 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    //Preparation for a future work depends on tos choice
+    //if needed
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     }
