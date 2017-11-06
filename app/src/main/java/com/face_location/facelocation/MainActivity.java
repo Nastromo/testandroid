@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -57,27 +58,32 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+//    Creates 3 right dots menu with options from file menu.xml
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action1) {
-            return true;
-        }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.menu, menu);
+//        return true;
+//    }
 
-        return super.onOptionsItemSelected(item);
-    }
+
+//    Handle clicks on options in 3 right dots menu
+//    The action bar will automatically handle clicks on the Home/Up button, so long
+//    as you specify a parent activity in AndroidManifest.xml.
+
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//
+//        int id = item.getItemId();
+//
+//        if (id == R.id.action1) {
+//            return true;
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -85,17 +91,20 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.my_events) {
+            Toast.makeText(this, "This is my Toast message!", Toast.LENGTH_LONG).show();
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.visited_events) {
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.my_locations) {
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.create_event) {
 
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.add_location) {
+
+        } else if (id == R.id.support) {
+
+        } else if (id == R.id.exit) {
 
         }
 
