@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_camera"
+            android:title="Події, що я створив" />
+        <item
+            android:id="@+id/nav_gallery"
+            android:title="Події, які я відвідав" />
+        <item
+            android:id="@+id/nav_slideshow"
+            android:title="Локації, що я створив" />
+        <item
+            android:id="@+id/nav_manage"
+            android:title="Створити нову подію" />
+        <item
+            android:id="@+id/nav_send"
+            android:title="Додати нову локацію" />
+        <item
+            android:id="@+id/nav_manage3"
+            android:title="Вийти" />
+    </group>
+
+    <item android:title="Face-Location.com">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:title="сервіс, який об’єднує людей навколо хороших і цікавих ідей!" />
+        </menu>
+    </item>
+
+</menu>
