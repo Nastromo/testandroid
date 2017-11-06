@@ -17,7 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".StartActivity"
             android:screenOrientation="portrait"
             android:theme="@style/GreyStatusBar">
             <intent-filter>
@@ -30,7 +30,6 @@
             android:name=".TermsOfUse"
             android:screenOrientation="portrait"
             android:theme="@style/GreyStatusBar" />
-        <activity android:name=".ForTests" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -44,14 +43,14 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".MapsActivity"
-            android:label="@string/title_activity_maps"
+            android:name=".Map"
+            android:label="@string/title_activity_map"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"></activity>
 
         <activity
-            android:name=".MenuActivity"
-            android:label="@string/title_activity_menu"
+            android:name=".MainActivity"
+            android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
