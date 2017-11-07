@@ -11,6 +11,8 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -22,7 +24,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
+        implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, View.OnClickListener {
 
     private GoogleMap mMap;
 
@@ -62,13 +64,24 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
+//  Geting header with all elemnts in it. Then finding elemtn by ID and setListener
+        View header = navigationView.getHeaderView(0);
+
+        ImageView myProfileImageView = (ImageView) header.findViewById(R.id.myProfileImageView);
+        myProfileImageView.setOnClickListener(this);
+
+        TextView editMyProfileTextView = (TextView) header.findViewById(R.id.editMyProfileTextView);
+        editMyProfileTextView.setOnClickListener(this);
+        
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
+//  Add a marker in Sydney and move the camera
         LatLng lviv = new LatLng(49.84, 24.03);
         mMap.addMarker(new MarkerOptions()
                 .position(lviv)
@@ -134,11 +147,23 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.support) {
 
         } else if (id == R.id.exit) {
-
+            Toast.makeText(this, "You clicked on Exit!", Toast.LENGTH_LONG).show();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.myProfileImageView:
+                Toast.makeText(this, "You clicked on UserImage!", Toast.LENGTH_LONG).show();
+                break;
+            case R.id.editMyProfileTextView:
+                Toast.makeText(this, "You clicked on EditMyProfile Text!", Toast.LENGTH_LONG).show();
+                break;
+        }
     }
 }
