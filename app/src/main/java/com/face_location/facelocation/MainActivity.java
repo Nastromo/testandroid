@@ -37,6 +37,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         OnMapReadyCallback,
@@ -102,6 +103,7 @@ public class MainActivity extends AppCompatActivity
 
         TextView editMyProfileTextView = (TextView) header.findViewById(R.id.editMyProfileTextView);
         editMyProfileTextView.setOnClickListener(this);
+
     }
 
     @Override
