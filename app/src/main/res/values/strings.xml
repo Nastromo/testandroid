@@ -22,4 +22,8 @@
     <string name="bottom_menu_title">Face-Location.com</string>
     <string name="subtext">сервіс, який об’єднує людей\n навколо хороших і цікавих ідей!</string>
     <string name="default_location">Маркер у Львові</string>
+    <string name="permission_needed">Ваше місце розташування</string>
+    <string name="location_permission_text">Щоб використовувати Facelocation дозвольте доступ до вашої локації</string>
+    <string name="my_location">Моя позиція</string>
+    <string name="permission_denied">Доступ не надано</string>
 </resources>
