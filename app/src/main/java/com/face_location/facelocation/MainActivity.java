@@ -1,7 +1,9 @@
 package com.face_location.facelocation;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
@@ -17,6 +19,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -24,10 +27,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -36,6 +44,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
 public class MainActivity extends AppCompatActivity
@@ -48,14 +58,19 @@ public class MainActivity extends AppCompatActivity
 
     private GoogleMap mMap;
     private final LatLng mDefaultLocation = new LatLng(49.84, 24.03);
-    private static final int DEFAULT_ZOOM = 17;
+    private static final int DEFAULT_ZOOM = 15;
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+    int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
     LocationRequest mLocationRequest;
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
     Marker mCurrLocationMarker;
     View mapView; //Padding the My location button
     LatLng latLng;
+    TextView placeName;
+    TextView placeAddress;
+    String placeNameString;
+    String placeAddressString;
 
 
     @Override
@@ -103,6 +118,9 @@ public class MainActivity extends AppCompatActivity
 
         TextView editMyProfileTextView = (TextView) header.findViewById(R.id.editMyProfileTextView);
         editMyProfileTextView.setOnClickListener(this);
+
+        placeName = (TextView) findViewById(R.id.placeName);
+        placeAddress = (TextView) findViewById(R.id.placeAddress);
 
     }
 
@@ -183,10 +201,11 @@ public class MainActivity extends AppCompatActivity
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         }
 
-        //Get the last known coordinates. Lust know coordinat updates every 1 sec
+        //Get the last known coordinates. Lust know coordinates updates every 1 sec
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (mLastLocation != null) {
             LatLng lastLatLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lastLatLng, DEFAULT_ZOOM));
         }
     }
@@ -305,29 +324,39 @@ public class MainActivity extends AppCompatActivity
 
 //    Creates 3 right dots menu with options from file menu.xml
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.menu, menu);
-//        return true;
-//    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
 
 
 //    Handle clicks on options in 3 right dots menu
 //    The action bar will automatically handle clicks on the Home/Up button, so long
 //    as you specify a parent activity in AndroidManifest.xml.
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//
-//        int id = item.getItemId();
-//
-//        if (id == R.id.action1) {
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        if (id == R.id.geo_search) {
+            //Getting autocomplete overlay for geo search
+            try {
+                Intent intent =
+                        new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY)
+                                .build(this);
+                startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
+            } catch (GooglePlayServicesRepairableException e) {
+                // TODO: Handle the error.
+            } catch (GooglePlayServicesNotAvailableException e) {
+                // TODO: Handle the error.
+            }
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -367,5 +396,37 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText(this, "You clicked on EditMyProfile Text!", Toast.LENGTH_LONG).show();
                 break;
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                Place place = PlaceAutocomplete.getPlace(this, data);
+
+                placeNameString = place.getName().toString();
+                placeAddressString =  place.getAddress().toString();
+
+                placeName.setText(placeNameString);
+                placeAddress.setText(placeAddressString);
+
+                LatLng toLatLng = place.getLatLng();
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(toLatLng, DEFAULT_ZOOM));
+
+
+            } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
+                Status status = PlaceAutocomplete.getStatus(this, data);
+                // TODO: Handle the error.
+                Toast.makeText(this, "An error!!!", Toast.LENGTH_LONG).show();
+
+            } else if (resultCode == RESULT_CANCELED) {
+                // The user canceled the operation.
+            }
+        }
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 }

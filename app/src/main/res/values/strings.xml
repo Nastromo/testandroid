@@ -11,7 +11,7 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="action_settings">Заготовка</string>
+    <string name="geo_search">Пошук</string>
     <string name="my_events">Події, що я створив</string>
     <string name="visited_events">Події, які я відвідав</string>
     <string name="my_locations">Локації, що я створив</string>
