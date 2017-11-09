@@ -5,30 +5,35 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
-            android:title="Події, що я створив" />
+            android:id="@+id/my_events"
+            android:title="@string/my_events" />
         <item
-            android:id="@+id/nav_gallery"
-            android:title="Події, які я відвідав" />
+            android:id="@+id/visited_events"
+            android:title="@string/visited_events" />
         <item
-            android:id="@+id/nav_slideshow"
-            android:title="Локації, що я створив" />
+            android:id="@+id/my_locations"
+            android:title="@string/my_locations" />
         <item
-            android:id="@+id/nav_manage"
-            android:title="Створити нову подію" />
+            android:id="@+id/create_event"
+            android:title="@string/create_event" />
         <item
-            android:id="@+id/nav_send"
-            android:title="Додати нову локацію" />
+            android:id="@+id/add_location"
+            android:title="@string/add_location" />
         <item
-            android:id="@+id/nav_manage3"
-            android:title="Вийти" />
+            android:id="@+id/support"
+            android:title="@string/support" />
+        <item
+            android:id="@+id/exit"
+            android:title="@string/exit" />
     </group>
 
-    <item android:title="Face-Location.com">
+    <item
+        android:id="@+id/bottom_menu_title"
+        android:title="@string/bottom_menu_title">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:title="сервіс, який об’єднує людей навколо хороших і цікавих ідей!" />
+                android:id="@+id/subtext"
+                android:title="@string/subtext" />
         </menu>
     </item>
 

@@ -41,26 +41,26 @@ public class Map extends AppCompatActivity implements OnMapReadyCallback {
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        LatLng lviv = new LatLng(49.84, 24.03);
+        mMap.addMarker(new MarkerOptions().position(lviv).title("@strings/default_Location"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lviv, 10));
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//         Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.main, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//         Handle action bar item clicks here. The action bar will
+//         automatically handle clicks on the Home/Up button, so long
+//         as you specify a parent activity in AndroidManifest.xml.
+//        int id = item.getItemId();
+//
+//        noinspection SimplifiableIfStatement
 //        if (id == R.id.action_camera) {
 //
 //            // Do something
@@ -71,7 +71,7 @@ public class Map extends AppCompatActivity implements OnMapReadyCallback {
 //            // Do something
 //            return true;
 //        }
-
-        return super.onOptionsItemSelected(item);
-    }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 }
