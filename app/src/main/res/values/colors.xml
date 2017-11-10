@@ -11,4 +11,8 @@
     <color name="colorYellow">#F8E81C</color>
     <color name="colorAlphaGrey">#7b898989</color>
     <color name="transparent">#00595fe8</color>
+    <color name="colorPrimaryMoreLighter">#5B61EB</color>
+    <color name="title_color_for_location_adding">#F8E81C</color>
+    <color name="stroke">#9296F8</color>
+    <color name="fillDark">#7D81E9</color>
 </resources>

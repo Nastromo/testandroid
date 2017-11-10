@@ -26,4 +26,14 @@
     <string name="location_permission_text">Щоб використовувати Facelocation дозвольте доступ до вашої локації</string>
     <string name="my_location">Моя позиція</string>
     <string name="permission_denied">Доступ не надано</string>
+    <string name="title_activity_new_location">NewLocation</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="logo">Logo</string>
+    <string name="back">Назад</string>
+    <string name="titleForNewLocationAdding">Додати нову локацію</string>
+    <string name="enter_title_location_tip">Вкажіть назву локації</string>
+    <string name="enter_location_name">Назва локації</string>
+    <string name="chose_photo">Додайте фото</string>
+    <string name="chose_photo_gallery">ВИБРАТИ ФОТО ЛОКАЦІЇ</string>
 </resources>

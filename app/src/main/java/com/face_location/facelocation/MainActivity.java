@@ -10,7 +10,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
@@ -95,8 +94,11 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Заготовка для создать Локацию", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent newLocation = new Intent(getApplicationContext(), NewLocation.class);
+                startActivity(newLocation);
+
+//                Snackbar.make(view, "Заготовка для создать Локацию", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
             }
         });
 
