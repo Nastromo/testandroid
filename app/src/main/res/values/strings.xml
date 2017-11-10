@@ -36,4 +36,5 @@
     <string name="enter_location_name">Назва локації</string>
     <string name="chose_photo">Додайте фото</string>
     <string name="chose_photo_gallery">ВИБРАТИ ФОТО ЛОКАЦІЇ</string>
+    <string name="forward">ПРОДОВЖИТИ</string>
 </resources>

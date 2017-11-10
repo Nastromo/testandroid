@@ -60,6 +60,9 @@ public class NewLocation extends AppCompatActivity {
 //            }
 //        });
 
+        TextView backButtonText = (TextView) findViewById(R.id.backButtonText);
+        backButtonText.setText(getString(R.string.back).toUpperCase());
+
     }
 
     @Override
@@ -119,10 +122,7 @@ public class NewLocation extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
             View rootView = inflater.inflate(R.layout.fragment_new_location, container, false);
-
-            TextView backButtonText = (TextView) rootView.findViewById(R.id.backButtonText);
 //            backButtonText.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-            backButtonText.setText(getString(R.string.back).toUpperCase());
 
             final EditText newLocationTitle = (EditText) rootView.findViewById(R.id.newLocationTitle);
 
