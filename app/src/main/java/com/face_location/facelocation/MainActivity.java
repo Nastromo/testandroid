@@ -56,10 +56,10 @@ public class MainActivity extends AppCompatActivity
         LocationListener {
 
     private GoogleMap mMap;
-    private final LatLng mDefaultLocation = new LatLng(49.84, 24.03);
-    private static final int DEFAULT_ZOOM = 15;
+    static final LatLng mDefaultLocation = new LatLng(49.84, 24.03);
+    static final int DEFAULT_ZOOM = 15;
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
-    int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
+    static int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
     LocationRequest mLocationRequest;
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
@@ -94,7 +94,9 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent newLocation = new Intent(getApplicationContext(), AddLocationFirstFragment.class);
+
+                //TODO Delete add location fragments before realece if needed
+                Intent newLocation = new Intent(getApplicationContext(), AddLocationFirstActivity.class);
                 startActivity(newLocation);
 
 //                Snackbar.make(view, "Заготовка для создать Локацию", Snackbar.LENGTH_LONG)
@@ -230,7 +232,7 @@ public class MainActivity extends AppCompatActivity
         latLng = new LatLng(location.getLatitude(), location.getLongitude());
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
-        markerOptions.title("Моя позиція");
+        markerOptions.title(getString(R.string.my_location));
         markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker));
         mCurrLocationMarker = mMap.addMarker(markerOptions);
 
@@ -347,7 +349,7 @@ public class MainActivity extends AppCompatActivity
             //Getting autocomplete overlay for geo search
             try {
                 Intent intent =
-                        new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY)
+                        new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN) //TODO remove this comment before Release: don't change MODE_FULLSCREEN on MODE_OVERLAY
                                 .build(this);
                 startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
             } catch (GooglePlayServicesRepairableException e) {
@@ -406,11 +408,13 @@ public class MainActivity extends AppCompatActivity
             if (resultCode == RESULT_OK) {
                 Place place = PlaceAutocomplete.getPlace(this, data);
 
-                placeNameString = place.getName().toString();
-                placeAddressString =  place.getAddress().toString();
-
-                placeName.setText(placeNameString);
-                placeAddress.setText(placeAddressString);
+                //TODO Delete this block off code
+                // Uncomment this if you need Location Title and details
+//                placeNameString = place.getName().toString();
+//                placeAddressString =  place.getAddress().toString();
+//
+//                placeName.setText(placeNameString);
+//                placeAddress.setText(placeAddressString);
 
                 LatLng toLatLng = place.getLatLng();
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(toLatLng, DEFAULT_ZOOM));
@@ -427,6 +431,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    //Set fonts for activity
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));

@@ -61,11 +61,20 @@
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".AddLocationFirstFragment"
-            android:windowSoftInputMode="adjustResize"
-            android:label="@string/title_activity_new_location"
-            android:theme="@style/AppThemeScroll" />
+
+        <!-- Return this blocj if fragments need, else delete before release -->
+        <!--
+           <activity
+           android:name=".AddLocationFirstFragment"
+           android:windowSoftInputMode="adjustResize"
+           android:label="@string/title_activity_new_location"
+           android:theme="@style/AppThemeScroll" />
+        -->
+        <!-- TODO android:windowSoftInputMode="adjustResize" - makes content jump under keyboard -->
+        <activity android:name=".AddLocationFirstActivity" />
+        <activity android:name=".AddLocationSecondActivity" />
+        <activity android:name=".AddLocationThirdActivity" />
+        <activity android:name=".AddLocationFourthActivity"></activity>
     </application>
 
 </manifest>

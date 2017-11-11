@@ -30,11 +30,18 @@
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="logo">Logo</string>
-    <string name="back">Назад</string>
+    <string name="back">НАЗАД</string>
     <string name="titleForNewLocationAdding">Додати нову локацію</string>
     <string name="enter_title_location_tip">Вкажіть назву локації</string>
     <string name="enter_location_name">Назва локації</string>
     <string name="chose_photo">Додайте фото</string>
     <string name="chose_photo_gallery">ВИБРАТИ ФОТО ЛОКАЦІЇ</string>
     <string name="forward">ПРОДОВЖИТИ</string>
+    <string name="title_activity_maps_activityiiiii">Map</string>
+    <string name="something_about">розкажіть щось про це місце…</string>
+    <string name="something_about_tip">Вкажіть опис локації</string>
+    <string name="add_concatc">Контакт (не обовязково)</string>
+    <string name="do_public">Опублікувати локацію?</string>
+    <string name="contact_tip">контакт</string>
+    <string name="else_text">інакше буде збережено у чернетках</string>
 </resources>

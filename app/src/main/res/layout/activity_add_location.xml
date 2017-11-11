@@ -41,13 +41,12 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="29dp"
-            android:text="TextView"
+            android:text="@string/back"
             android:textColor="@color/colorWhite"
             android:textSize="13sp"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/backButtonIcon"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="@string/back" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/forwardButtonIcon"

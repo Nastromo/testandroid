@@ -39,7 +39,7 @@ public class AddLocationFirstFragment extends AppCompatActivity implements View.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_location);
+        setContentView(R.layout.activity_add_location);
 
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
@@ -92,7 +92,7 @@ public class AddLocationFirstFragment extends AppCompatActivity implements View.
                     mViewPager.setCurrentItem(currentPage + 1, true);
                     break;
                 } else {
-                    //TODO logic for final create lovation button
+                    //TODO logic for final create location button
                     onBackPressed();
                     break;
                 }
@@ -207,14 +207,14 @@ public class AddLocationFirstFragment extends AppCompatActivity implements View.
 
             switch (position){
                 case 0:
-                    PlaceholderFragment stepFirst = new PlaceholderFragment();
-                    return stepFirst;
+                    PlaceholderFragment stepOne = new PlaceholderFragment();
+                    return stepOne;
                 case 1:
-                    AddLocationThirdFragment thr = new AddLocationThirdFragment();
-                    return  thr;
+                    AddLocationSecondFragment stepTwo = new AddLocationSecondFragment();
+                    return  stepTwo;
                 case 2:
-                    AddLocationSecondFragment second = new AddLocationSecondFragment();
-                    return  second;
+                    AddLocationThirdFragment stepThree = new AddLocationThirdFragment();
+                    return  stepThree;
 
             }
             return null;
