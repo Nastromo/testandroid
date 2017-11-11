@@ -15,7 +15,8 @@ import android.widget.TextView;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class NewLocation extends AppCompatActivity {
+public class NewLocation extends AppCompatActivity implements View.OnClickListener{
+
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -31,6 +32,8 @@ public class NewLocation extends AppCompatActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+    final int QUANTITY_VIEWPAGERS = 3;
+    private static int currentPage;
 
 
     @Override
@@ -60,11 +63,51 @@ public class NewLocation extends AppCompatActivity {
 //            }
 //        });
 
-        TextView backButtonText = (TextView) findViewById(R.id.backButtonText);
-        backButtonText.setText(getString(R.string.back).toUpperCase());
+        TextView backButton = (TextView) findViewById(R.id.backButtonText);
+        backButton.setText(getString(R.string.back).toUpperCase());
+        backButton.setOnClickListener(this);
+
+
+        TextView forwardButton = (TextView) findViewById(R.id.forwardButtonText);
+        forwardButton.setOnClickListener(this);
+
+        PageListener pageListener = new PageListener();
+        mViewPager.addOnPageChangeListener(pageListener);
 
     }
 
+    //Gets the index of the currently displayed fragment
+    private static class PageListener extends ViewPager.SimpleOnPageChangeListener {
+        public void onPageSelected(int position) {
+            currentPage = position;
+        }
+    }
+
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.forwardButtonText:
+                if(currentPage != QUANTITY_VIEWPAGERS - 1){
+                    mViewPager.setCurrentItem(currentPage + 1, true);
+                    break;
+                } else {
+                    //TODO logic for final create lovation button
+                    onBackPressed();
+                    break;
+                }
+            case R.id.backButtonText:
+                if (currentPage == 0){
+                    onBackPressed();
+                    break;
+                } else {
+                    mViewPager.setCurrentItem(currentPage - 1, true);
+                    break;
+                }
+        }
+    }
+
+    //Set fonts for activity
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
@@ -118,8 +161,12 @@ public class NewLocation extends AppCompatActivity {
             return fragment;
         }
 
+
+        //First ViewPager fragment
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+            currentPage = 0; //That's for every time when zero index fragment starts current page takes 0
 
             View rootView = inflater.inflate(R.layout.fragment_new_location, container, false);
 //            backButtonText.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
@@ -151,14 +198,12 @@ public class NewLocation extends AppCompatActivity {
             super(fm);
         }
 
+
         @Override
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
             //return PlaceholderFragment.newInstance(position + 1);
-
-//            AddLocationSecondFragment second = new AddLocationSecondFragment();
-//            return second;
 
             switch (position){
                 case 0:
@@ -167,6 +212,9 @@ public class NewLocation extends AppCompatActivity {
                 case 1:
                     Third thr = new Third();
                     return  thr;
+                case 2:
+                    AddLocationSecondFragment second = new AddLocationSecondFragment();
+                    return  second;
 
             }
             return null;
@@ -174,8 +222,8 @@ public class NewLocation extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
-            return 2;
+            // Quantity of pages.
+            return QUANTITY_VIEWPAGERS;
         }
     }
 
