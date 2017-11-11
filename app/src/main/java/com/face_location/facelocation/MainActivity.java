@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent newLocation = new Intent(getApplicationContext(), NewLocation.class);
+                Intent newLocation = new Intent(getApplicationContext(), AddLocationFirstFragment.class);
                 startActivity(newLocation);
 
 //                Snackbar.make(view, "Заготовка для создать Локацию", Snackbar.LENGTH_LONG)

@@ -12,10 +12,10 @@ import android.view.ViewGroup;
  * Created by admin on 10.11.17.
  */
 
-public class Third extends Fragment {
+public class AddLocationThirdFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_third, container, false);
+        return inflater.inflate(R.layout.add_location_third_fragment, container, false);
     }
 }

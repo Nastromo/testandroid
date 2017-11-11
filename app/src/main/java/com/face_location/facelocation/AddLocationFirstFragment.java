@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class NewLocation extends AppCompatActivity implements View.OnClickListener{
+public class AddLocationFirstFragment extends AppCompatActivity implements View.OnClickListener{
 
 
     /**
@@ -168,7 +168,7 @@ public class NewLocation extends AppCompatActivity implements View.OnClickListen
 
             currentPage = 0; //That's for every time when zero index fragment starts current page takes 0
 
-            View rootView = inflater.inflate(R.layout.fragment_new_location, container, false);
+            View rootView = inflater.inflate(R.layout.add_location_first_fragment, container, false);
 //            backButtonText.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
 
             final EditText newLocationTitle = (EditText) rootView.findViewById(R.id.newLocationTitle);
@@ -210,7 +210,7 @@ public class NewLocation extends AppCompatActivity implements View.OnClickListen
                     PlaceholderFragment stepFirst = new PlaceholderFragment();
                     return stepFirst;
                 case 1:
-                    Third thr = new Third();
+                    AddLocationThirdFragment thr = new AddLocationThirdFragment();
                     return  thr;
                 case 2:
                     AddLocationSecondFragment second = new AddLocationSecondFragment();
