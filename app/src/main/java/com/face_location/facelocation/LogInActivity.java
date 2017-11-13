@@ -1,5 +1,6 @@
 package com.face_location.facelocation;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,7 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
     Button cancelLoginButton, successLoginButton;
     EditText userEmail, userPass;
     TextView registrationTextView;
+    public static ProgressDialog pDialog;
 
 
     @Override
@@ -42,6 +44,13 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
                 onBackPressed();
                 break;
             case R.id.successLoginButton:
+
+                //TODO delete this if don't get paid for progressbar
+                pDialog = new ProgressDialog(this);
+                pDialog.setMessage("Завантажую...");
+                pDialog.setTitle("Вхід");
+                pDialog.show();
+
                 //TODO implement login logic
                 Intent registrationFirstActivity = new Intent (this, MainActivity.class);
                 startActivity(registrationFirstActivity);

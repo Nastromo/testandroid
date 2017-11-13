@@ -77,6 +77,9 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //TODO delete this if don't get paid for progressbar
+        LogInActivity.pDialog.hide();
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         // mapView = mapFragment.getView();  //Padding the My location button
         mapFragment.getMapAsync(this);
