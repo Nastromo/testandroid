@@ -15,4 +15,7 @@
     <color name="title_color_for_location_adding">#F8E81C</color>
     <color name="stroke">#9296F8</color>
     <color name="fillDark">#7D81E9</color>
+    <color name="green">#50E3C2</color>
+    <color name="green_stroke">#2DC9A6</color>
+    <color name="text_color_dark">#5558A6</color>
 </resources>

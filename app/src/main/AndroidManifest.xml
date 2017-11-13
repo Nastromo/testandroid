@@ -19,6 +19,11 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -62,7 +67,7 @@
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar" />
 
-        <!-- Return this blocj if fragments need, else delete before release -->
+        <!-- Return this block if fragments need for swiping, else delete before release -->
         <!--
            <activity
            android:name=".AddLocationFirstFragment"
@@ -74,7 +79,12 @@
         <activity android:name=".AddLocationFirstActivity" />
         <activity android:name=".AddLocationSecondActivity" />
         <activity android:name=".AddLocationThirdActivity" />
-        <activity android:name=".AddLocationFourthActivity"></activity>
+        <activity android:name=".AddLocationFourthActivity" />
+        <activity android:name=".LogInActivity" />
+        <activity android:name=".RegistrationFirstActivity" />
+        <activity android:name=".RegistrationSecondActivity" />
+        <activity android:name=".AddLocationFifthActivity">
+        </activity>
     </application>
 
 </manifest>

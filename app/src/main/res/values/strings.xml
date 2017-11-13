@@ -44,4 +44,51 @@
     <string name="do_public">Опублікувати локацію?</string>
     <string name="contact_tip">контакт</string>
     <string name="else_text">інакше буде збережено у чернетках</string>
+    <string name="hello">Вітаємо з поверненням! Увійдіть\n у свій аккаунт</string>
+    <string name="enterEmail">Вкажіть e-mail</string>
+    <string name="enter_email_hint">ваш email@domain.com</string>
+    <string name="enter_pass">Вкажіть пароль</string>
+    <string name="pass_hint">пароль для входу</string>
+    <string name="registration">Реєстрація</string>
+    <string name="login">Увійти</string>
+    <string name="email_for_login">ця адреса буде використовуватись для входу</string>
+    <string name="next">Далі</string>
+    <string name="title_activity_login2">Sign in</string>
+    <string name="create_pass">вигадайте свій надійний пароль </string>
+    <string name="title_activity_add_location_fifth">Sign in</string>
+    <string name="create_event_title">Створити подію у цій локації?</string>
+    <string name="event_name">Назва події</string>
+    <string name="event_hint">не більше 70 символів</string>
+    <string name="required_field">це поле обовязкове для заповненя</string>
+    <string name="chose_category">Виберіть категорію</string>
+    <string name="cancel_event_creation">ВІДМІНИТИ</string>
+    <string name="create_new_event">Створити</string>
+
+    <!--Event category names-->
+    <string name="concert">концерт</string>
+    <string name="business">бізнес</string>
+    <string name="fun">розваги</string>
+    <string name="sales">акції</string>
+    <string name="sport">спорт</string>
+    <string name="meeting">зустріч</string>
+    <string name="cafe">кафе</string>
+    <string name="seminar">семінар</string>
+    <string name="confa">конференція</string>
+    <string name="training">тренінг</string>
+    
+    <string-array name="event_types">
+        <item>концерт</item>
+        <item>бізнес</item>
+        <item>розваги</item>
+        <item>акції</item>
+        <item>спорт</item>
+        <item>зустріч</item>
+        <item>кафе</item>
+        <item>семінар</item>
+        <item>конференція</item>
+        <item>тренінг</item>
+    </string-array>
+
+
+
 </resources>

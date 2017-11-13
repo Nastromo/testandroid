@@ -15,7 +15,7 @@ public class AddLocationFourthActivity extends AppCompatActivity implements View
     EditText contactsEditText;
     ImageView cancelButton;
     Switch switchDoPublic;
-    Intent mainActivity;
+    Intent stepFifth, mainActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +44,8 @@ public class AddLocationFourthActivity extends AppCompatActivity implements View
                 break;
             case R.id.createLocationReady:
                 //TODO push JSON to server | switcher and EditText field grab info
-                mainActivity = new Intent(this, MainActivity.class);
-                startActivity(mainActivity);
+                stepFifth = new Intent(this, AddLocationFifthActivity.class);
+                startActivity(stepFifth);
                 break;
             case R.id.cancelButton:
                 mainActivity = new Intent(this, MainActivity.class);
