@@ -23,7 +23,7 @@
         android:layout_height="match_parent" />
 
     <include
-        layout="@layout/location_attr"
+        layout="@layout/location_title_attr"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

@@ -39,7 +39,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.localize:
-                Intent mainActivity = new Intent(this, MainActivity.class);
+                Intent mainActivity = new Intent(this, LogInActivity.class);
                 startActivity(mainActivity);
                 break;
             case R.id.tos:
