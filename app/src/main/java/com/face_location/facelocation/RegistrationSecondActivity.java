@@ -1,16 +1,35 @@
 package com.face_location.facelocation;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class RegistrationSecondActivity extends AppCompatActivity implements View.OnClickListener{
 
     Button backLoginButton, signupButton;
     EditText userPassForLogining;
+    String userPass;
+    TextView enterPassTextView;
+
+    private static String url;
+    private static final String REG = "/user";
+    private static final String EMAIL = "email";
+    private static final String JOB = "job";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +44,10 @@ public class RegistrationSecondActivity extends AppCompatActivity implements Vie
 
         userPassForLogining = (EditText) findViewById(R.id.userPassForLogining);
 
+        enterPassTextView = (TextView) findViewById(R.id.enterPassTextView);
+
+        url = getResources().getString(R.string.base_url);
+
     }
 
     @Override
@@ -34,10 +57,48 @@ public class RegistrationSecondActivity extends AppCompatActivity implements Vie
                 onBackPressed();
                 break;
             case R.id.signupButton:
-                //TODO create account logic
-                Intent mainActivity = new Intent(this, MainActivity.class);
-                startActivity(mainActivity);
+                getUserPass();
+
+                if(TextUtils.isEmpty(userPass)){
+                    showPassRequires();
+                    break;
+                } else {
+                    userRegistration();
+//                Intent mainActivity = new Intent(this, MainActivity.class);
+//                startActivity(mainActivity);
+                }
                 break;
         }
+    }
+
+    public void showPassRequires(){
+        enterPassTextView.setTextColor(getResources().getColor(R.color.colorAccent));
+    }
+
+    private String getUserPass(){
+        return userPass = userPassForLogining.getText().toString();
+    }
+
+    private void userRegistration(){
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url + REG, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Toast.makeText(getApplicationContext(), "Все прошло хорошо!", Toast.LENGTH_SHORT).show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put(EMAIL, RegistrationFirstActivity.userEmail);
+                params.put(JOB, userPass);
+                return params;
+            }
+        };
+        MySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
 }

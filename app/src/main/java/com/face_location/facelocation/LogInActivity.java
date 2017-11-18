@@ -46,10 +46,10 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
             case R.id.successLoginButton:
 
                 //TODO delete this if don't get paid for progressbar
-                pDialog = new ProgressDialog(this);
-                pDialog.setMessage("Завантажую...");
-                pDialog.setTitle("Вхід");
-                pDialog.show();
+//                pDialog = new ProgressDialog(this);
+//                pDialog.setMessage("Завантажую...");
+//                pDialog.setTitle("Вхід");
+//                pDialog.show();
 
                 //TODO implement login logic
                 Intent registrationFirstActivity = new Intent (this, MainActivity.class);

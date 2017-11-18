@@ -1,4 +1,6 @@
 <resources>
+    <string name="base_url">http://face-location.com/api</string>
+
     <string name="app_name">Facelocation</string>
     <string name="localing">ЛОКАЛІЗУЙСЯ</string>
     <string name="tos_hint">Скориставшись цим додатком Ви\n погоджуєтесь з політикою надання послуг</string>
@@ -65,17 +67,6 @@
     <string name="create_new_event">Створити</string>
 
     <!--Event category names-->
-    <string name="concert">концерт</string>
-    <string name="business">бізнес</string>
-    <string name="fun">розваги</string>
-    <string name="sales">акції</string>
-    <string name="sport">спорт</string>
-    <string name="meeting">зустріч</string>
-    <string name="cafe">кафе</string>
-    <string name="seminar">семінар</string>
-    <string name="confa">конференція</string>
-    <string name="training">тренінг</string>
-    
     <string-array name="event_types">
         <item>концерт</item>
         <item>бізнес</item>
