@@ -16,7 +16,6 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
     TextView registrationTextView;
     public static ProgressDialog pDialog;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +32,6 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
 
         registrationTextView = (TextView) findViewById(R.id.registrationTextView);
         registrationTextView.setOnClickListener(this);
-
     }
 
     @Override

@@ -1,6 +1,8 @@
 package com.face_location.facelocation;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -13,6 +15,7 @@ public class AddLocationThirdActivity extends AppCompatActivity implements View.
     TextView backButtonView, forwardButtonView;
     ImageView cancel;
     EditText somethingAbout;
+    public static final String LOCATION_ABOUT = "location_about";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +41,15 @@ public class AddLocationThirdActivity extends AppCompatActivity implements View.
                 onBackPressed();
                 break;
             case R.id.forwardButtonView:
+
+                String aboutLocation = somethingAbout.getText().toString();
+
+                //Save Location about to shared preferences file
+                SharedPreferences sharedPref = getSharedPreferences(AddLocationFirstActivity.FILE_LOCATION_DETAILS, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString(LOCATION_ABOUT, aboutLocation);
+                editor.commit();
+
                 Intent fourthStep = new Intent(this, AddLocationFourthActivity.class);
                 startActivity(fourthStep);
                 break;

@@ -1,6 +1,8 @@
 package com.face_location.facelocation;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -21,12 +23,18 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+
 public class AddLocationSecondActivity extends AppCompatActivity implements View.OnClickListener,
         OnMapReadyCallback{
 //        GoogleMap.OnMapLongClickListener{
 
     Button markerNo, markerYes, searchButton;
     private GoogleMap mMap;
+    public static final String LOCATION_LATITUDE = "location_latitude";
+    public static final String LOCATION_LONGITUDE = "location_longitude";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +53,20 @@ public class AddLocationSecondActivity extends AppCompatActivity implements View
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+//        TextView textView2 = (TextView) findViewById(R.id.textView2);
+          //Read from SharedPreferences file
+//        SharedPreferences sharedPref = getSharedPreferences(AddLocationFirstActivity.FILE_LOCATION_DETAILS, Context.MODE_PRIVATE);
+//        String savedValue = sharedPref.getString(AddLocationFirstActivity.LOCATION_TITLE, "Ничего нету");
+//        textView2.setText(savedValue);
 
+        //Converts bytes to Bitmap
+//        byte[] bytesArray = readBytesFromFile(AddLocationFirstActivity.imgFilePath);
+//        Bitmap decodedByte = BitmapFactory.decodeByteArray(bytesArray, 0, bytesArray.length);
+
+        //Display the Bitmap as an ImageView
+//        ImageView imageView2 = (ImageView) findViewById(R.id.imageView2);
+//        imageView2.setImageBitmap(decodedByte);
+//        imageView2.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -56,7 +77,7 @@ public class AddLocationSecondActivity extends AppCompatActivity implements View
                 break;
 
             case R.id.markerYes:
-                // TODO need to add logic for cheking if there is a marker coordinates
+                // TODO need to add logic for cheking if there are marker coordinates
                 Intent thirdStep = new Intent(this, AddLocationThirdActivity.class);
                 startActivity(thirdStep);
                 break;
@@ -95,12 +116,20 @@ public class AddLocationSecondActivity extends AppCompatActivity implements View
 
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(toLatLng);
-                markerOptions.draggable(true);
+//                markerOptions.draggable(true);
                 markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker));
+                Marker marker = mMap.addMarker(markerOptions);
 
-                Marker draggableMarker = mMap.addMarker(markerOptions);
-                LatLng draggableMarkerPosition = draggableMarker.getPosition();
-//                Toast.makeText(this, "Lat " + draggableMarkerPosition.latitude + " " + "Long " + draggableMarkerPosition.longitude, Toast.LENGTH_LONG).show();
+                double lat = toLatLng.latitude;
+                double lng = toLatLng.longitude;
+
+                //Save Location LatLong to shared preferences file
+                SharedPreferences sharedPref = getSharedPreferences(AddLocationFirstActivity.FILE_LOCATION_DETAILS, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString(LOCATION_LATITUDE, String.valueOf(lat));
+                editor.putString(LOCATION_LONGITUDE, String.valueOf(lng));
+                editor.commit();
+
 
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
                 Status status = PlaceAutocomplete.getStatus(this, data);
@@ -111,6 +140,37 @@ public class AddLocationSecondActivity extends AppCompatActivity implements View
                 // The user canceled the operation.
             }
         }
+    }
+
+
+    private static byte[] readBytesFromFile(String filePath) {
+
+        FileInputStream fileInputStream = null;
+        byte[] bytesArray = null;
+
+        try {
+
+            File file = new File(filePath);
+            bytesArray = new byte[(int) file.length()];
+
+            //read file into bytes[]
+            fileInputStream = new FileInputStream(file);
+            fileInputStream.read(bytesArray);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (fileInputStream != null) {
+                try {
+                    fileInputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return bytesArray;
+
     }
 
 
