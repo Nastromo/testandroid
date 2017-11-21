@@ -3,8 +3,6 @@ package com.face_location.facelocation;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -41,8 +39,8 @@ public class AddLocationFourthActivity extends AppCompatActivity implements View
     boolean isPublic = false;
 
     //Delete after tests
-    TextView textView2;
-    ImageView imageView2;
+//    TextView textView2;
+//    ImageView imageView2;
 
 
     @Override
@@ -67,8 +65,8 @@ public class AddLocationFourthActivity extends AppCompatActivity implements View
         url = getResources().getString(R.string.base_url);
 
         //Delete after tests
-        imageView2 = (ImageView) findViewById(R.id.imageView2);
-        textView2 = (TextView) findViewById(R.id.textView2);
+//        imageView2 = (ImageView) findViewById(R.id.imageView2);
+//        textView2 = (TextView) findViewById(R.id.textView2);
     }
 
     @Override
@@ -100,23 +98,23 @@ public class AddLocationFourthActivity extends AppCompatActivity implements View
                 createLocation();
 
                 //Test data which has to be sent on server
-                textView2.setText(title + "\n" +
-                        latitude + "\n" +
-                        longitude + "\n" +
-                        about + "\n" +
-                        contact + "\n" +
-                        String.valueOf(isPublic));
+//                textView2.setText(title + "\n" +
+//                        latitude + "\n" +
+//                        longitude + "\n" +
+//                        about + "\n" +
+//                        contact + "\n" +
+//                        String.valueOf(isPublic));
 
-                //Converts bytes to Bitmap
-                byte[] bytesArray = readBytesFromFile(AddLocationFirstActivity.imgFilePath);
-                Bitmap decodedByte = BitmapFactory.decodeByteArray(bytesArray, 0, bytesArray.length);
+//                //Converts bytes to Bitmap
+//                byte[] bytesArray = readBytesFromFile(AddLocationFirstActivity.imgFilePath);
+//                Bitmap decodedByte = BitmapFactory.decodeByteArray(bytesArray, 0, bytesArray.length);
+//
+//                //Display the Bitmap as an ImageView
+//                imageView2.setImageBitmap(decodedByte);
+//                imageView2.setVisibility(View.VISIBLE);
 
-                //Display the Bitmap as an ImageView
-                imageView2.setImageBitmap(decodedByte);
-                imageView2.setVisibility(View.VISIBLE);
-
-//                stepFifth = new Intent(this, AddLocationFifthActivity.class);
-//                startActivity(stepFifth);
+                stepFifth = new Intent(this, AddLocationFifthActivity.class);
+                startActivity(stepFifth);
                 break;
 
             case R.id.cancelButton:
