@@ -33,8 +33,8 @@ public class AddLocationSecondActivity extends AppCompatActivity implements View
 
     Button markerNo, markerYes, searchButton;
     private GoogleMap mMap;
-    public static final String LOCATION_LATITUDE = "location_latitude";
-    public static final String LOCATION_LONGITUDE = "location_longitude";
+    public static final String LOCATION_LATITUDE = "latitude";
+    public static final String LOCATION_LONGITUDE = "longitude";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +53,8 @@ public class AddLocationSecondActivity extends AppCompatActivity implements View
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        //Read from SharedPreferences file
 //        TextView textView2 = (TextView) findViewById(R.id.textView2);
-          //Read from SharedPreferences file
 //        SharedPreferences sharedPref = getSharedPreferences(AddLocationFirstActivity.FILE_LOCATION_DETAILS, Context.MODE_PRIVATE);
 //        String savedValue = sharedPref.getString(AddLocationFirstActivity.LOCATION_TITLE, "Ничего нету");
 //        textView2.setText(savedValue);

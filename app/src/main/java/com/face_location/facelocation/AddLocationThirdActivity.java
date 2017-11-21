@@ -15,7 +15,7 @@ public class AddLocationThirdActivity extends AppCompatActivity implements View.
     TextView backButtonView, forwardButtonView;
     ImageView cancel;
     EditText somethingAbout;
-    public static final String LOCATION_ABOUT = "location_about";
+    public static final String LOCATION_ABOUT = "text";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +44,7 @@ public class AddLocationThirdActivity extends AppCompatActivity implements View.
 
                 String aboutLocation = somethingAbout.getText().toString();
 
-                //Save Location about to shared preferences file
+                //Save Location's about to shared preferences file
                 SharedPreferences sharedPref = getSharedPreferences(AddLocationFirstActivity.FILE_LOCATION_DETAILS, Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPref.edit();
                 editor.putString(LOCATION_ABOUT, aboutLocation);

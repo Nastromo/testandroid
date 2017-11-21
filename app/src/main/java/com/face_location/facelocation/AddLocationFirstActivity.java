@@ -25,7 +25,7 @@ public class AddLocationFirstActivity extends AppCompatActivity implements View.
     TextView backButtonTextView, forwardButtonTextView;
     Button buttonChosePhoto;
     public static final int PICK_IMAGE = 1;
-    public static final String LOCATION_TITLE = "location_title";
+    public static final String LOCATION_TITLE = "title";
     public static final String FILE_LOCATION_DETAILS = "New Location details";
     static String imgFileName;
     static String imgFilePath;

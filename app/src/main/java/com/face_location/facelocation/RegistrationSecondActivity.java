@@ -26,9 +26,9 @@ public class RegistrationSecondActivity extends AppCompatActivity implements Vie
     TextView enterPassTextView;
 
     private static String url;
-    private static final String REG = "/user";
+    private static final String REG = "/auth/register";
     private static final String EMAIL = "email";
-    private static final String JOB = "job";
+    private static final String PASSWORD = "password";
 
 
     @Override
@@ -95,7 +95,8 @@ public class RegistrationSecondActivity extends AppCompatActivity implements Vie
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put(EMAIL, RegistrationFirstActivity.userEmail);
-                params.put(JOB, userPass);
+                params.put(PASSWORD, userPass);
+                params.put("username", userPass);
                 return params;
             }
         };

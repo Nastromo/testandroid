@@ -1,5 +1,5 @@
 <resources>
-    <string name="base_url">http://face-location.com/api</string>
+    <string name="base_url">http://face-location.com</string>
 
     <string name="app_name">Facelocation</string>
     <string name="localing">ЛОКАЛІЗУЙСЯ</string>
