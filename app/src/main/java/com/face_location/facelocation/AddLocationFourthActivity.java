@@ -113,7 +113,7 @@ public class AddLocationFourthActivity extends AppCompatActivity implements View
 //                imageView2.setImageBitmap(decodedByte);
 //                imageView2.setVisibility(View.VISIBLE);
 
-                stepFifth = new Intent(this, AddLocationFifthActivity.class);
+                stepFifth = new Intent(this, NewEventFirstActivity.class);
                 startActivity(stepFifth);
                 break;
 
