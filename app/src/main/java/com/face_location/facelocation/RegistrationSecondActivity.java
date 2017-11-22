@@ -64,8 +64,6 @@ public class RegistrationSecondActivity extends AppCompatActivity implements Vie
                     break;
                 } else {
                     userRegistration();
-//                Intent mainActivity = new Intent(this, MainActivity.class);
-//                startActivity(mainActivity);
                 }
                 break;
         }
@@ -84,6 +82,9 @@ public class RegistrationSecondActivity extends AppCompatActivity implements Vie
             @Override
             public void onResponse(String response) {
                 Toast.makeText(getApplicationContext(), "Все прошло хорошо!", Toast.LENGTH_SHORT).show();
+//                if (200 OK)
+//                Intent mainActivity = new Intent(this, MainActivity.class);
+//                startActivity(mainActivity);
             }
         }, new Response.ErrorListener() {
             @Override
