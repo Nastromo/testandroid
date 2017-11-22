@@ -113,7 +113,7 @@
             android:paddingTop="3dp"
             android:selectAllOnFocus="false"
             android:singleLine="false"
-            android:textAlignment="textStart"
+
             android:textColor="@color/colorBlack"
             android:textColorHint="@color/colorTextLight"
             android:textSize="15sp"

@@ -80,7 +80,8 @@
         <activity android:name=".NewEventSixthActivity" />
         <activity android:name=".NewEventSeventhActivity" />
         <activity android:name=".NewEventEighthActivity" />
-        <activity android:name=".NewEventNinthActivity"></activity>
+        <activity android:name=".NewEventNinthActivity" />
+        <activity android:name=".SearchLocationActivity"></activity>
     </application>
 
 </manifest>

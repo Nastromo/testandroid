@@ -15,8 +15,6 @@ public class NewEventSeventhActivity extends AppCompatActivity implements View.O
     Button addParagraf, addDay;
     TextView buttonBackView, dayCount;
     ImageView eventReady;
-    String currentCountString;
-    int currentCountInteger;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

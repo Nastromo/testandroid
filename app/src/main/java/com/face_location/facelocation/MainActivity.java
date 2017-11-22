@@ -379,10 +379,16 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.my_locations) {
 
         } else if (id == R.id.create_event) {
+            Intent searchLocationActivity = new Intent(this, SearchLocationActivity.class);
+            startActivity(searchLocationActivity);
 
         } else if (id == R.id.add_location) {
+            Intent addLocationFirstActivity = new Intent(this, AddLocationFirstActivity.class);
+            startActivity(addLocationFirstActivity);
 
         } else if (id == R.id.support) {
+            Intent searchLocationActivity = new Intent(this, SearchLocationActivity.class);
+            startActivity(searchLocationActivity);
 
         } else if (id == R.id.exit) {
             Toast.makeText(this, "You clicked on Exit!", Toast.LENGTH_LONG).show();

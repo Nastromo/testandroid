@@ -12,6 +12,7 @@ public class NewEventFourthActivity extends AppCompatActivity implements View.On
 
     Spinner spinnerEventPeriod;
     TextView buttonBackView, forwardButtonTextView;
+//    ImageView imageView2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +31,16 @@ public class NewEventFourthActivity extends AppCompatActivity implements View.On
                 getResources().getStringArray(R.array.event_period));
         myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerEventPeriod.setAdapter(myAdapter);
+
+//        imageView2 = (ImageView) findViewById(R.id.imageView2);
+//
+//        //Converts bytes to Bitmap
+//                byte[] bytesArray = readBytesFromFile(NewEventThirdActivity.imgFilePath);
+//                Bitmap decodedByte = BitmapFactory.decodeByteArray(bytesArray, 0, bytesArray.length);
+//
+//                //Display the Bitmap as an ImageView
+//                imageView2.setImageBitmap(decodedByte);
+//                imageView2.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -43,5 +54,36 @@ public class NewEventFourthActivity extends AppCompatActivity implements View.On
                 startActivity(newEventFifthActivity);
         }
     }
+
+    // delete after tests
+//    private static byte[] readBytesFromFile(String filePath) {
+//
+//        FileInputStream fileInputStream = null;
+//        byte[] bytesArray = null;
+//
+//        try {
+//
+//            File file = new File(filePath);
+//            bytesArray = new byte[(int) file.length()];
+//
+//            //read file into bytes[]
+//            fileInputStream = new FileInputStream(file);
+//            fileInputStream.read(bytesArray);
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } finally {
+//            if (fileInputStream != null) {
+//                try {
+//                    fileInputStream.close();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//
+//        return bytesArray;
+//
+//    }
 }
 
