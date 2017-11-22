@@ -1,5 +1,5 @@
 <resources>
-    <string name="base_url">http://face-location.com/api</string>
+    <string name="base_url">http://face-location.com</string>
 
     <string name="app_name">Facelocation</string>
     <string name="localing">ЛОКАЛІЗУЙСЯ</string>
@@ -65,6 +65,34 @@
     <string name="chose_category">Виберіть категорію</string>
     <string name="cancel_event_creation">ВІДМІНИТИ</string>
     <string name="create_new_event">Створити</string>
+    <string name="event_description">Вкажіть опис події</string>
+    <string name="what_will_happens">що буде відбуватись?</string>
+    <string name="create_event_now">Створити подію</string>
+    <string name="event_type">Тип вашої події</string>
+    <string name="chose_event_photo">Виберіть з ваших фото</string>
+    <string name="event_photo">Фото події</string>
+    <string name="places_quantity">К-сть місць</string>
+    <string name="places_quantity_hint">вкажіть к-сть місць</string>
+    <string name="period">Періодичність?</string>
+    <string name="event_start">Коли починається подія?</string>
+    <string name="enter_date">вкажіть дату</string>
+    <string name="event_end">Коли закінчується?</string>
+    <string name="schedule">Розклад вашої події</string>
+    <string name="add_schedule">ДОДАТИ РОЗКЛАД</string>
+    <string name="specify_sponsors">ВКАЗАТИ СПОНСОРІВ</string>
+    <string name="have_sponsors">У вас є спонсори?</string>
+    <string name="create">ЗАВЕРШИТИ</string>
+    <string name="event_first_action">З чого починається подія?</string>
+    <string name="schedule_hint">наприклад: знайомство</string>
+    <string name="time_start">О котрій годині?</string>
+    <string name="time_end">Завершення?</string>
+    <string name="add_day">ДОДАТИ ДЕНЬ?</string>
+    <string name="add_paragraph">ДОДАТИ ПУНКТ?</string>
+    <string name="day">-Й ДЕНЬ</string>
+    <string name="next_point">Наступний пункт розкладу</string>
+    <string name="next_point_hint">наступний пункт</string>
+    <string name="next_day_schedule">Розклад наступного дня</string>
+    <string name="next_day_paragraf">пункт розкладу</string>
 
     <!--Event category names-->
     <string-array name="event_types">
@@ -80,6 +108,17 @@
         <item>тренінг</item>
     </string-array>
 
+    <!--Event publicity-->
+    <string-array name="event_publicity">
+        <item>Відкритий</item>
+        <item>По запрошенню</item>
+    </string-array>
 
+    <!--Event period-->
+    <string-array name="event_period">
+        <item>Одноразово</item>
+        <item>Щотижнево</item>
+        <item>Без кінця</item>
+    </string-array>
 
 </resources>

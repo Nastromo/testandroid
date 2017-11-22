@@ -9,17 +9,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-public class AddLocationFifthActivity extends AppCompatActivity implements View.OnClickListener{
+public class NewEventFirstActivity extends AppCompatActivity implements View.OnClickListener{
 
     EditText eventName;
     Button cancelEventCreation, successEventCreation;
 //    final CharSequence[] items = {"Red", "Green", "Blue"}; //For AlertDialog
-    Spinner spinnerEventType, spinnerEventTypezzz;
+    Spinner spinnerEventType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_location_fifth);
+        setContentView(R.layout.activity_new_event_first);
 
         eventName = (EditText) findViewById(R.id.eventName);
 
@@ -47,7 +47,7 @@ public class AddLocationFifthActivity extends AppCompatActivity implements View.
               break;
           case R.id.successEventCreation:
               //TODO implement second step event creation
-              Intent secondStepEventCreation = new Intent(this, MainActivity.class);
+              Intent secondStepEventCreation = new Intent(this, NewEventSecondActivity.class);
               startActivity(secondStepEventCreation);
               break;
 

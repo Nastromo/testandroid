@@ -11,7 +11,7 @@
     tools:layout_editor_absoluteY="81dp">
 
     <ImageView
-        android:id="@+id/cancelButton"
+        android:id="@+id/cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
@@ -27,11 +27,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="35dp"
         android:layout_marginTop="30dp"
-        android:text="@string/titleForNewLocationAdding"
+        android:text="@string/create_event_now"
         android:textColor="@color/title_color_for_location_adding"
         android:textSize="17sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonBackView" />
+        app:layout_constraintTop_toBottomOf="@+id/btnBackView" />
 
     <ImageView
         android:id="@+id/backButtonImg"
@@ -45,7 +45,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/buttonBackView"
+        android:id="@+id/btnBackView"
         fontPath="fonts/OpenSans-Bold.ttf"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -75,7 +75,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="35dp"
-        android:text="@string/add_concatc"
+        android:text="@string/event_description"
         android:textColor="@color/colorTextLight"
         android:textSize="13sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -84,7 +84,7 @@
     <LinearLayout
         android:id="@+id/editTextInput"
         android:layout_width="match_parent"
-        android:layout_height="52dp"
+        android:layout_height="180dp"
         android:layout_marginEnd="35dp"
         android:layout_marginStart="35dp"
         android:layout_marginTop="4dp"
@@ -97,7 +97,7 @@
         app:layout_constraintTop_toBottomOf="@+id/something_about_hint">
 
         <EditText
-            android:id="@+id/contactsEditText"
+            android:id="@+id/somethingAbout"
             fontPath="fonts/OpenSans-SemiBold.ttf"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -105,14 +105,15 @@
             android:layout_marginTop="0dp"
             android:layout_weight="1"
             android:background="@drawable/rec_white"
-            android:gravity="center_vertical"
-            android:hint="@string/contact_tip"
-            android:inputType="textCapSentences"
+            android:gravity="top"
+            android:hint="@string/what_will_happens"
+            android:inputType="textCapSentences|textMultiLine"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
             android:paddingTop="3dp"
             android:selectAllOnFocus="false"
             android:singleLine="false"
+            android:textAlignment="textStart"
             android:textColor="@color/colorBlack"
             android:textColorHint="@color/colorTextLight"
             android:textSize="15sp"
@@ -121,7 +122,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/createLocationReady"
+        android:id="@+id/forwardButtonView"
         fontPath="fonts/OpenSans-Bold.ttf"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -135,41 +136,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/forwardButtonImg" />
 
-    <TextView
-        android:id="@+id/do_public"
-        fontPath="fonts/OpenSans-SemiBold.ttf"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="35dp"
-        android:layout_marginTop="28dp"
-        android:text="@string/do_public"
-        android:textColor="@color/colorTextLight"
-        android:textSize="13sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextInput" />
-
-    <Switch
-        android:id="@+id/switchDoPublic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="35dp"
-        android:layout_marginTop="5dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/do_public" />
-
-    <TextView
-        android:id="@+id/else_text"
-        fontPath="fonts/OpenSans-SemiBold.ttf"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="35dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/else_text"
-        android:textColor="@color/colorTextLight"
-        android:textSize="13sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/switchDoPublic" />
-
-
 </android.support.constraint.ConstraintLayout>
+
 
