@@ -9,19 +9,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-public class NewEventSeventhActivity extends AppCompatActivity implements View.OnClickListener{
+public class NewEventEighthActivity extends AppCompatActivity implements View.OnClickListener{
 
     TimePicker timePickerStart, timePickerEnd;
-    Button addParagraf, addDay;
-    TextView buttonBackView, dayCount;
+    TextView buttonBackView;
     ImageView eventReady;
-    String currentCountString;
-    int currentCountInteger;
+    Button addDay, addParagraf;
+    TextView dayCount;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_event_seventh);
+        setContentView(R.layout.activity_new_event_eighth);
 
         timePickerStart = (TimePicker) findViewById(R.id.timePickerStart);
         timePickerStart.setIs24HourView(true);
@@ -33,47 +33,46 @@ public class NewEventSeventhActivity extends AppCompatActivity implements View.O
         timePickerEnd.setCurrentHour(10);
         timePickerEnd.setCurrentMinute(0);
 
-        addParagraf = (Button) findViewById(R.id.addParagraf);
-        addParagraf.setOnClickListener(this);
-
-        addDay = (Button) findViewById(R.id.addDay);
-        addDay.setOnClickListener(this);
-
         buttonBackView = (TextView) findViewById(R.id.buttonBackView);
         buttonBackView.setOnClickListener(this);
 
         eventReady = (ImageView) findViewById(R.id.eventReady);
         eventReady.setOnClickListener(this);
 
-        dayCount = (TextView) findViewById(R.id.dayCount);
-    }
+        addDay = (Button) findViewById(R.id.addDay);
+        addDay.setOnClickListener(this);
 
+        addParagraf = (Button) findViewById(R.id.addParagraf);
+        addParagraf.setOnClickListener(this);
+
+        dayCount = (TextView) findViewById(R.id.dayCount);
+        dayCount.setText(String.valueOf(DayCounter.dayCount));
+    }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-
             case R.id.buttonBackView:
-                onBackPressed();
+                Intent newEventSixthActivity = new Intent(this, NewEventSixthActivity.class);
+                startActivity(newEventSixthActivity);
                 break;
 
             case R.id.addParagraf:
-                DayCounter.dayCount = 1;
                 Intent newEventEighthActivity = new Intent(this, NewEventEighthActivity.class);
                 startActivity(newEventEighthActivity);
                 break;
 
             case R.id.addDay:
-                DayCounter.dayCount = 1;
-                DayCounter.addDay();
+                String currentCountString = dayCount.getText().toString();
+                int currentCountInteger = Integer.parseInt(currentCountString);
+                if (DayCounter.dayCount == currentCountInteger){
+                    DayCounter.addDay();
+                } else {
+                    DayCounter.dayCount = currentCountInteger;
+                    DayCounter.addDay();
+                }
                 Intent тewEventNinthActivity = new Intent(this, NewEventNinthActivity.class);
                 startActivity(тewEventNinthActivity);
-                break;
-
-            case R.id.eventReady:
-                //TODO Send event to server
-                Intent mainActivity = new Intent(this, MainActivity.class);
-                startActivity(mainActivity);
                 break;
         }
     }

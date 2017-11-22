@@ -86,8 +86,13 @@
     <string name="schedule_hint">наприклад: знайомство</string>
     <string name="time_start">О котрій годині?</string>
     <string name="time_end">Завершення?</string>
-    <string name="add_day">ДОДАТИ ЩЕ ДЕНЬ?</string>
-    <string name="add_paragraph">ДОДАТИ ЩЕ ПУНКТ?</string>
+    <string name="add_day">ДОДАТИ ДЕНЬ?</string>
+    <string name="add_paragraph">ДОДАТИ ПУНКТ?</string>
+    <string name="day">-Й ДЕНЬ</string>
+    <string name="next_point">Наступний пункт розкладу</string>
+    <string name="next_point_hint">наступний пункт</string>
+    <string name="next_day_schedule">Розклад наступного дня</string>
+    <string name="next_day_paragraf">пункт розкладу</string>
 
     <!--Event category names-->
     <string-array name="event_types">

@@ -55,7 +55,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="35dp"
         android:layout_marginTop="8dp"
-        android:text="@string/event_first_action"
+        android:text="@string/next_point"
         android:textColor="@color/colorTextLight"
         android:textSize="13sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -127,12 +127,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
-        android:inputType="textPersonName"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/enterTitleLocationTip"
         android:layout_weight="1"
         android:background="@color/colorPrimaryMoreLighter"
-        android:hint="@string/schedule_hint"
+        android:hint="@string/next_point_hint"
+        android:inputType="textPersonName"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:paddingTop="3dp"
@@ -140,7 +138,9 @@
         android:singleLine="true"
         android:textColor="@color/colorWhite"
         android:textColorHint="@color/colorWhite"
-        android:textSize="17sp" />
+        android:textSize="17sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/enterTitleLocationTip" />
 
     <Button
         android:id="@+id/addDay"
