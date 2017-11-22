@@ -387,8 +387,8 @@ public class MainActivity extends AppCompatActivity
             startActivity(addLocationFirstActivity);
 
         } else if (id == R.id.support) {
-            Intent searchLocationActivity = new Intent(this, SearchLocationActivity.class);
-            startActivity(searchLocationActivity);
+            Intent supportActivity = new Intent(this, SupportActivity.class);
+            startActivity(supportActivity);
 
         } else if (id == R.id.exit) {
             Toast.makeText(this, "You clicked on Exit!", Toast.LENGTH_LONG).show();
