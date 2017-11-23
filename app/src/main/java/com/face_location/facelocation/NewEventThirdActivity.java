@@ -2,6 +2,7 @@ package com.face_location.facelocation;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -25,6 +27,8 @@ public class NewEventThirdActivity extends AppCompatActivity implements View.OnC
     Spinner spinnerEventPublicity;
     TextView buttonBackView, forwardButtonTextView;
     public static final int PICK_IMAGE = 1;
+    public static final String TAG = "newEvent";
+    public static final String EVENT_PUBLICITY = "private";
     static String imgFileName;
     static String imgFilePath;
     static byte[] imgBytes;
@@ -62,6 +66,21 @@ public class NewEventThirdActivity extends AppCompatActivity implements View.OnC
                 break;
 
             case R.id.forwardButtonTextView:
+                String publicityEvent = spinnerEventPublicity.getSelectedItem().toString();
+                Log.i(TAG, "Тип публичности: " + publicityEvent);
+                if (publicityEvent.equals("Відкритий")){
+                    publicityEvent = "true";
+                } else {
+                publicityEvent = "false";
+                }
+                Log.i(TAG, "Тип публичности логический: " + publicityEvent);
+
+                //Save Event publicity to shared preferences file
+                SharedPreferences sharedPref = getSharedPreferences(NewEventFirstActivity.FILE_EVENT_DETAILS, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString(EVENT_PUBLICITY, publicityEvent);
+                editor.commit();
+
                 Intent newEventFourthActivity = new Intent(this, NewEventFourthActivity.class);
                 startActivity(newEventFourthActivity);
                 break;

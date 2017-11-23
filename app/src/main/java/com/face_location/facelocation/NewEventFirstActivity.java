@@ -1,8 +1,11 @@
 package com.face_location.facelocation;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -15,6 +18,12 @@ public class NewEventFirstActivity extends AppCompatActivity implements View.OnC
     Button cancelEventCreation, successEventCreation;
 //    final CharSequence[] items = {"Red", "Green", "Blue"}; //For AlertDialog
     Spinner spinnerEventType;
+
+    private static final String TAG = "newEvent";
+
+    public static final String FILE_EVENT_DETAILS = "New Event details";
+    public static final String EVENT_TITLE = "title";
+    public static final String EVENT_TYPE = "type";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +50,26 @@ public class NewEventFirstActivity extends AppCompatActivity implements View.OnC
     @Override
     public void onClick(View view) {
       switch(view.getId()){
+
           case R.id.cancelEventCreation:
               Intent mainActivity = new Intent(this, MainActivity.class);
               startActivity(mainActivity);
               break;
+
           case R.id.successEventCreation:
-              //TODO implement second step event creation
+              String titleEvent = eventName.getText().toString().trim();
+              Log.i(TAG, "Название события: " + titleEvent);
+
+              String typeEvent = spinnerEventType.getSelectedItem().toString();
+              Log.i(TAG, "Тип события: " + typeEvent);
+
+              //Save Event name and category to shared preferences file
+              SharedPreferences sharedPref = getSharedPreferences(FILE_EVENT_DETAILS, Context.MODE_PRIVATE);
+              SharedPreferences.Editor editor = sharedPref.edit();
+              editor.putString(EVENT_TITLE, titleEvent);
+              editor.putString(EVENT_TYPE, typeEvent);
+              editor.commit();
+
               Intent secondStepEventCreation = new Intent(this, NewEventSecondActivity.class);
               startActivity(secondStepEventCreation);
               break;

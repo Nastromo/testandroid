@@ -18,6 +18,8 @@ public class AddLocationFirstActivity extends AppCompatActivity implements View.
     public static final String FILE_LOCATION_DETAILS = "New Location details";
     EditText newLocationTitle;
 
+    //TODO проверить чтобы все ключи в файле FILE_EVENT_DETAILS и FILE_LOCATION_DETAILS были уникальными
+
     //Uncomment these variables if photo choose needed
 //    public static final int PICK_IMAGE = 1;
 //    static String imgFileName;

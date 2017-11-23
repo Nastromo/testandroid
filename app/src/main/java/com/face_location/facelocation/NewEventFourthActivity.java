@@ -1,10 +1,14 @@
 package com.face_location.facelocation;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -12,6 +16,10 @@ public class NewEventFourthActivity extends AppCompatActivity implements View.On
 
     Spinner spinnerEventPeriod;
     TextView buttonBackView, forwardButtonTextView;
+    EditText placesQuantity;
+    public static final String TAG = "newEvent";
+    public static final String EVENT_PLACES = "seats";
+    public static final String EVENT_PERIOD = "frequency";
 //    ImageView imageView2;
 
     @Override
@@ -32,6 +40,9 @@ public class NewEventFourthActivity extends AppCompatActivity implements View.On
         myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerEventPeriod.setAdapter(myAdapter);
 
+        placesQuantity = (EditText) findViewById(R.id.placesQuantity);
+
+        //Show saved images from byte array
 //        imageView2 = (ImageView) findViewById(R.id.imageView2);
 //
 //        //Converts bytes to Bitmap
@@ -49,7 +60,39 @@ public class NewEventFourthActivity extends AppCompatActivity implements View.On
             case R.id.buttonBackView:
                 onBackPressed();
                 break;
+
             case R.id.forwardButtonTextView:
+                String placesEvent = placesQuantity.getText().toString();
+                Log.i(TAG, "Количество мест: " + placesEvent);
+
+                String periodEvent = spinnerEventPeriod.getSelectedItem().toString();
+                Log.i(TAG, "Периодичность: " + periodEvent);
+
+                //TODO спросить Диму, какие значения соответствуют словам
+                switch (periodEvent){
+                    case "Одноразово":
+                        periodEvent = "0";
+                        Log.i(TAG, "Периодичность: " + periodEvent);
+                        break;
+
+                    case "Щотижнево":
+                        periodEvent = "1";
+                        Log.i(TAG, "Периодичность: " + periodEvent);
+                        break;
+
+                    case "Без кінця":
+                        periodEvent = "2";
+                        Log.i(TAG, "Периодичность: " + periodEvent);
+                        break;
+                }
+
+                //Save Event place quantity to shared preferences file
+                SharedPreferences sharedPref = getSharedPreferences(NewEventFirstActivity.FILE_EVENT_DETAILS, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString(EVENT_PLACES, placesEvent);
+                editor.putString(EVENT_PERIOD, periodEvent);
+                editor.commit();
+
                 Intent newEventFifthActivity = new Intent(this, NewEventFifthActivity.class);
                 startActivity(newEventFifthActivity);
         }

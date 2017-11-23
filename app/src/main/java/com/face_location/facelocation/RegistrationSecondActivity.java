@@ -3,6 +3,7 @@ package com.face_location.facelocation;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,6 +30,7 @@ public class RegistrationSecondActivity extends AppCompatActivity implements Vie
     private static final String REG = "/api/auth/register";
     private static final String EMAIL = "email";
     private static final String PASSWORD = "password";
+    private static final String TAG = "Registration";
 
 
     @Override
@@ -90,6 +92,8 @@ public class RegistrationSecondActivity extends AppCompatActivity implements Vie
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
+                String errorDisplay = error.toString();
+                Log.d(TAG, "Ошибка: " + errorDisplay);
             }
         }){
             @Override
