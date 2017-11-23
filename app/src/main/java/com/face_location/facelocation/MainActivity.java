@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity
     TextView placeAddress;
     String placeNameString;
     String placeAddressString;
+    Intent myProfileActivity;
 
 
     @Override
@@ -403,10 +404,12 @@ public class MainActivity extends AppCompatActivity
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.myProfileImageView:
-                Toast.makeText(this, "You clicked on UserImage!", Toast.LENGTH_LONG).show();
+                myProfileActivity = new Intent(this, MyProfileActivity.class);
+                startActivity(myProfileActivity);
                 break;
             case R.id.editMyProfileTextView:
-                Toast.makeText(this, "You clicked on EditMyProfile Text!", Toast.LENGTH_LONG).show();
+                myProfileActivity = new Intent(this, MyProfileActivity.class);
+                startActivity(myProfileActivity);
                 break;
         }
     }

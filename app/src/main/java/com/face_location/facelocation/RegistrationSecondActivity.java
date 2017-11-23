@@ -93,7 +93,7 @@ public class RegistrationSecondActivity extends AppCompatActivity implements Vie
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
                 String errorDisplay = error.toString();
-                Log.d(TAG, "Ошибка: " + errorDisplay);
+                Log.i(TAG, "Ошибка: " + errorDisplay);
             }
         }){
             @Override

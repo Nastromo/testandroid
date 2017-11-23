@@ -99,6 +99,8 @@
     <string name="your_trouble">Вкажіть опис проблеми</string>
     <string name="help">вкажіть як ми можемо Вам допомогти?</string>
     <string name="send">НАДІСЛАТИ</string>
+    <string name="add_photo">Додайте своє фото</string>
+    <string name="friend_reco">щоб друзі змогли вас впізнати</string>
 
 
     <!--Event category names-->

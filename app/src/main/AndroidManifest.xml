@@ -82,7 +82,8 @@
         <activity android:name=".NewEventEighthActivity" />
         <activity android:name=".NewEventNinthActivity" />
         <activity android:name=".SearchLocationActivity" />
-        <activity android:name=".SupportActivity"></activity>
+        <activity android:name=".SupportActivity" />
+        <activity android:name=".MyProfileActivity"></activity>
     </application>
 
 </manifest>
