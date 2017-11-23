@@ -40,7 +40,7 @@
         android:layout_height="0dp"
         android:layout_marginBottom="53dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="65dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -64,9 +64,9 @@
                 fontPath="fonts/OpenSans-SemiBold.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:text="@string/add_photo"
                 android:textColor="@color/colorBlack"
-                android:layout_gravity="center_horizontal"
                 android:textSize="13sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
@@ -75,24 +75,164 @@
             <TextView
                 android:id="@+id/addPhotoHint"
                 android:layout_width="wrap_content"
-                android:layout_gravity="center_horizontal"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:text="@string/friend_reco"
                 android:textColor="@color/grey"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
                 tools:layout_editor_absoluteY="187dp" />
 
+            <TextView
+                android:id="@+id/yourEmail"
+                fontPath="fonts/OpenSans-SemiBold.ttf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="35dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/your_email"
+                android:textColor="@color/colorBlack"
+                android:textSize="13sp"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:layout_editor_absoluteY="97dp" />
+
+            <EditText
+                android:id="@+id/editEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="35dp"
+                android:layout_marginRight="35dp"
+                android:background="@color/colorWhite"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:singleLine="true"
+                android:textColor="@color/colorText"
+                android:textColorHint="@color/colorText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/yourEmail"
+                fontPath="fonts/OpenSans-SemiBold.ttf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="35dp"
+                android:layout_marginTop="15dp"
+                android:text="@string/your_name"
+                android:textColor="@color/colorBlack"
+                android:textSize="13sp"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:layout_editor_absoluteY="97dp" />
+
+            <EditText
+                android:id="@+id/editName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="35dp"
+                android:layout_marginRight="35dp"
+                android:background="@color/colorWhite"
+                android:ems="10"
+                android:hint="@string/no_name"
+                android:inputType="textPersonName"
+                android:singleLine="true"
+                android:textColor="@color/colorText"
+                android:textColorHint="@color/colorText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/yourEmail"
+                fontPath="fonts/OpenSans-SemiBold.ttf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="35dp"
+                android:layout_marginTop="15dp"
+                android:text="@string/soname"
+                android:textColor="@color/colorBlack"
+                android:textSize="13sp"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:layout_editor_absoluteY="97dp" />
+
+            <EditText
+                android:id="@+id/editSoname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="35dp"
+                android:layout_marginRight="35dp"
+                android:background="@color/colorWhite"
+                android:ems="10"
+                android:hint="@string/no_soname"
+                android:inputType="textPersonName"
+                android:singleLine="true"
+                android:textColor="@color/colorText"
+                android:textColorHint="@color/colorText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/yourEmail"
+                fontPath="fonts/OpenSans-SemiBold.ttf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="35dp"
+                android:layout_marginTop="15dp"
+                android:text="@string/phone_number"
+                android:textColor="@color/colorBlack"
+                android:textSize="13sp"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:layout_editor_absoluteY="97dp" />
+
+            <EditText
+                android:id="@+id/editNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="35dp"
+                android:layout_marginRight="35dp"
+                android:background="@color/colorWhite"
+                android:ems="10"
+                android:hint="@string/numbers"
+                android:inputType="textPersonName"
+                android:singleLine="true"
+                android:textColor="@color/colorText"
+                android:textColorHint="@color/colorText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/yourEmail"
+                fontPath="fonts/OpenSans-SemiBold.ttf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="35dp"
+                android:layout_marginTop="15dp"
+                android:text="@string/job"
+                android:textColor="@color/colorBlack"
+                android:textSize="13sp"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:layout_editor_absoluteY="97dp" />
+
+            <EditText
+                android:id="@+id/editJob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="35dp"
+                android:layout_marginRight="35dp"
+                android:background="@color/colorWhite"
+                android:ems="10"
+                android:hint="@string/no_job"
+                android:inputType="textPersonName"
+                android:singleLine="true"
+                android:textColor="@color/colorText"
+                android:textColorHint="@color/colorText"
+                android:textSize="16sp" />
+
         </LinearLayout>
 
     </ScrollView>
 
     <Button
-        android:id="@+id/sendIssue"
+        android:id="@+id/saveButton"
         android:layout_width="match_parent"
         android:layout_height="52dp"
         android:background="@color/colorPrimaryDark"
-        android:text="@string/send"
+        android:elevation="10dp"
+        android:text="@string/save"
         android:textColor="@color/colorYellow"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
