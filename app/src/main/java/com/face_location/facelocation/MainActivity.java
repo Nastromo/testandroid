@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
@@ -25,6 +26,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -68,9 +71,11 @@ public class MainActivity extends AppCompatActivity
     LatLng latLng;
     TextView placeName;
     TextView placeAddress;
+    TextView editMyProfileTextView, userNameTextView;
     String placeNameString;
-    String placeAddressString;
+    String placeAddressString, userAvatar, userName;
     Intent myProfileActivity;
+    ImageView myProfileImageView;
 
 
     @Override
@@ -121,14 +126,43 @@ public class MainActivity extends AppCompatActivity
         //getting header with all elements in it. Then finding element by ID and setListener
         View header = navigationView.getHeaderView(0);
 
-        ImageView myProfileImageView = (ImageView) header.findViewById(R.id.myProfileImageView);
+        myProfileImageView = (ImageView) header.findViewById(R.id.myProfileImageView);
         myProfileImageView.setOnClickListener(this);
 
-        TextView editMyProfileTextView = (TextView) header.findViewById(R.id.editMyProfileTextView);
+        editMyProfileTextView = (TextView) header.findViewById(R.id.editMyProfileTextView);
         editMyProfileTextView.setOnClickListener(this);
+
+        userNameTextView = (TextView) header.findViewById(R.id.userNameTextView);
+        userNameTextView.setOnClickListener(this);
 
         placeName = (TextView) findViewById(R.id.placeName);
         placeAddress = (TextView) findViewById(R.id.placeAddress);
+
+        //Extract user profile data from shared preferences
+        SharedPreferences sharedPref = getSharedPreferences(getResources().getString(R.string.APPLICATION_DATA_FILE), Context.MODE_PRIVATE);
+
+        userAvatar = sharedPref.getString(getResources()
+                .getString(R.string.user_avatar_url), "No key like " + getResources().getString(R.string.user_email));
+
+        userName = sharedPref.getString(getResources()
+                .getString(R.string.user_name), getResources().getString(R.string.your_name_menu));
+
+
+        if (userAvatar.equals("/assets/img/icons/avatar.svg")){
+            return;
+        } else {
+            myProfileImageView.setBackground(null);
+            userNameTextView.setText(userName);
+
+            Glide
+                    .with(MainActivity.this)
+                    .load("https://goo.gl/2q7E7e")
+                    .thumbnail(0.1f) //shows mini image which weight 0.1 from real image while real image is downloading
+                    .apply(RequestOptions
+                            .circleCropTransform())
+//                            .placeholder(R.drawable.oval)) //shows drawable while real/mini image is downloading
+                    .into(myProfileImageView);
+        }
 
     }
 
@@ -331,7 +365,6 @@ public class MainActivity extends AppCompatActivity
     }
 
 //    Creates 3 right dots menu with options from file menu.xml
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

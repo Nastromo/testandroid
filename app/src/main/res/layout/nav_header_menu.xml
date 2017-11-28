@@ -12,19 +12,19 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/myProfileImageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
-        app:srcCompat="@drawable/my_profile" />
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:background="@drawable/my_profile" />
 
     <TextView
         android:id="@+id/userNameTextView"
+        fontPath="fonts/OpenSans-Bold.ttf"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="Ваше ім'я?"
+        android:text="@string/your_name_menu"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="#5558A6"
         android:textStyle="bold" />
@@ -33,7 +33,7 @@
         android:id="@+id/editMyProfileTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="редагувати данні"
+        android:text="@string/edit_data"
         android:textColor="#545454" />
 
 </LinearLayout>

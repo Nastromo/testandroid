@@ -49,18 +49,19 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
 
-            <com.android.volley.toolbox.NetworkImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/avatar"
                 android:layout_width="76dp"
                 android:layout_height="76dp"
                 android:layout_gravity="center_horizontal"
-                android:background="@drawable/default_avatar"
-                app:srcCompat="@drawable/common_google_signin_btn_icon_light_normal" />
+                android:background="@drawable/oval_avatar" />
 
             <TextView
-                android:id="@+id/addPhoto"
+                android:id="@+id/addPhotoText"
                 fontPath="fonts/OpenSans-SemiBold.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -104,6 +105,7 @@
                 android:layout_marginRight="35dp"
                 android:background="@color/colorWhite"
                 android:ems="10"
+                android:hint="@string/enterEmail"
                 android:inputType="textPersonName"
                 android:singleLine="true"
                 android:textColor="@color/colorText"
