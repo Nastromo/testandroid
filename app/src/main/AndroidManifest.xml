@@ -83,8 +83,14 @@
         <activity android:name=".NewEventNinthActivity" />
         <activity android:name=".SearchLocationActivity" />
         <activity android:name=".SupportActivity" />
-        <activity android:name=".MyProfileActivity"
-            android:windowSoftInputMode="adjustPan"></activity>
+        <activity
+            android:name=".MyProfileActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".MyAppActionsActivity"
+            android:label="@string/title_activity_my_app_actions"
+            android:theme="@style/AppTheme"
+            android:parentActivityName="com.face_location.facelocation.MainActivity" ></activity>
     </application>
 
 </manifest>

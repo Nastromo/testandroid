@@ -126,11 +126,6 @@
     <string name="user_name">name</string>
 
 
-
-
-
-
-
     <!--Event category names-->
     <string-array name="event_types">
         <item>концерт</item>
@@ -157,5 +152,11 @@
         <item>Щотижнево</item>
         <item>Без кінця</item>
     </string-array>
+
+
+    <string name="title_activity_my_app_actions">НАЗАД ДО КАРТИ</string>
+    <string name="tab_text_1">МОЇ ПОДІЇ</string>
+    <string name="tab_text_2">ВІДВІДАВ</string>
+    <string name="tab_text_3">МОЇ ЛОКАЦІЇ</string>
 
 </resources>

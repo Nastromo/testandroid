@@ -140,13 +140,10 @@ public class MainActivity extends AppCompatActivity
 
         //Extract user profile data from shared preferences
         SharedPreferences sharedPref = getSharedPreferences(getResources().getString(R.string.APPLICATION_DATA_FILE), Context.MODE_PRIVATE);
-
         userAvatar = sharedPref.getString(getResources()
                 .getString(R.string.user_avatar_url), "No key like " + getResources().getString(R.string.user_email));
-
         userName = sharedPref.getString(getResources()
                 .getString(R.string.user_name), getResources().getString(R.string.your_name_menu));
-
 
         if (userAvatar.equals("/assets/img/icons/avatar.svg")){
             return;
@@ -406,7 +403,8 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.my_events) {
-            Toast.makeText(this, "This is my Toast message!", Toast.LENGTH_LONG).show();
+            Intent myAppActionsActivity = new Intent(this, MyAppActionsActivity.class);
+            startActivity(myAppActionsActivity);
 
         } else if (id == R.id.visited_events) {
 
