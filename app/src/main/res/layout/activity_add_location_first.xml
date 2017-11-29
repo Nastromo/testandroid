@@ -111,7 +111,9 @@
             app:layout_constraintTop_toBottomOf="@+id/enterTitleLocationTip" />
     </LinearLayout>
 
-    <TextView
+
+    <!--Choose photo views-->
+    <!--<TextView
         android:id="@+id/chosePhoto"
         fontPath="fonts/OpenSans-SemiBold.ttf"
         android:layout_width="wrap_content"
@@ -147,7 +149,7 @@
             android:background="@drawable/rec_dark"
             android:text="@string/chose_photo_gallery"
             android:textColor="@color/colorText" />
-    </LinearLayout>
+    </LinearLayout> -->
 
     <TextView
         android:id="@+id/forwardButtonTextView"

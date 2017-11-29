@@ -80,7 +80,17 @@
         <activity android:name=".NewEventSixthActivity" />
         <activity android:name=".NewEventSeventhActivity" />
         <activity android:name=".NewEventEighthActivity" />
-        <activity android:name=".NewEventNinthActivity"></activity>
+        <activity android:name=".NewEventNinthActivity" />
+        <activity android:name=".SearchLocationActivity" />
+        <activity android:name=".SupportActivity" />
+        <activity
+            android:name=".MyProfileActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".MyAppActionsActivity"
+            android:label="@string/title_activity_my_app_actions"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

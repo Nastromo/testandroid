@@ -1,14 +1,24 @@
 package com.face_location.facelocation;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 public class NewEventSecondActivity extends AppCompatActivity implements View.OnClickListener{
 
     TextView btnBackView, forwardButtonView;
+    EditText somethingAbout;
+
+    //TODO попросить Диму, чтобы изменил название поля про этот ивент с text на about_event
+    //TODO проверить чтобы все ключи в файле FILE_EVENT_DETAILS и FILE_LOCATION_DETAILS были уникальными
+    public static final String EVENT_ABOUT = "about_event";
+    public static final String TAG = "newEvent";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +31,8 @@ public class NewEventSecondActivity extends AppCompatActivity implements View.On
         forwardButtonView = (TextView) findViewById(R.id.forwardButtonView);
         forwardButtonView.setOnClickListener(this);
 
+        somethingAbout = (EditText) findViewById(R.id.somethingAbout);
+
     }
 
     @Override
@@ -32,6 +44,15 @@ public class NewEventSecondActivity extends AppCompatActivity implements View.On
                 break;
 
             case R.id.forwardButtonView:
+                String aboutEvent = somethingAbout.getText().toString().trim();
+                Log.i(TAG, "Про событие: " + aboutEvent);
+
+                //Save Event about to shared preferences file
+                SharedPreferences sharedPref = getSharedPreferences(NewEventFirstActivity.FILE_EVENT_DETAILS, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString(EVENT_ABOUT, aboutEvent);
+                editor.commit();
+
                 Intent newEventThirdActivity = new Intent (this, NewEventThirdActivity.class);
                 startActivity(newEventThirdActivity);
                 break;

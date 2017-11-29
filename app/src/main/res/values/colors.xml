@@ -18,4 +18,8 @@
     <color name="green">#50E3C2</color>
     <color name="green_stroke">#2DC9A6</color>
     <color name="text_color_dark">#5558A6</color>
+    <color name="stroke_for_super_dark">#9296F8</color>
+    <color name="grey">#C2C2C2</color>
+    <color name="grey_text">#545454</color>
+    <color name="seren">#9BB3EB</color>
 </resources>
