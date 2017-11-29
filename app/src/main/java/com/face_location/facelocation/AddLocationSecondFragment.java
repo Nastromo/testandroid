@@ -20,5 +20,6 @@ public class AddLocationSecondFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.add_location_second_fragment, container, false);
+
     }
 }

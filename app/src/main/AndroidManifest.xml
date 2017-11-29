@@ -89,8 +89,8 @@
         <activity
             android:name=".MyAppActionsActivity"
             android:label="@string/title_activity_my_app_actions"
-            android:theme="@style/AppTheme"
-            android:parentActivityName="com.face_location.facelocation.MainActivity" ></activity>
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

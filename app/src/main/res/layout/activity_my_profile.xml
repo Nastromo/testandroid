@@ -58,6 +58,7 @@
                 android:layout_width="76dp"
                 android:layout_height="76dp"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/oval_avatar" />
 
             <TextView
@@ -85,12 +86,12 @@
                 tools:layout_editor_absoluteY="187dp" />
 
             <TextView
-                android:id="@+id/yourEmail"
+                android:id="@+id/yourEmailText"
                 fontPath="fonts/OpenSans-SemiBold.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="35dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="30dp"
                 android:text="@string/your_email"
                 android:textColor="@color/colorBlack"
                 android:textSize="13sp"
@@ -113,7 +114,7 @@
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/yourEmail"
+                android:id="@+id/yourEmailView"
                 fontPath="fonts/OpenSans-SemiBold.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

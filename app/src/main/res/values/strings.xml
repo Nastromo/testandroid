@@ -114,6 +114,9 @@
     <string name="edit_avatar">Змінити фото</string>
     <string name="your_name_menu">Ваше ім’я?</string>
     <string name="edit_data">редагувати данні</string>
+    <string name="me_events_title">Мої події</string>
+    <string name="create_new_event_btn">Створити нову подію</string>
+    <string name="create_new_location">Створити нову локацію</string>
 
     <!--Application information-->
     <string name="APPLICATION_DATA_FILE">Application data</string>
