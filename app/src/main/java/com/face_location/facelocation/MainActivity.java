@@ -407,8 +407,14 @@ public class MainActivity extends AppCompatActivity
             startActivity(myAppActionsActivity);
 
         } else if (id == R.id.visited_events) {
+            Intent myAppActionsActivity = new Intent(this, MyAppActionsActivity.class);
+            myAppActionsActivity.putExtra("tabNumber", 1);
+            startActivity(myAppActionsActivity);
 
         } else if (id == R.id.my_locations) {
+            Intent myAppActionsActivity = new Intent(this, MyAppActionsActivity.class);
+            myAppActionsActivity.putExtra("tabNumber", 2);
+            startActivity(myAppActionsActivity);
 
         } else if (id == R.id.create_event) {
             Intent searchLocationActivity = new Intent(this, SearchLocationActivity.class);
