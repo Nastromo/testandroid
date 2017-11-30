@@ -3,10 +3,27 @@ package com.face_location.facelocation;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.face_location.facelocation.model.FacelocationAPI;
+import com.face_location.facelocation.model.RegistrationBody;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RegistrationSecondActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -71,49 +88,49 @@ public class RegistrationSecondActivity extends AppCompatActivity implements Vie
                     showPassRequires();
                     break;
                 } else {
-//                    Retrofit retrofit = new Retrofit.Builder()
-//                            .baseUrl(url)
-//                            .addConverterFactory(GsonConverterFactory.create())
-//                            .build();
-//
-//
-//                    FacelocationAPI api = retrofit.create(FacelocationAPI.class);
-//
-//                    RegistrationBody reg = new RegistrationBody("somenewemail@gmail.com", "somepass");
-//
-//
-//                    HashMap<String, String> headerMap = new HashMap<String, String>();
-//                    headerMap.put("Content-Type", "application/json");
-//
-//                    Call<ResponseBody> call = api.registerUser(headerMap, reg);
-//
-//                    Log.i(TAG, "Сработало до сих пор");
-//
-//                    call.enqueue(new Callback<ResponseBody>() {
-//                        @Override
-//                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-//                            Toast.makeText(RegistrationSecondActivity.this, "Все прошло хорошо",Toast.LENGTH_SHORT).show();
-//                            Log.i(TAG, "onResponse: " + response.toString());
-//                            Log.i(TAG, "onResponse: " + call.toString());
-//
-//                            try{
-//                                String json = response.body().toString();
-//                                Log.d(TAG, "onResponse: json: " + json);
-//                                JSONObject data = null;
-//                                data = new JSONObject(json);
-//                            Log.d(TAG, "onResponse: data: " + data.optString("json"));
-//
-//                            }catch (JSONException e){
-//                                Log.e(TAG, "onResponse: JSONException: " + e.getMessage() );
-//                            }
-//
-//                        }
-//
-//                        @Override
-//                        public void onFailure(Call<ResponseBody> call, Throwable t) {
-//
-//                        }
-//                    });
+                    Retrofit retrofit = new Retrofit.Builder()
+                            .baseUrl(url)
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
+
+
+                    FacelocationAPI api = retrofit.create(FacelocationAPI.class);
+
+                    RegistrationBody reg = new RegistrationBody("somenetttttttwemail@gmail.com", "somepass");
+
+
+                    HashMap<String, String> headerMap = new HashMap<String, String>();
+                    headerMap.put("Content-Type", "application/json");
+
+                    Call<ResponseBody> call = api.registerUser(headerMap, reg);
+
+                    Log.i(TAG, "Сработало до сих пор");
+
+                    call.enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            Toast.makeText(RegistrationSecondActivity.this, "Все прошло хорошо",Toast.LENGTH_SHORT).show();
+                            Log.i(TAG, "onResponse: " + response.toString());
+                            Log.i(TAG, "onResponse: " + call.toString());
+
+                            try{
+                                String json = response.body().toString();
+                                Log.d(TAG, "onResponse: json: " + json);
+                                JSONObject data = null;
+                                data = new JSONObject(json);
+                            Log.d(TAG, "onResponse: data: " + data.optString("json"));
+
+                            }catch (JSONException e){
+                                Log.e(TAG, "onResponse: JSONException: " + e.getMessage() );
+                            }
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                        }
+                    });
 
 //                    userRegistration();
                 }

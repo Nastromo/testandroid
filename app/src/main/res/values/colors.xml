@@ -22,4 +22,5 @@
     <color name="grey">#C2C2C2</color>
     <color name="grey_text">#545454</color>
     <color name="seren">#9BB3EB</color>
+    <color name="dark_event_name">#485565</color>
 </resources>

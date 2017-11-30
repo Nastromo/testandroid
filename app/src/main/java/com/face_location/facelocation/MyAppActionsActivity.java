@@ -91,8 +91,8 @@ public class MyAppActionsActivity extends AppCompatActivity {
                     return myEventsTab;
 
                 case 1:
-                    VisitedEventsFragment VisitedEventsTab = new VisitedEventsFragment();
-                    return VisitedEventsTab;
+                    VisitedEventsFragment visitedEventsTab = new VisitedEventsFragment();
+                    return visitedEventsTab;
 
                 case 2:
                     MyLocationsFragment myLocationsTab = new MyLocationsFragment();

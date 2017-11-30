@@ -91,6 +91,7 @@
             android:label="@string/title_activity_my_app_actions"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme" />
+        <activity android:name=".LocalizedActivity"></activity>
     </application>
 
 </manifest>
