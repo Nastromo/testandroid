@@ -62,8 +62,8 @@ public class LocalizedActivity extends AppCompatActivity {
                     return chatFragment;
 
                 case 2:
-                    AtentionFragment atentionFragment = new AtentionFragment();
-                    return atentionFragment;
+                    AttentionFragment attentionFragment = new AttentionFragment();
+                    return attentionFragment;
 
                 case 3:
                     FilesFragment filesFragment = new FilesFragment();
