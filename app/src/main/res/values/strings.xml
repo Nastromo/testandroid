@@ -118,6 +118,7 @@
     <string name="create_new_event_btn">Створити нову подію</string>
     <string name="create_new_location">Створити нову локацію</string>
     <string name="now_here">зараз тут:</string>
+    <string name="chose_file">Виберіть файл</string>
 
     <!--Application information-->
     <string name="APPLICATION_DATA_FILE">Application data</string>

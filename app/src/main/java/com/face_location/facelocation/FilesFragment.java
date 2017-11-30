@@ -20,17 +20,17 @@ public class FilesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.my_locations_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.files_fragment, container, false);
 
-        ArrayList<Location> locations = new ArrayList<>();
+        ArrayList<File> files = new ArrayList<>();
 
         for (int i = 0; i < 20; i++) {
-            locations.add(new Location("Первое событие с длинным заголовком" + i));
+            files.add(new File("Первое событие с длинным заголовком" + i));
         }
 
 
-        listView = (ListView) rootView.findViewById(R.id.locationListView);
-        MyLocationsListAdapter myLocationsFragment = new MyLocationsListAdapter(getContext(), R.layout.my_location_card, locations);
+        listView = (ListView) rootView.findViewById(R.id.filesListView);
+        FileAdapter myLocationsFragment = new FileAdapter(getContext(), R.layout.file_card, files);
         listView.setAdapter(myLocationsFragment);
 
         return rootView;
