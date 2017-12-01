@@ -19,7 +19,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -146,14 +145,12 @@ public class MainActivity extends AppCompatActivity
         SharedPreferences.Editor editor = sharedPref.edit();
 
         editor.putBoolean(getString(R.string.FIRST_LOGIN), true);
-        Boolean islogFirst = sharedPref.getBoolean(getString(R.string.FIRST_LOGIN), false);
-        Log.i(TAG, "onCreate111: " + islogFirst.toString());
+        editor.commit();
 
         userAvatar = sharedPref.getString(getResources()
-                .getString(R.string.USER_AVATAR_URL), "No key like " + getResources().getString(R.string.USER_AVATAR_URL));
-
+                .getString(R.string.USER_AVATAR_URL), "No key like " + getString(R.string.USER_AVATAR_URL));
         userName = sharedPref.getString(getResources()
-                .getString(R.string.USER_NAME), getResources().getString(R.string.your_name_menu));
+                .getString(R.string.USER_NAME), getString(R.string.your_name_menu));
 
         if (userAvatar.equals("/assets/img/icons/avatar.svg")){
             //go further
@@ -170,10 +167,6 @@ public class MainActivity extends AppCompatActivity
 //                            .placeholder(R.drawable.oval)) //shows drawable while real/mini image is downloading
                     .into(myProfileImageView);
         }
-
-        Boolean islogSecond = sharedPref.getBoolean(getString(R.string.FIRST_LOGIN), false);
-        Log.i(TAG, "onCreate222: " + islogSecond.toString());
-
     }
 
     @Override
@@ -442,7 +435,14 @@ public class MainActivity extends AppCompatActivity
             startActivity(supportActivity);
 
         } else if (id == R.id.exit) {
-            Toast.makeText(this, "You clicked on Exit!", Toast.LENGTH_LONG).show();
+            SharedPreferences sharedPref = getSharedPreferences(getString(R.string.APPLICATION_DATA_FILE), Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+
+            editor.putBoolean(getString(R.string.FIRST_LOGIN), false);
+            editor.commit();
+
+            Intent startActivity = new Intent(this, StartActivity.class);
+            startActivity(startActivity);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

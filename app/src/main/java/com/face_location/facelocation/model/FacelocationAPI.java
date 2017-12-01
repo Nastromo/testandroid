@@ -1,5 +1,7 @@
 package com.face_location.facelocation.model;
 
+import com.face_location.facelocation.model.Location.LocationBody;
+import com.face_location.facelocation.model.Location.LocationResponse;
 import com.face_location.facelocation.model.Registration.RegistrationBody;
 import com.face_location.facelocation.model.Registration.RegistrationResponse;
 
@@ -28,5 +30,13 @@ public interface FacelocationAPI {
     Call<RegistrationResponse> loginUser(
             @HeaderMap Map<String, String> headers,
             @Body RegistrationBody body
+    );
+
+
+    //New Location
+    @POST("api/locations")
+    Call<LocationResponse> addLocation(
+            @HeaderMap Map<String, String> headers,
+            @Body LocationBody body
     );
 }

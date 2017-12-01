@@ -5,42 +5,40 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
+import com.face_location.facelocation.model.FacelocationAPI;
+import com.face_location.facelocation.model.Location.LocationBody;
+import com.face_location.facelocation.model.Location.LocationResponse;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class AddLocationFourthActivity extends AppCompatActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener{
 
+    public static final String TAG ="AddLocationFourth";
     TextView buttonBackView, createLocationReady;
     EditText contactsEditText;
     ImageView cancelButton;
     Switch switchDoPublic;
     Intent stepFifth, mainActivity;
-    public static final String LOCATION_CONTACT = "contact";
-    public static final String LOCATION_ISPUBLIC = "published";
     private static String url;
-    private static final String CREATE_LOCATION = "/api/locations";
-    String title, latitude, longitude, about, contact;
-    boolean isPublic = false;
-
-    //Delete after tests
-//    TextView textView2;
-//    ImageView imageView2;
+    String title, latitude, longitude, text, contact, token;
+    boolean isPublished = false;
 
 
     @Override
@@ -64,9 +62,6 @@ public class AddLocationFourthActivity extends AppCompatActivity implements View
 
         url = getResources().getString(R.string.base_url);
 
-        //Delete after tests
-//        imageView2 = (ImageView) findViewById(R.id.imageView2);
-//        textView2 = (TextView) findViewById(R.id.textView2);
     }
 
     @Override
@@ -78,32 +73,7 @@ public class AddLocationFourthActivity extends AppCompatActivity implements View
                 break;
 
             case R.id.createLocationReady:
-                contact = contactsEditText.getText().toString();
-
-                //Save Location contact and isPublic to shared preferences file
-//                SharedPreferences sharedPref = getSharedPreferences(AddLocationFirstActivity.FILE_LOCATION_DETAILS, Context.MODE_PRIVATE);
-//                SharedPreferences.Editor editor = sharedPref.edit();
-//                editor.putString(LOCATION_CONTACT, contact);
-//                editor.putString(LOCATION_ISPUBLIC, isPublicString);
-//                editor.commit();
-
-                //Extract data from shared preferences
-                SharedPreferences sharedPref = getSharedPreferences(AddLocationFirstActivity.FILE_LOCATION_DETAILS, Context.MODE_PRIVATE);
-
-                title = sharedPref.getString(AddLocationFirstActivity.LOCATION_TITLE, "No key like " + AddLocationFirstActivity.LOCATION_TITLE);
-                latitude = sharedPref.getString(AddLocationSecondActivity.LOCATION_LATITUDE, "No key like " + AddLocationSecondActivity.LOCATION_LATITUDE);
-                longitude = sharedPref.getString(AddLocationSecondActivity.LOCATION_LONGITUDE, "No key like " + AddLocationSecondActivity.LOCATION_LONGITUDE);
-                about = sharedPref.getString(AddLocationThirdActivity.LOCATION_ABOUT, "No key like " + AddLocationThirdActivity.LOCATION_ABOUT);
-
                 createLocation();
-
-                //Test data which has to be sent on server
-//                textView2.setText(title + "\n" +
-//                        latitude + "\n" +
-//                        longitude + "\n" +
-//                        about + "\n" +
-//                        contact + "\n" +
-//                        String.valueOf(isPublic));
 
 //                //Converts bytes to Bitmap
 //                byte[] bytesArray = readBytesFromFile(AddLocationFirstActivity.imgFilePath);
@@ -113,8 +83,6 @@ public class AddLocationFourthActivity extends AppCompatActivity implements View
 //                imageView2.setImageBitmap(decodedByte);
 //                imageView2.setVisibility(View.VISIBLE);
 
-                stepFifth = new Intent(this, NewEventFirstActivity.class);
-                startActivity(stepFifth);
                 break;
 
             case R.id.cancelButton:
@@ -127,7 +95,7 @@ public class AddLocationFourthActivity extends AppCompatActivity implements View
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
         if(isChecked) {
-            isPublic = true;
+            isPublished = true;
         }
     }
 
@@ -163,30 +131,74 @@ public class AddLocationFourthActivity extends AppCompatActivity implements View
     }
 
     private void createLocation(){
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url + CREATE_LOCATION, new Response.Listener<String>() {
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(url)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        contact = contactsEditText.getText().toString();
+
+        //Extract data from shared preferences
+        SharedPreferences sharedPref = getSharedPreferences(AddLocationFirstActivity.FILE_LOCATION_DETAILS, Context.MODE_PRIVATE);
+
+        title = sharedPref.getString(AddLocationFirstActivity.LOCATION_TITLE, "No key like " + AddLocationFirstActivity.LOCATION_TITLE);
+        latitude = sharedPref.getString(AddLocationSecondActivity.LOCATION_LATITUDE, "No key like " + AddLocationSecondActivity.LOCATION_LATITUDE);
+        longitude = sharedPref.getString(AddLocationSecondActivity.LOCATION_LONGITUDE, "No key like " + AddLocationSecondActivity.LOCATION_LONGITUDE);
+        text = sharedPref.getString(AddLocationThirdActivity.LOCATION_ABOUT, "No key like " + AddLocationThirdActivity.LOCATION_ABOUT);
+
+        SharedPreferences sharedPrefAPP = getSharedPreferences(getString(R.string.APPLICATION_DATA_FILE), Context.MODE_PRIVATE);
+        token = sharedPrefAPP.getString(getString(R.string.USER_TOKEN), "No key like " + getString(R.string.USER_TOKEN));
+
+        FacelocationAPI api = retrofit.create(FacelocationAPI.class);
+        //Наверно еще нужно отправлять імейл
+        LocationBody location = new LocationBody(title, longitude, latitude, text, contact, token, isPublished);
+
+
+        HashMap<String, String> headerMap = new HashMap<String, String>();
+        headerMap.put("Content-Type", "application/json");
+
+        Call<LocationResponse> call = api.addLocation(headerMap, location);
+        call.enqueue(new Callback<LocationResponse>() {
             @Override
-            public void onResponse(String response) {
-                Toast.makeText(getApplicationContext(), "Все прошло хорошо!", Toast.LENGTH_SHORT).show();
+            public void onResponse(Call<LocationResponse> call, Response<LocationResponse> response) {
+                Log.i(TAG, "onResponse: " + response.toString());
+
+                if (response.code() == 200) {
+
+                    String title = response.body().getTitle();
+                    int longitude = response.body().getAddress().getMarker().getLongitude();
+                    int latitude = response.body().getAddress().getMarker().getLatitude();
+                    String text = response.body().getText();
+                    String contact = response.body().getContact();
+                    Boolean isPublished = response.body().getPublished();
+                    String locationPicURL = response.body().getCover().getLocation() + response.body().getCover().getFilename();
+
+
+                    Log.i(TAG, "onResponse: \n" +
+                            title + "\n" +
+                            longitude + "\n" +
+                            latitude + "\n" +
+                            text + "\n" +
+                            contact + "\n" +
+                            isPublished + "\n" +
+                            locationPicURL);
+
+                    stepFifth = new Intent(AddLocationFourthActivity.this, NewEventFirstActivity.class);
+                    startActivity(stepFifth);
+
+                } else {
+                    Log.i(TAG, "onResponse: \n" +
+                            response.code());
+                }
             }
-        }, new Response.ErrorListener() {
+
+
             @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
+            public void onFailure(Call<LocationResponse> call, Throwable t) {
+                Log.i(TAG, "onFailure: " + t.toString());
             }
-        }){
-            @Override
-            protected java.util.Map<String, String> getParams() throws AuthFailureError {
-                java.util.Map<String, String> params = new HashMap<String, String>();
-                params.put(AddLocationFirstActivity.LOCATION_TITLE, title);
-                params.put(AddLocationSecondActivity.LOCATION_LATITUDE, latitude);
-                params.put(AddLocationSecondActivity.LOCATION_LONGITUDE, longitude);
-                params.put(AddLocationThirdActivity.LOCATION_ABOUT, about);
-                params.put(LOCATION_CONTACT, contact);
-                params.put(LOCATION_ISPUBLIC, String.valueOf(isPublic));
-                return params;
-            }
-        };
-        MySingleton.getInstance(this).addToRequestQueue(stringRequest);
+        });
     }
 }
 

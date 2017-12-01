@@ -55,11 +55,8 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
         SharedPreferences sharedPref = getSharedPreferences(getString(R.string.APPLICATION_DATA_FILE), Context.MODE_PRIVATE);
         userEmail = sharedPref.getString(getResources()
                 .getString(R.string.USER_EMAIL), "No key like " + getResources().getString(R.string.USER_EMAIL));
-
         userAvatar = sharedPref.getString(getResources()
                 .getString(R.string.USER_AVATAR_URL), "No key like " + getString(R.string.USER_EMAIL));
-
-        Log.i(TAG, "onCreateFirst: \n" + userEmail);
 
 
         if (userAvatar.equals("/assets/img/icons/avatar.svg")){
