@@ -19,6 +19,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -58,6 +59,8 @@ public class MainActivity extends AppCompatActivity
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
 
+
+    public static final String TAG = "MainActivity";
     private GoogleMap mMap;
     static final LatLng mDefaultLocation = new LatLng(49.84, 24.03);
     static final int DEFAULT_ZOOM = 15;
@@ -139,14 +142,21 @@ public class MainActivity extends AppCompatActivity
         placeAddress = (TextView) findViewById(R.id.placeAddress);
 
         //Extract user profile data from shared preferences
-        SharedPreferences sharedPref = getSharedPreferences(getResources().getString(R.string.APPLICATION_DATA_FILE), Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.APPLICATION_DATA_FILE), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+
+        editor.putBoolean(getString(R.string.FIRST_LOGIN), true);
+        Boolean islogFirst = sharedPref.getBoolean(getString(R.string.FIRST_LOGIN), false);
+        Log.i(TAG, "onCreate111: " + islogFirst.toString());
+
         userAvatar = sharedPref.getString(getResources()
-                .getString(R.string.user_avatar_url), "No key like " + getResources().getString(R.string.user_email));
+                .getString(R.string.USER_AVATAR_URL), "No key like " + getResources().getString(R.string.USER_AVATAR_URL));
+
         userName = sharedPref.getString(getResources()
-                .getString(R.string.user_name), getResources().getString(R.string.your_name_menu));
+                .getString(R.string.USER_NAME), getResources().getString(R.string.your_name_menu));
 
         if (userAvatar.equals("/assets/img/icons/avatar.svg")){
-            return;
+            //go further
         } else {
             myProfileImageView.setBackground(null);
             userNameTextView.setText(userName);
@@ -160,6 +170,9 @@ public class MainActivity extends AppCompatActivity
 //                            .placeholder(R.drawable.oval)) //shows drawable while real/mini image is downloading
                     .into(myProfileImageView);
         }
+
+        Boolean islogSecond = sharedPref.getBoolean(getString(R.string.FIRST_LOGIN), false);
+        Log.i(TAG, "onCreate222: " + islogSecond.toString());
 
     }
 

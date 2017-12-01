@@ -2,8 +2,10 @@ package com.face_location.facelocation;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -12,6 +14,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class StartActivity extends AppCompatActivity implements View.OnClickListener{
 
+    public static final String TAG = "StartActivity";
     RippleBackground rippleBackground;
 
     @Override
@@ -38,10 +41,24 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+
             case R.id.localize:
-                Intent mainActivity = new Intent(this, LogInActivity.class);
-                startActivity(mainActivity);
+                SharedPreferences sharedPref =
+                        getSharedPreferences(getString(R.string.APPLICATION_DATA_FILE),
+                                Context.MODE_PRIVATE);
+
+                Boolean isFirstLogined = sharedPref.getBoolean(getString(R.string.FIRST_LOGIN), false);
+                Log.i(TAG, "onClick: " + isFirstLogined.toString());
+
+                if (isFirstLogined){
+                    Intent mainActivity = new Intent(this, MainActivity.class);
+                    startActivity(mainActivity);
+                } else {
+                    Intent logInActivity = new Intent(this, LogInActivity.class);
+                    startActivity(logInActivity);
+                }
                 break;
+
             case R.id.tos:
                 Intent tosActivity = new Intent(this, TermsOfUse.class);
                 startActivityForResult(tosActivity, 1);

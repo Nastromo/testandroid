@@ -119,18 +119,21 @@
     <string name="create_new_location">Створити нову локацію</string>
     <string name="now_here">зараз тут:</string>
     <string name="chose_file">Виберіть файл</string>
+    <string name="startChat">Ропочати приватний чат?</string>
+    <string name="members">учасники:</string>
+
+
 
     <!--Application information-->
     <string name="APPLICATION_DATA_FILE">Application data</string>
-    <string name="user_email">userEmail</string>
-    <string name="user_id">_id</string>
-    <string name="user_avatar_url">avatar</string>
-    <string name="user_role">role</string>
-    <string name="user_status">status</string>
-    <string name="user_token">token</string>
-    <string name="user_name">name</string>
-    <string name="startChat">Ропочати приватний чат?</string>
-    <string name="members">учасники:</string>
+    <string name="FIRST_LOGIN">firstLogin</string>
+    <string name="USER_EMAIL">userEmail</string>
+    <string name="USER_ID">_id</string>
+    <string name="USER_AVATAR_URL">avatar</string>
+    <string name="USER_ROLE">role</string>
+    <string name="USER_STATUS">status</string>
+    <string name="USER_TOKEN">token</string>
+    <string name="USER_NAME">name</string>
 
 
     <!--Event category names-->
@@ -147,6 +150,8 @@
         <item>тренінг</item>
     </string-array>
 
+
+
     <!--Event publicity-->
     <string-array name="event_publicity">
         <item>Відкритий</item>
@@ -160,7 +165,7 @@
         <item>Без кінця</item>
     </string-array>
 
-    <!--<string name="title_activity_my_app_actions">НАЗАД ДО КАРТИ</string> -->
+
     <string name="title_activity_my_app_actions">НАЗАД ДО КАРТИ</string>
     <string name="tab_text_1">МОЇ ПОДІЇ</string>
     <string name="tab_text_2">ВІДВІДАВ</string>

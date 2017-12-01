@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,6 +23,7 @@ import java.io.IOException;
 
 public class MyProfileActivity extends AppCompatActivity implements View.OnClickListener{
 
+    public static final String TAG = "MyProfileActivity";
     public static final int PICK_IMAGE = 1;
     Bitmap eventImageBitmap;
     Intent getIntent, chooserIntent;
@@ -45,30 +47,30 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
         addPhotoText.setOnClickListener(this);
 
         editEmail = (EditText) findViewById(R.id.editEmail);
-//        editEmail.setOnClickListener(this);
 
         avatar = (ImageView) findViewById(R.id.avatar);
         avatar.setOnClickListener(this);
 
         //Extract user profile data from shared preferences
-        SharedPreferences sharedPref = getSharedPreferences(getResources().getString(R.string.APPLICATION_DATA_FILE), Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.APPLICATION_DATA_FILE), Context.MODE_PRIVATE);
         userEmail = sharedPref.getString(getResources()
-                .getString(R.string.user_email), "No key like " + getResources().getString(R.string.user_email));
+                .getString(R.string.USER_EMAIL), "No key like " + getResources().getString(R.string.USER_EMAIL));
 
         userAvatar = sharedPref.getString(getResources()
-                .getString(R.string.user_avatar_url), "No key like " + getResources().getString(R.string.user_email));
+                .getString(R.string.USER_AVATAR_URL), "No key like " + getString(R.string.USER_EMAIL));
 
-//        userAvatar = "/assets/img/icons/avatar.svg";
+        Log.i(TAG, "onCreateFirst: \n" + userEmail);
+
 
         if (userAvatar.equals("/assets/img/icons/avatar.svg")){
-            return;
+            //just go further
         } else {
             avatar.setBackground(null);
             addPhotoText.setText(getString(R.string.edit_avatar));
             Glide
                     .with(MyProfileActivity.this)
                     .load("https://goo.gl/2q7E7e")
-                    .thumbnail(0.1f) //shows mini image which weight 0.1 from real image while real image is downloading
+                    .thumbnail(0.1f) //shows mini image which weights 0.1 from real image while real image is downloading
                     .apply(RequestOptions
                             .circleCropTransform())
 //                            .placeholder(R.drawable.oval)) //shows drawable while real/mini image is downloading
@@ -91,6 +93,8 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
 //                }
 //            });
         }
+
+        Log.i(TAG, "onCreate: \n" + userEmail);
 
         editEmail.setText(userEmail);
         editName = (EditText) findViewById(R.id.editName);
