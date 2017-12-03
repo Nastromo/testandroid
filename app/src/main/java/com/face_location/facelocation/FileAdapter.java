@@ -15,7 +15,7 @@ import java.util.ArrayList;
  * Created by admin on 30.11.17.
  */
 
-public class FileAdapter extends ArrayAdapter<File> {
+public class FileAdapter extends ArrayAdapter<Files> {
 
     private static final String TAG = "LocalsAdapter";
     private Context mContext;
@@ -27,7 +27,7 @@ public class FileAdapter extends ArrayAdapter<File> {
     }
 
 
-    public FileAdapter(Context context, int resource, ArrayList<File> objects) {
+    public FileAdapter(Context context, int resource, ArrayList<Files> objects) {
         super(context, resource, objects);
         mContext = context;
         mResource = resource;

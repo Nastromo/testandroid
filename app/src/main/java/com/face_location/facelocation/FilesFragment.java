@@ -22,10 +22,10 @@ public class FilesFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.files_fragment, container, false);
 
-        ArrayList<File> files = new ArrayList<>();
+        ArrayList<Files> files = new ArrayList<>();
 
         for (int i = 0; i < 20; i++) {
-            files.add(new File("Первое событие с длинным заголовком" + i));
+            files.add(new Files("Первое событие с длинным заголовком" + i));
         }
 
 

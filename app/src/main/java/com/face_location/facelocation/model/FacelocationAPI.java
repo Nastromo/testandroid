@@ -7,10 +7,14 @@ import com.face_location.facelocation.model.Registration.RegistrationResponse;
 
 import java.util.Map;
 
+import okhttp3.MultipartBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.HeaderMap;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 
 /**
  * Created by admin on 26.11.17.
@@ -39,4 +43,12 @@ public interface FacelocationAPI {
             @HeaderMap Map<String, String> headers,
             @Body LocationBody body
     );
+
+    //Upload User Avatar
+    @Multipart
+    @POST("api/profile/avatar")
+    Call <ResponseBody> uploadAvatar(
+            @HeaderMap Map<String, String> headers,
+            @Part MultipartBody.Part avatar
+            );
 }

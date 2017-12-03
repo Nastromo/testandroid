@@ -4,11 +4,11 @@ package com.face_location.facelocation;
  * Created by admin on 30.11.17.
  */
 
-public class File {
+public class Files {
 
     String name;
 
-    public File(String name) {
+    public Files(String name) {
         this.name = name;
     }
 
