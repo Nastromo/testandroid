@@ -25,6 +25,8 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.face_location.facelocation.model.FacelocationAPI;
+import com.face_location.facelocation.model.MyProfile.ProfileBody;
+import com.face_location.facelocation.model.MyProfile.ProfileResponse;
 
 import java.io.File;
 import java.io.IOException;
@@ -52,9 +54,13 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
     ImageView avatar;
     Button saveButton;
 
-    String userEmail, userName, userSoname, userNumber, userJob, userAvatar, url, imgFileName, imgFilePath, token;
-
+    String userEmail, userName, userSoname, userNumber, userJob, userAvatar, url, imgFileName, token;
     Uri returnUri;
+
+    int requestCodeGlobal, resultCodeGlobal;
+    Intent dataGlobal;
+
+    SharedPreferences sharedPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +81,7 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
         avatar.setOnClickListener(this);
 
         //Extract user profile data from shared preferences
-        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.APPLICATION_DATA_FILE), Context.MODE_PRIVATE);
+        sharedPref = getSharedPreferences(getString(R.string.APPLICATION_DATA_FILE), Context.MODE_PRIVATE);
         userEmail = sharedPref.getString(getResources()
                 .getString(R.string.USER_EMAIL), "No key like " + getResources().getString(R.string.USER_EMAIL));
         userAvatar = sharedPref.getString(getResources()
@@ -136,7 +142,6 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
                 break;
 
             case R.id.addPhotoText:
-                //TODO pick and change photo logic
                 getIntent = new Intent(Intent.ACTION_GET_CONTENT);
                 getIntent.setType("image/*");
                 chooserIntent = Intent.createChooser(getIntent, "Select Image");
@@ -144,26 +149,42 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
                 break;
 
             case R.id.avatar:
-
                 ActivityCompat.requestPermissions(MyProfileActivity.this,
                         new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},1);
                 break;
 
             case R.id.saveButton:
                 userEmail = editEmail.getText().toString();
+                Log.i(TAG, "Сразу после написания: " + userEmail);
+
                 userName = editName.getText().toString();
+                Log.i(TAG, "Сразу после написания: " + userName);
+
                 userSoname = editSoname.getText().toString();
+                Log.i(TAG, "Сразу после написания: " + userSoname);
+
                 userNumber = editNumber.getText().toString();
+                Log.i(TAG, "Сразу после написания: " + userNumber);
+
                 userJob = editJob.getText().toString();
+                Log.i(TAG, "Сразу после написания: " + userJob);
 
 
-                uploadAvatarOnServer();
-                //TODO send strings and photo to server
+                if (requestCodeGlobal == PICK_IMAGE
+                        && resultCodeGlobal == RESULT_OK
+                        && dataGlobal != null){
+                    uploadAvatarOnServer();
+                }
+
+                updateMyProfile();
+
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+
 
         if (requestCode == PICK_IMAGE && resultCode == RESULT_OK && data != null){
             returnUri = data.getData();
@@ -192,10 +213,7 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
     private void uploadAvatarOnServer(){
 
         String realPAth = getRealPathFromURI(MyProfileActivity.this, returnUri);
-
         Log.i(TAG, "СТАРТ ЗАГРУЗКИ \n");
-//        File image = FileUtils.getFile(this, returnUri);
-
         File image = new File(realPAth);
 
         RequestBody filePart = RequestBody.create(MediaType.parse("image/*"), image);
@@ -220,6 +238,12 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
                 Toast.makeText(MyProfileActivity.this, "Все прошло хорошо", Toast.LENGTH_LONG).show();
                 Log.i(TAG, "onResponse: " + response.toString());
 
+                //TODO save user avatar URL to shared pref file
+//                String userAvatarURL = response.body().toString();
+//
+//                SharedPreferences.Editor editor = sharedPref.edit();
+//                editor.putString(getString(R.string.USER_AVATAR_URL), userAvatarURL);
+
             }
 
             @Override
@@ -238,9 +262,8 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
                     // permission granted and now can proceed
-//                    mymethod(); //a sample method called
-                    Toast.makeText(MyProfileActivity.this, "Разрешено!!!", Toast.LENGTH_SHORT).show();
                     getIntent = new Intent(Intent.ACTION_GET_CONTENT);
                     getIntent.setType("image/*");
                     chooserIntent = Intent.createChooser(getIntent, "Select Image");
@@ -250,7 +273,7 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
 
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
-                    Toast.makeText(MyProfileActivity.this, "Permission denied to read your External storage", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MyProfileActivity.this, "Доступ не надано", Toast.LENGTH_SHORT).show();
                 }
                 return;
             }
@@ -280,5 +303,92 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
         }
         cursor.close();
         return filePath;
+    }
+
+    public void updateMyProfile(){
+        Retrofit retrofit = new Retrofit.Builder()
+            .baseUrl(url)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build();
+
+
+    FacelocationAPI api = retrofit.create(FacelocationAPI.class);
+
+        Log.i(TAG, "Перед формирование тела: " +
+                userEmail + "\n" +
+                userName + "\n" +
+                userSoname + "\n" +
+                userNumber + "\n" +
+                userJob);
+
+
+    ProfileBody myProfile = new ProfileBody(userEmail, userName, userSoname, userNumber, userJob);
+
+
+    HashMap<String, String> headers = new HashMap<String, String>();
+        headers.put("Content-Type", "application/json");
+        headers.put("X-Auth", token);
+
+
+    Call<ProfileResponse> call = api.updateMyProfile(headers, myProfile);
+        call.enqueue(new Callback<ProfileResponse>() {
+        @Override
+        public void onResponse(Call<ProfileResponse> call, Response<ProfileResponse> response) {
+            Log.i(TAG, "onResponse: " + response.toString());
+
+            if (response.code() == 200) {
+                String userEmailResponse = response.body().getEmail();
+                String userNameResponse = response.body().getUsername();
+                String userSonameResponse = response.body().getLastname();
+                String userPhoneResponse = response.body().getPhone();
+                String userJobResponse = response.body().getJob();
+
+                Log.i(TAG, "onResponse: \n" +
+                        userEmailResponse + "\n" +
+                        userNameResponse + "\n" +
+                        userSonameResponse + "\n" +
+                        userPhoneResponse + "\n" +
+                        userJobResponse);
+
+                //Save server response data to shared preferences file
+                SharedPreferences.Editor editor = sharedPref.edit();
+
+                editor.putString(getString(R.string.USER_EMAIL), userEmailResponse);
+                editor.putString(getString(R.string.USER_NAME), userNameResponse);
+                editor.putString(getString(R.string.USER_SONAME), userSonameResponse);
+                editor.putString(getString(R.string.USER_PHONE), userPhoneResponse);
+                editor.putString(getString(R.string.USER_JOB), userJobResponse);
+                editor.commit();
+
+                //Check saved information from SharedPref
+//                String userIDExtracted = sharedPref.getString(getString(R.string.USER_ID),
+//                        "No key like " + getString(R.string.USER_ID));
+//
+//                String userEmailExtracted = sharedPref.getString(getString(R.string.USER_EMAIL),
+//                        "No key like " + getString(R.string.USER_EMAIL));
+//
+//                String userAvatarURLExtracted = sharedPref.getString(getString(R.string.USER_AVATAR_URL),
+//                        "No key like " + getString(R.string.USER_AVATAR_URL));
+//
+//                String userTokenExtracted = sharedPref.getString(getString(R.string.USER_TOKEN),
+//                        "No key like " + getString(R.string.USER_TOKEN));
+//
+//                Log.i(TAG, "onResponse: \n" +
+//                        userIDExtracted + "\n" +
+//                        userEmailExtracted + "\n" +
+//                        userAvatarURLExtracted + "\n" +
+//                        userTokenExtracted);
+
+            } else {
+                Log.i(TAG, "onResponse: \n" + response.code());
+            }
+        }
+
+
+        @Override
+        public void onFailure(Call<ProfileResponse> call, Throwable t) {
+                Log.i(TAG, "onFailure: " + t.toString());
+            }
+        });
     }
 }

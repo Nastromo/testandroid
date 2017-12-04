@@ -134,6 +134,10 @@
     <string name="USER_STATUS">status</string>
     <string name="USER_TOKEN">token</string>
     <string name="USER_NAME">name</string>
+    <string name="USER_SONAME">lastname</string>
+    <string name="USER_PHONE">phone</string>
+    <string name="USER_JOB">job</string>
+
 
 
     <!--Event category names-->

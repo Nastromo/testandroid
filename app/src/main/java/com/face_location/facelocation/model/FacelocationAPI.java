@@ -2,6 +2,8 @@ package com.face_location.facelocation.model;
 
 import com.face_location.facelocation.model.Location.LocationBody;
 import com.face_location.facelocation.model.Location.LocationResponse;
+import com.face_location.facelocation.model.MyProfile.ProfileBody;
+import com.face_location.facelocation.model.MyProfile.ProfileResponse;
 import com.face_location.facelocation.model.Registration.RegistrationBody;
 import com.face_location.facelocation.model.Registration.RegistrationResponse;
 
@@ -51,4 +53,11 @@ public interface FacelocationAPI {
             @HeaderMap Map<String, String> headers,
             @Part MultipartBody.Part avatar
             );
+
+    //Update My Profile
+    @POST("api/profile")
+    Call<ProfileResponse> updateMyProfile(
+            @HeaderMap Map<String, String> headers,
+            @Body ProfileBody body
+    );
 }
