@@ -58,6 +58,8 @@ public class MainActivity extends AppCompatActivity
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
 
+
+    public static final String TAG = "MainActivity";
     private GoogleMap mMap;
     static final LatLng mDefaultLocation = new LatLng(49.84, 24.03);
     static final int DEFAULT_ZOOM = 15;
@@ -139,14 +141,19 @@ public class MainActivity extends AppCompatActivity
         placeAddress = (TextView) findViewById(R.id.placeAddress);
 
         //Extract user profile data from shared preferences
-        SharedPreferences sharedPref = getSharedPreferences(getResources().getString(R.string.APPLICATION_DATA_FILE), Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.APPLICATION_DATA_FILE), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+
+        editor.putBoolean(getString(R.string.FIRST_LOGIN), true);
+        editor.commit();
+
         userAvatar = sharedPref.getString(getResources()
-                .getString(R.string.user_avatar_url), "No key like " + getResources().getString(R.string.user_email));
+                .getString(R.string.USER_AVATAR_URL), "No key like " + getString(R.string.USER_AVATAR_URL));
         userName = sharedPref.getString(getResources()
-                .getString(R.string.user_name), getResources().getString(R.string.your_name_menu));
+                .getString(R.string.USER_NAME), getString(R.string.your_name_menu));
 
         if (userAvatar.equals("/assets/img/icons/avatar.svg")){
-            return;
+            //go further
         } else {
             myProfileImageView.setBackground(null);
             userNameTextView.setText(userName);
@@ -160,7 +167,6 @@ public class MainActivity extends AppCompatActivity
 //                            .placeholder(R.drawable.oval)) //shows drawable while real/mini image is downloading
                     .into(myProfileImageView);
         }
-
     }
 
     @Override
@@ -407,8 +413,14 @@ public class MainActivity extends AppCompatActivity
             startActivity(myAppActionsActivity);
 
         } else if (id == R.id.visited_events) {
+            Intent myAppActionsActivity = new Intent(this, MyAppActionsActivity.class);
+            myAppActionsActivity.putExtra("tabNumber", 1);
+            startActivity(myAppActionsActivity);
 
         } else if (id == R.id.my_locations) {
+            Intent myAppActionsActivity = new Intent(this, MyAppActionsActivity.class);
+            myAppActionsActivity.putExtra("tabNumber", 2);
+            startActivity(myAppActionsActivity);
 
         } else if (id == R.id.create_event) {
             Intent searchLocationActivity = new Intent(this, SearchLocationActivity.class);
@@ -423,7 +435,14 @@ public class MainActivity extends AppCompatActivity
             startActivity(supportActivity);
 
         } else if (id == R.id.exit) {
-            Toast.makeText(this, "You clicked on Exit!", Toast.LENGTH_LONG).show();
+            SharedPreferences sharedPref = getSharedPreferences(getString(R.string.APPLICATION_DATA_FILE), Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+
+            editor.putBoolean(getString(R.string.FIRST_LOGIN), false);
+            editor.commit();
+
+            Intent startActivity = new Intent(this, StartActivity.class);
+            startActivity(startActivity);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

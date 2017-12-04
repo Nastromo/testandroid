@@ -1,11 +1,13 @@
 package com.face_location.facelocation;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -53,6 +55,14 @@ public class MyEventsFragment extends Fragment {
         listView = (ListView) rootView.findViewById(R.id.listView);
         MyEventsListAdapter myEventsListAdapter = new MyEventsListAdapter(getContext(), R.layout.my_event_card, events);
         listView.setAdapter(myEventsListAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent localizedActivity = new Intent(getContext(), LocalizedActivity.class);
+                startActivity(localizedActivity);
+            }
+        });
 
         return rootView;
     }

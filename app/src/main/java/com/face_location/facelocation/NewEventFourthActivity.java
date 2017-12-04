@@ -106,7 +106,7 @@ public class NewEventFourthActivity extends AppCompatActivity implements View.On
 //
 //        try {
 //
-//            File file = new File(filePath);
+//            Files file = new Files(filePath);
 //            bytesArray = new byte[(int) file.length()];
 //
 //            //read file into bytes[]

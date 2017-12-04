@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -14,6 +15,7 @@ public class MyAppActionsActivity extends AppCompatActivity {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
+    String TAG = "MyAppActionsActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,24 @@ public class MyAppActionsActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 
+        //Set the right tab to start
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+
+            int value = extras.getInt("tabNumber");
+            Log.i(TAG, "tabNumber: " + value);
+
+            if(value == 1) {
+                Log.i(TAG, "value: " + value);
+                mViewPager.setCurrentItem(1);
+            }
+
+            if(value == 2) {
+                Log.i(TAG, "value: " + value);
+                mViewPager.setCurrentItem(2);
+            }
+        }
+
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
@@ -71,8 +91,8 @@ public class MyAppActionsActivity extends AppCompatActivity {
                     return myEventsTab;
 
                 case 1:
-                    VisitedEventsFragment VisitedEventsTab = new VisitedEventsFragment();
-                    return VisitedEventsTab;
+                    VisitedEventsFragment visitedEventsTab = new VisitedEventsFragment();
+                    return visitedEventsTab;
 
                 case 2:
                     MyLocationsFragment myLocationsTab = new MyLocationsFragment();
