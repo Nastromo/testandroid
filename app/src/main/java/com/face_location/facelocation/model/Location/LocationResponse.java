@@ -9,36 +9,47 @@ import com.google.gson.annotations.SerializedName;
 
 public class LocationResponse {
 
+    @SerializedName("_id")
+    @Expose
+    private String id;
     @SerializedName("title")
     @Expose
     private String title;
     @SerializedName("text")
     @Expose
     private String text;
-    @SerializedName("address")
-    @Expose
-    private Address address;
     @SerializedName("contact")
     @Expose
     private String contact;
-    @SerializedName("cover")
-    @Expose
-    private Cover cover;
     @SerializedName("user")
     @Expose
     private User user;
-    @SerializedName("published")
+    @SerializedName("__v")
     @Expose
-    private Boolean published;
-    @SerializedName("status")
-    @Expose
-    private Integer status;
+    private Integer v;
     @SerializedName("created_at")
     @Expose
     private String createdAt;
-    @SerializedName("updated_at")
+    @SerializedName("status")
     @Expose
-    private String updatedAt;
+    private Integer status;
+    @SerializedName("published")
+    @Expose
+    private Boolean published;
+    @SerializedName("cover")
+    @Expose
+    private Cover cover;
+    @SerializedName("address")
+    @Expose
+    private Address address;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;
@@ -56,28 +67,12 @@ public class LocationResponse {
         this.text = text;
     }
 
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
     public String getContact() {
         return contact;
     }
 
     public void setContact(String contact) {
         this.contact = contact;
-    }
-
-    public Cover getCover() {
-        return cover;
-    }
-
-    public void setCover(Cover cover) {
-        this.cover = cover;
     }
 
     public User getUser() {
@@ -88,20 +83,12 @@ public class LocationResponse {
         this.user = user;
     }
 
-    public Boolean getPublished() {
-        return published;
+    public Integer getV() {
+        return v;
     }
 
-    public void setPublished(Boolean published) {
-        this.published = published;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
+    public void setV(Integer v) {
+        this.v = v;
     }
 
     public String getCreatedAt() {
@@ -112,11 +99,35 @@ public class LocationResponse {
         this.createdAt = createdAt;
     }
 
-    public String getUpdatedAt() {
-        return updatedAt;
+    public Integer getStatus() {
+        return status;
     }
 
-    public void setUpdatedAt(String updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Boolean getPublished() {
+        return published;
+    }
+
+    public void setPublished(Boolean published) {
+        this.published = published;
+    }
+
+    public Cover getCover() {
+        return cover;
+    }
+
+    public void setCover(Cover cover) {
+        this.cover = cover;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
     }
 }

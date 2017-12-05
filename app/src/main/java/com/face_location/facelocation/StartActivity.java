@@ -9,18 +9,25 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.face_location.facelocation.model.DataBase.DataBaseHelper;
 import com.skyfishjy.library.RippleBackground;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 
 public class StartActivity extends AppCompatActivity implements View.OnClickListener{
 
     public static final String TAG = "StartActivity";
     RippleBackground rippleBackground;
+    DataBaseHelper applicationDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
+
+        applicationDB = new DataBaseHelper(this);
 
         rippleBackground = (RippleBackground)findViewById(R.id.ripple);
         rippleBackground.startRippleAnimation();
@@ -43,9 +50,26 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         switch (view.getId()) {
 
             case R.id.localize:
-                SharedPreferences sharedPref =
-                        getSharedPreferences(getString(R.string.APPLICATION_DATA_FILE),
-                                Context.MODE_PRIVATE);
+                boolean insertFirstLoginValue = applicationDB.addData(true);
+
+                if (insertFirstLoginValue == true){
+                    Toast.makeText(StartActivity.this, "Данные в БД добавлены!", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(StartActivity.this, "Нихрена!", Toast.LENGTH_LONG).show();
+                }
+
+
+
+
+
+
+
+
+
+
+
+
+                SharedPreferences sharedPref = getSharedPreferences(GLOBAL_CONSTANTS.sharedPrefFileName, Context.MODE_PRIVATE);
 
                 Boolean isFirstLogined = sharedPref.getBoolean(getString(R.string.FIRST_LOGIN), false);
                 Log.i(TAG, "onClick: " + isFirstLogined.toString());

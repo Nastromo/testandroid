@@ -121,19 +121,22 @@
     <string name="chose_file">Виберіть файл</string>
     <string name="startChat">Ропочати приватний чат?</string>
     <string name="members">учасники:</string>
-
+    <string name="question">Тема запитання</string>
+    <string name="location_text">ЛОКАЦІЯ</string>
+    <string name="event_desc">Опис події</string>
+    <string name="localiz">локалізуватись</string>
+    <string name="going">Збираються відвідати</string>
 
 
     <!--Application information-->
-    <string name="APPLICATION_DATA_FILE">Application data</string>
     <string name="FIRST_LOGIN">firstLogin</string>
-    <string name="USER_EMAIL">userEmail</string>
+    <string name="USER_EMAIL">email</string>
     <string name="USER_ID">_id</string>
     <string name="USER_AVATAR_URL">avatar</string>
     <string name="USER_ROLE">role</string>
     <string name="USER_STATUS">status</string>
     <string name="USER_TOKEN">token</string>
-    <string name="USER_NAME">name</string>
+    <string name="USER_NAME">username</string>
     <string name="USER_SONAME">lastname</string>
     <string name="USER_PHONE">phone</string>
     <string name="USER_JOB">job</string>
@@ -153,7 +156,6 @@
         <item>конференція</item>
         <item>тренінг</item>
     </string-array>
-
 
 
     <!--Event publicity-->
@@ -180,5 +182,7 @@
     <string name="chat">ЧАТ</string>
     <string name="attention">УВАГА</string>
     <string name="files">ФАЙЛИ</string>
+    <string name="no_such_location">Такої локації не існує</string>
+    <string name="def_avatar">https://face-location.com/assets/img/icons/avatar.svg</string>
 
 </resources>

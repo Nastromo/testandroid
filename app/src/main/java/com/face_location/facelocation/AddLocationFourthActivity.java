@@ -36,7 +36,7 @@ public class AddLocationFourthActivity extends AppCompatActivity implements View
     ImageView cancelButton;
     Switch switchDoPublic;
     Intent stepFifth, mainActivity;
-    private static String url;
+    private String url;
     String title, latitude, longitude, text, contact, token;
     boolean isPublished = false;
 
@@ -147,18 +147,21 @@ public class AddLocationFourthActivity extends AppCompatActivity implements View
         longitude = sharedPref.getString(AddLocationSecondActivity.LOCATION_LONGITUDE, "No key like " + AddLocationSecondActivity.LOCATION_LONGITUDE);
         text = sharedPref.getString(AddLocationThirdActivity.LOCATION_ABOUT, "No key like " + AddLocationThirdActivity.LOCATION_ABOUT);
 
-        SharedPreferences sharedPrefAPP = getSharedPreferences(getString(R.string.APPLICATION_DATA_FILE), Context.MODE_PRIVATE);
+        SharedPreferences sharedPrefAPP = getSharedPreferences(GLOBAL_CONSTANTS.sharedPrefFileName, Context.MODE_PRIVATE);
         token = sharedPrefAPP.getString(getString(R.string.USER_TOKEN), "No key like " + getString(R.string.USER_TOKEN));
 
         FacelocationAPI api = retrofit.create(FacelocationAPI.class);
         //Наверно еще нужно отправлять імейл
-        LocationBody location = new LocationBody(title, longitude, latitude, text, contact, token, isPublished);
+//        LocationBody location = new LocationBody(title, longitude, latitude, text, contact, isPublished);
 
 
-        HashMap<String, String> headerMap = new HashMap<String, String>();
-        headerMap.put("Content-Type", "application/json");
+        LocationBody location = new LocationBody(title, longitude, latitude, text, contact, isPublished);
 
-        Call<LocationResponse> call = api.addLocation(headerMap, location);
+        HashMap<String, String> headers = new HashMap<String, String>();
+        headers.put("Content-Type", "application/json");
+        headers.put("X-Auth", token);
+
+        Call<LocationResponse> call = api.addLocation(headers, location);
         call.enqueue(new Callback<LocationResponse>() {
             @Override
             public void onResponse(Call<LocationResponse> call, Response<LocationResponse> response) {
@@ -167,8 +170,8 @@ public class AddLocationFourthActivity extends AppCompatActivity implements View
                 if (response.code() == 200) {
 
                     String title = response.body().getTitle();
-                    int longitude = response.body().getAddress().getMarker().getLongitude();
-                    int latitude = response.body().getAddress().getMarker().getLatitude();
+                    double longitude = response.body().getAddress().getMarker().getLongitude();
+                    double latitude = response.body().getAddress().getMarker().getLatitude();
                     String text = response.body().getText();
                     String contact = response.body().getContact();
                     Boolean isPublished = response.body().getPublished();
@@ -188,8 +191,7 @@ public class AddLocationFourthActivity extends AppCompatActivity implements View
                     startActivity(stepFifth);
 
                 } else {
-                    Log.i(TAG, "onResponse: \n" +
-                            response.code());
+                    Log.i(TAG, "onResponse: \n" + response.code());
                 }
             }
 

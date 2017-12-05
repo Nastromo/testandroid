@@ -59,8 +59,8 @@ public class MyEventsFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent localizedActivity = new Intent(getContext(), LocalizedActivity.class);
-                startActivity(localizedActivity);
+                Intent eventdActivity = new Intent(getContext(), EventActivity.class);
+                startActivity(eventdActivity);
             }
         });
 

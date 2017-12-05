@@ -108,7 +108,6 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void userLogin(){
-
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(url)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -139,8 +138,10 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
                             userAvatarURL + "\n" +
                             userToken);
 
+                    GLOBAL_CONSTANTS.sharedPrefFileName = response.body().getUser().getEmail();
+
                     //Save server response data to shared preferences file
-                    SharedPreferences sharedPref = getSharedPreferences(getString(R.string.APPLICATION_DATA_FILE), Context.MODE_PRIVATE);
+                    SharedPreferences sharedPref = getSharedPreferences(GLOBAL_CONSTANTS.sharedPrefFileName, Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPref.edit();
 
                     editor.putString(getString(R.string.USER_ID), userID);

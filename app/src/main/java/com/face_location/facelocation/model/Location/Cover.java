@@ -5,20 +5,12 @@ import com.google.gson.annotations.SerializedName;
 
 public class Cover {
 
-    @SerializedName("location")
-    @Expose
-    private String location;
     @SerializedName("filename")
     @Expose
     private String filename;
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
+    @SerializedName("location")
+    @Expose
+    private String location;
 
     public String getFilename() {
         return filename;
@@ -26,6 +18,14 @@ public class Cover {
 
     public void setFilename(String filename) {
         this.filename = filename;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
 }

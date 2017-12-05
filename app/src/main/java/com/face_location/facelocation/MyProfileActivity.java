@@ -81,15 +81,14 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
         avatar.setOnClickListener(this);
 
         //Extract user profile data from shared preferences
-        sharedPref = getSharedPreferences(getString(R.string.APPLICATION_DATA_FILE), Context.MODE_PRIVATE);
-        userEmail = sharedPref.getString(getResources()
-                .getString(R.string.USER_EMAIL), "No key like " + getResources().getString(R.string.USER_EMAIL));
+        sharedPref = getSharedPreferences(GLOBAL_CONSTANTS.sharedPrefFileName, Context.MODE_PRIVATE);
+        userEmail = sharedPref.getString(getString(R.string.USER_EMAIL), "No key like " + getResources().getString(R.string.USER_EMAIL));
         userAvatar = sharedPref.getString(getResources()
                 .getString(R.string.USER_AVATAR_URL), "No key like " + getString(R.string.USER_EMAIL));
         token = sharedPref.getString(getString(R.string.USER_TOKEN), "No key like " + getString(R.string.USER_TOKEN));
 
 
-        if (userAvatar.equals("/assets/img/icons/avatar.svg")){
+        if (userAvatar.equals(getString(R.string.def_avatar))){
             //just go further
         } else {
             avatar.setBackground(null);
@@ -102,26 +101,8 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
                             .circleCropTransform())
 //                            .placeholder(R.drawable.oval)) //shows drawable while real/mini image is downloading
                     .into(avatar);
-
-            //circled imageView with Glide 3.5.2
-//            Glide
-//                    .with(MyProfileActivity.this)
-//                    .load("https://goo.gl/2q7E7e")
-//                    .asBitmap()
-//                    .centerCrop()
-//                    .into(new BitmapImageViewTarget(avatar) {
-//                @Override
-//                protected void setResource(Bitmap resource) {
-//                    RoundedBitmapDrawable circularBitmapDrawable =
-//                            RoundedBitmapDrawableFactory.create(MyProfileActivity.this.getResources(), resource);
-//                    circularBitmapDrawable.setCircular(true);
-//                    avatar.setImageDrawable(circularBitmapDrawable);
-//                    avatar.setBackground(null);
-//                }
-//            });
         }
 
-        Log.i(TAG, "EMAIL ПОЛЬЗОВАТЕЛЯ: \n" + userEmail);
 
         editEmail.setText(userEmail);
         editName = (EditText) findViewById(R.id.editName);
@@ -155,19 +136,10 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
 
             case R.id.saveButton:
                 userEmail = editEmail.getText().toString();
-                Log.i(TAG, "Сразу после написания: " + userEmail);
-
                 userName = editName.getText().toString();
-                Log.i(TAG, "Сразу после написания: " + userName);
-
                 userSoname = editSoname.getText().toString();
-                Log.i(TAG, "Сразу после написания: " + userSoname);
-
                 userNumber = editNumber.getText().toString();
-                Log.i(TAG, "Сразу после написания: " + userNumber);
-
                 userJob = editJob.getText().toString();
-                Log.i(TAG, "Сразу после написания: " + userJob);
 
 
                 if (requestCodeGlobal == PICK_IMAGE
@@ -175,9 +147,8 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
                         && dataGlobal != null){
                     uploadAvatarOnServer();
                 }
-
+                uploadAvatarOnServer();
                 updateMyProfile();
-
         }
     }
 
@@ -313,15 +284,6 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
 
 
     FacelocationAPI api = retrofit.create(FacelocationAPI.class);
-
-        Log.i(TAG, "Перед формирование тела: " +
-                userEmail + "\n" +
-                userName + "\n" +
-                userSoname + "\n" +
-                userNumber + "\n" +
-                userJob);
-
-
     ProfileBody myProfile = new ProfileBody(userEmail, userName, userSoname, userNumber, userJob);
 
 
@@ -359,25 +321,6 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
                 editor.putString(getString(R.string.USER_PHONE), userPhoneResponse);
                 editor.putString(getString(R.string.USER_JOB), userJobResponse);
                 editor.commit();
-
-                //Check saved information from SharedPref
-//                String userIDExtracted = sharedPref.getString(getString(R.string.USER_ID),
-//                        "No key like " + getString(R.string.USER_ID));
-//
-//                String userEmailExtracted = sharedPref.getString(getString(R.string.USER_EMAIL),
-//                        "No key like " + getString(R.string.USER_EMAIL));
-//
-//                String userAvatarURLExtracted = sharedPref.getString(getString(R.string.USER_AVATAR_URL),
-//                        "No key like " + getString(R.string.USER_AVATAR_URL));
-//
-//                String userTokenExtracted = sharedPref.getString(getString(R.string.USER_TOKEN),
-//                        "No key like " + getString(R.string.USER_TOKEN));
-//
-//                Log.i(TAG, "onResponse: \n" +
-//                        userIDExtracted + "\n" +
-//                        userEmailExtracted + "\n" +
-//                        userAvatarURLExtracted + "\n" +
-//                        userTokenExtracted);
 
             } else {
                 Log.i(TAG, "onResponse: \n" + response.code());

@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity
         placeAddress = (TextView) findViewById(R.id.placeAddress);
 
         //Extract user profile data from shared preferences
-        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.APPLICATION_DATA_FILE), Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = getSharedPreferences(GLOBAL_CONSTANTS.sharedPrefFileName, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
 
         editor.putBoolean(getString(R.string.FIRST_LOGIN), true);
@@ -151,13 +151,12 @@ public class MainActivity extends AppCompatActivity
                 .getString(R.string.USER_AVATAR_URL), "No key like " + getString(R.string.USER_AVATAR_URL));
         userName = sharedPref.getString(getResources()
                 .getString(R.string.USER_NAME), getString(R.string.your_name_menu));
+        userNameTextView.setText(userName);
 
-        if (userAvatar.equals("/assets/img/icons/avatar.svg")){
+        if (userAvatar.equals(getString(R.string.def_avatar))){
             //go further
         } else {
             myProfileImageView.setBackground(null);
-            userNameTextView.setText(userName);
-
             Glide
                     .with(MainActivity.this)
                     .load("https://goo.gl/2q7E7e")
@@ -435,7 +434,7 @@ public class MainActivity extends AppCompatActivity
             startActivity(supportActivity);
 
         } else if (id == R.id.exit) {
-            SharedPreferences sharedPref = getSharedPreferences(getString(R.string.APPLICATION_DATA_FILE), Context.MODE_PRIVATE);
+            SharedPreferences sharedPref = getSharedPreferences(GLOBAL_CONSTANTS.sharedPrefFileName, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPref.edit();
 
             editor.putBoolean(getString(R.string.FIRST_LOGIN), false);
