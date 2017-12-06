@@ -2,17 +2,15 @@ package com.face_location.facelocation;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.face_location.facelocation.model.DataBase.DataBaseHelper;
 import com.skyfishjy.library.RippleBackground;
+
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
@@ -27,7 +25,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
-        applicationDB = new DataBaseHelper(this);
+        applicationDB = DataBaseHelper.getInstance(this);
 
         rippleBackground = (RippleBackground)findViewById(R.id.ripple);
         rippleBackground.startRippleAnimation();
@@ -50,38 +48,21 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         switch (view.getId()) {
 
             case R.id.localize:
-                boolean insertFirstLoginValue = applicationDB.addData(true);
-
-                if (insertFirstLoginValue == true){
-                    Toast.makeText(StartActivity.this, "Данные в БД добавлены!", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(StartActivity.this, "Нихрена!", Toast.LENGTH_LONG).show();
-                }
-
-
-
-
-
-
-
-
-
-
-
-
-                SharedPreferences sharedPref = getSharedPreferences(GLOBAL_CONSTANTS.sharedPrefFileName, Context.MODE_PRIVATE);
-
-                Boolean isFirstLogined = sharedPref.getBoolean(getString(R.string.FIRST_LOGIN), false);
-                Log.i(TAG, "onClick: " + isFirstLogined.toString());
-
-                if (isFirstLogined){
-                    Intent mainActivity = new Intent(this, MainActivity.class);
-                    startActivity(mainActivity);
+                String[] userArrayData = applicationDB.retrieveFirstLoginValues();
+                if (userArrayData != null){
+                    if (userArrayData[1].equals("1")){
+                        Intent mainActivity = new Intent(this, MainActivity.class);
+                        startActivity(mainActivity);
+                    } else {
+                        Intent logInActivity = new Intent(this, LogInActivity.class);
+                        startActivity(logInActivity);
+                    }
+                    break;
                 } else {
                     Intent logInActivity = new Intent(this, LogInActivity.class);
                     startActivity(logInActivity);
+                    break;
                 }
-                break;
 
             case R.id.tos:
                 Intent tosActivity = new Intent(this, TermsOfUse.class);

@@ -3,7 +3,6 @@ package com.face_location.facelocation;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -24,6 +23,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.face_location.facelocation.model.DataBase.DataBaseHelper;
 import com.face_location.facelocation.model.FacelocationAPI;
 import com.face_location.facelocation.model.MyProfile.ProfileBody;
 import com.face_location.facelocation.model.MyProfile.ProfileResponse;
@@ -60,7 +60,7 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
     int requestCodeGlobal, resultCodeGlobal;
     Intent dataGlobal;
 
-    SharedPreferences sharedPref;
+    DataBaseHelper applicationDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,31 +80,39 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
         avatar = (ImageView) findViewById(R.id.avatar);
         avatar.setOnClickListener(this);
 
-        //Extract user profile data from shared preferences
-        sharedPref = getSharedPreferences(GLOBAL_CONSTANTS.sharedPrefFileName, Context.MODE_PRIVATE);
-        userEmail = sharedPref.getString(getString(R.string.USER_EMAIL), "No key like " + getResources().getString(R.string.USER_EMAIL));
-        userAvatar = sharedPref.getString(getResources()
-                .getString(R.string.USER_AVATAR_URL), "No key like " + getString(R.string.USER_EMAIL));
-        token = sharedPref.getString(getString(R.string.USER_TOKEN), "No key like " + getString(R.string.USER_TOKEN));
+        applicationDB = DataBaseHelper.getInstance(this);
+        String[] userArrayData = applicationDB.retrieveFirstLoginValues();
 
+        if (userArrayData != null){
+            token = userArrayData[5];
 
-        if (userAvatar.equals(getString(R.string.def_avatar))){
-            //just go further
-        } else {
-            avatar.setBackground(null);
-            addPhotoText.setText(getString(R.string.edit_avatar));
-            Glide
-                    .with(MyProfileActivity.this)
-                    .load("https://goo.gl/2q7E7e")
-                    .thumbnail(0.1f) //shows mini image which weights 0.1 from real image while real image is downloading
-                    .apply(RequestOptions
-                            .circleCropTransform())
+            userAvatar = userArrayData[7];
+            if (userAvatar.equals(getString(R.string.def_avatar)) || userAvatar.equals(getString(R.string.def_avatar_second))){
+                //go further
+            } else {
+                avatar.setBackground(null);
+                Glide
+                        .with(MyProfileActivity.this)
+                        .load(userAvatar)
+                        .thumbnail(0.1f) //shows mini image which weight 0.1 from real image while real image is downloading
+                        .apply(RequestOptions
+                                .circleCropTransform())
 //                            .placeholder(R.drawable.oval)) //shows drawable while real/mini image is downloading
-                    .into(avatar);
+                        .into(avatar);
+            }
+
+
+            userEmail = userArrayData[2];
+            if (userEmail != null){
+                editEmail.setText(userEmail);
+            }
+
+            userName = userArrayData[6];
+            if (userName != null){
+                editName.setText(userName);
+            }
         }
 
-
-        editEmail.setText(userEmail);
         editName = (EditText) findViewById(R.id.editName);
         editSoname = (EditText) findViewById(R.id.editSoname);
         editNumber = (EditText) findViewById(R.id.editNumber);
@@ -141,7 +149,7 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
                 userNumber = editNumber.getText().toString();
                 userJob = editJob.getText().toString();
 
-
+                //TODO разобраться с этим условием (оно кажется не работает)
                 if (requestCodeGlobal == PICK_IMAGE
                         && resultCodeGlobal == RESULT_OK
                         && dataGlobal != null){
@@ -154,8 +162,6 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-
 
         if (requestCode == PICK_IMAGE && resultCode == RESULT_OK && data != null){
             returnUri = data.getData();
@@ -209,7 +215,7 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
                 Toast.makeText(MyProfileActivity.this, "Все прошло хорошо", Toast.LENGTH_LONG).show();
                 Log.i(TAG, "onResponse: " + response.toString());
 
-                //TODO save user avatar URL to shared pref file
+                //TODO save user avatar URL to SQLite DB
 //                String userAvatarURL = response.body().toString();
 //
 //                SharedPreferences.Editor editor = sharedPref.edit();
@@ -312,15 +318,13 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
                         userPhoneResponse + "\n" +
                         userJobResponse);
 
-                //Save server response data to shared preferences file
-                SharedPreferences.Editor editor = sharedPref.edit();
+                boolean result = applicationDB.addMyProfileData(userEmailResponse, userNameResponse, userSonameResponse, userPhoneResponse, userJobResponse);
+                if (result == true){
+                    Log.i(TAG, "Запись в БД: УСПЕШНО");
 
-                editor.putString(getString(R.string.USER_EMAIL), userEmailResponse);
-                editor.putString(getString(R.string.USER_NAME), userNameResponse);
-                editor.putString(getString(R.string.USER_SONAME), userSonameResponse);
-                editor.putString(getString(R.string.USER_PHONE), userPhoneResponse);
-                editor.putString(getString(R.string.USER_JOB), userJobResponse);
-                editor.commit();
+                } else {
+                    Log.i(TAG, "Запись в БД: НЕ ЗАПИСАНО :(");
+                }
 
             } else {
                 Log.i(TAG, "onResponse: \n" + response.code());

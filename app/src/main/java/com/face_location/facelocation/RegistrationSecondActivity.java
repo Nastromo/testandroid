@@ -1,8 +1,6 @@
 package com.face_location.facelocation;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -12,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.face_location.facelocation.model.DataBase.DataBaseHelper;
 import com.face_location.facelocation.model.FacelocationAPI;
 import com.face_location.facelocation.model.Registration.RegistrationBody;
 import com.face_location.facelocation.model.Registration.RegistrationResponse;
@@ -33,6 +32,8 @@ public class RegistrationSecondActivity extends AppCompatActivity implements Vie
 
     private static final String TAG = "Registration";
     private String url;
+
+    private DataBaseHelper applicationDB;
 
 
 
@@ -107,48 +108,31 @@ public class RegistrationSecondActivity extends AppCompatActivity implements Vie
                 if (response.code() == 200) {
                     String userID = response.body().getUser().getId();
                     String userEmail = response.body().getUser().getEmail();
-                    String userAvatarURL = response.body().getUser().getAvatar();
+                    String userRole = response.body().getUser().getRole();
+                    int userStatus = response.body().getUser().getStatus();
                     String userToken = response.body().getToken();
+                    String userAvatarURL = response.body().getUser().getAvatar();
 
                     Log.i(TAG, "onResponse: \n" +
                             userID + "\n" +
                             userEmail + "\n" +
-                            userAvatarURL + "\n" +
-                            userToken);
+                            userRole + "\n" +
+                            userStatus + "\n" +
+                            userToken + "\n" +
+                            userAvatarURL);
 
-                    GLOBAL_CONSTANTS.sharedPrefFileName = response.body().getUser().getEmail();
+                    applicationDB = DataBaseHelper.getInstance(RegistrationSecondActivity.this);
+                    boolean insertFirstLoginData = applicationDB.addFirstLogginData(userID,true, userEmail, userRole, userStatus, userToken, userAvatarURL);
 
-                    //Save server response data to shared preferences file
-                    SharedPreferences sharedPref = getSharedPreferences(GLOBAL_CONSTANTS.sharedPrefFileName, Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPref.edit();
+                    if (insertFirstLoginData == true){
+                        Log.i(TAG, "Запись в БД: УСПЕШНО");
 
-                    editor.putString(getString(R.string.USER_ID), userID);
-                    editor.putString(getString(R.string.USER_EMAIL), userEmail);
-                    editor.putString(getString(R.string.USER_AVATAR_URL), userAvatarURL);
-                    editor.putString(getString(R.string.USER_TOKEN), userToken);
-                    editor.commit();
+                    } else {
+                        Log.i(TAG, "Запись в БД: НЕ ЗАПИСАНО :(");
+                    }
 
                     Intent mainActivity = new Intent(RegistrationSecondActivity.this, MainActivity.class);
                     startActivity(mainActivity);
-
-                    //Check saved information from SharedPref
-//                String userIDExtracted = sharedPref.getString(getString(R.string.USER_ID),
-//                        "No key like " + getString(R.string.USER_ID));
-//
-//                String userEmailExtracted = sharedPref.getString(getString(R.string.USER_EMAIL),
-//                        "No key like " + getString(R.string.USER_EMAIL));
-//
-//                String userAvatarURLExtracted = sharedPref.getString(getString(R.string.USER_AVATAR_URL),
-//                        "No key like " + getString(R.string.USER_AVATAR_URL));
-//
-//                String userTokenExtracted = sharedPref.getString(getString(R.string.USER_TOKEN),
-//                        "No key like " + getString(R.string.USER_TOKEN));
-//
-//                Log.i(TAG, "onResponse: \n" +
-//                        userIDExtracted + "\n" +
-//                        userEmailExtracted + "\n" +
-//                        userAvatarURLExtracted + "\n" +
-//                        userTokenExtracted);
 
                 } else {
                     Log.i(TAG, "onResponse: \n" +

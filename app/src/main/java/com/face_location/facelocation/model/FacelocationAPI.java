@@ -59,7 +59,7 @@ public interface FacelocationAPI {
     @POST("api/profile/avatar")
     Call <ResponseBody> uploadAvatar(
             @HeaderMap Map<String, String> headers,
-            @Part MultipartBody.Part avatar
+            @Part MultipartBody.Part file
             );
 
     //Update My Profile

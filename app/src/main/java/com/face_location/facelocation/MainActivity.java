@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
@@ -19,6 +18,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.face_location.facelocation.model.DataBase.DataBaseHelper;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -79,6 +80,9 @@ public class MainActivity extends AppCompatActivity
     Intent myProfileActivity;
     ImageView myProfileImageView;
 
+    DataBaseHelper applicationDB;
+    String[] userArrayData;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +91,8 @@ public class MainActivity extends AppCompatActivity
 
         //TODO delete this if don't get paid for progressbar
 //        LogInActivity.pDialog.hide();
+
+        applicationDB = DataBaseHelper.getInstance(this);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         // mapView = mapFragment.getView();  //Padding the My location button
@@ -109,9 +115,6 @@ public class MainActivity extends AppCompatActivity
                 //TODO Delete add location fragments before realece if needed
                 Intent newLocation = new Intent(getApplicationContext(), AddLocationFirstActivity.class);
                 startActivity(newLocation);
-
-//                Snackbar.make(view, "Заготовка для создать Локацию", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
             }
         });
 
@@ -140,32 +143,35 @@ public class MainActivity extends AppCompatActivity
         placeName = (TextView) findViewById(R.id.placeName);
         placeAddress = (TextView) findViewById(R.id.placeAddress);
 
-        //Extract user profile data from shared preferences
-        SharedPreferences sharedPref = getSharedPreferences(GLOBAL_CONSTANTS.sharedPrefFileName, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
+        userArrayData = applicationDB.retrieveFirstLoginValues();
 
-        editor.putBoolean(getString(R.string.FIRST_LOGIN), true);
-        editor.commit();
-
-        userAvatar = sharedPref.getString(getResources()
-                .getString(R.string.USER_AVATAR_URL), "No key like " + getString(R.string.USER_AVATAR_URL));
-        userName = sharedPref.getString(getResources()
-                .getString(R.string.USER_NAME), getString(R.string.your_name_menu));
-        userNameTextView.setText(userName);
-
-        if (userAvatar.equals(getString(R.string.def_avatar))){
-            //go further
-        } else {
-            myProfileImageView.setBackground(null);
-            Glide
-                    .with(MainActivity.this)
-                    .load("https://goo.gl/2q7E7e")
-                    .thumbnail(0.1f) //shows mini image which weight 0.1 from real image while real image is downloading
-                    .apply(RequestOptions
-                            .circleCropTransform())
+        if (userArrayData != null){
+            userAvatar = userArrayData[7];
+            if (userAvatar != null){
+                if (userAvatar.equals(getString(R.string.def_avatar)) || userAvatar.equals(getString(R.string.def_avatar_second))){
+                    //go further
+                } else {
+                    myProfileImageView.setBackground(null);
+                    Glide
+                            .with(MainActivity.this)
+                            .load(userAvatar)
+                            .thumbnail(0.1f) //shows mini image which weight 0.1 from real image while real image is downloading
+                            .apply(RequestOptions
+                                    .circleCropTransform())
 //                            .placeholder(R.drawable.oval)) //shows drawable while real/mini image is downloading
-                    .into(myProfileImageView);
+                            .into(myProfileImageView);
+                }
+            }
+
+            userName = userArrayData[6];
+            if (userName != null){
+                userNameTextView.setText(userName);
+            } else {
+                userNameTextView.setText(getString(R.string.your_name_menu));
+            }
         }
+
+
     }
 
     @Override
@@ -434,11 +440,14 @@ public class MainActivity extends AppCompatActivity
             startActivity(supportActivity);
 
         } else if (id == R.id.exit) {
-            SharedPreferences sharedPref = getSharedPreferences(GLOBAL_CONSTANTS.sharedPrefFileName, Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPref.edit();
 
-            editor.putBoolean(getString(R.string.FIRST_LOGIN), false);
-            editor.commit();
+            boolean result = applicationDB.updateFirstLoginValue(userArrayData[0]);
+            if (result == true){
+                Log.i(TAG, "Обновление в БД: УСПЕШНО");
+
+            } else {
+                Log.i(TAG, "Обновление в БД: НЕ ОБНОВЛЕНО :(");
+            }
 
             Intent startActivity = new Intent(this, StartActivity.class);
             startActivity(startActivity);

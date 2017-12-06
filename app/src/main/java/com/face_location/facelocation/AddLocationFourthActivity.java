@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.face_location.facelocation.model.DataBase.DataBaseHelper;
 import com.face_location.facelocation.model.FacelocationAPI;
 import com.face_location.facelocation.model.Location.LocationBody;
 import com.face_location.facelocation.model.Location.LocationResponse;
@@ -40,11 +41,15 @@ public class AddLocationFourthActivity extends AppCompatActivity implements View
     String title, latitude, longitude, text, contact, token;
     boolean isPublished = false;
 
+    DataBaseHelper applicationDB;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_location_fourth);
+
+        applicationDB = DataBaseHelper.getInstance(this);
 
         buttonBackView = (TextView) findViewById(R.id.buttonBackView);
         buttonBackView.setOnClickListener(this);
@@ -147,8 +152,8 @@ public class AddLocationFourthActivity extends AppCompatActivity implements View
         longitude = sharedPref.getString(AddLocationSecondActivity.LOCATION_LONGITUDE, "No key like " + AddLocationSecondActivity.LOCATION_LONGITUDE);
         text = sharedPref.getString(AddLocationThirdActivity.LOCATION_ABOUT, "No key like " + AddLocationThirdActivity.LOCATION_ABOUT);
 
-        SharedPreferences sharedPrefAPP = getSharedPreferences(GLOBAL_CONSTANTS.sharedPrefFileName, Context.MODE_PRIVATE);
-        token = sharedPrefAPP.getString(getString(R.string.USER_TOKEN), "No key like " + getString(R.string.USER_TOKEN));
+        String[] userInfo = applicationDB.retrieveFirstLoginValues();
+        token = userInfo[5];
 
         FacelocationAPI api = retrofit.create(FacelocationAPI.class);
         //Наверно еще нужно отправлять імейл
@@ -170,22 +175,22 @@ public class AddLocationFourthActivity extends AppCompatActivity implements View
                 if (response.code() == 200) {
 
                     String title = response.body().getTitle();
-                    double longitude = response.body().getAddress().getMarker().getLongitude();
-                    double latitude = response.body().getAddress().getMarker().getLatitude();
-                    String text = response.body().getText();
-                    String contact = response.body().getContact();
-                    Boolean isPublished = response.body().getPublished();
-                    String locationPicURL = response.body().getCover().getLocation() + response.body().getCover().getFilename();
+                    Log.i(TAG, "ЗАГОЛОВОК: " + title);
+//                    double longitude = response.body().getAddress().getMarker().getLongitude();
+//                    double latitude = response.body().getAddress().getMarker().getLatitude();
+//                    String text = response.body().getText();
+//                    String contact = response.body().getContact();
+//                    Boolean isPublished = response.body().getPublished();
+//                    String locationPicURL = response.body().getCover().getLocation() + response.body().getCover().getFilename();
 
-
-                    Log.i(TAG, "onResponse: \n" +
-                            title + "\n" +
-                            longitude + "\n" +
-                            latitude + "\n" +
-                            text + "\n" +
-                            contact + "\n" +
-                            isPublished + "\n" +
-                            locationPicURL);
+//                    Log.i(TAG, "onResponse: \n" +
+//                            title + "\n" +
+//                            longitude + "\n" +
+//                            latitude + "\n" +
+//                            text + "\n" +
+//                            contact + "\n" +
+//                            isPublished + "\n" +
+//                            locationPicURL);
 
                     stepFifth = new Intent(AddLocationFourthActivity.this, NewEventFirstActivity.class);
                     startActivity(stepFifth);
