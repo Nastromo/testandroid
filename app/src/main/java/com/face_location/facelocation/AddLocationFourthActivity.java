@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.face_location.facelocation.model.DataBase.DataBaseHelper;
 import com.face_location.facelocation.model.FacelocationAPI;
 import com.face_location.facelocation.model.Location.LocationBody;
 import com.face_location.facelocation.model.Location.LocationResponse;
@@ -36,15 +37,19 @@ public class AddLocationFourthActivity extends AppCompatActivity implements View
     ImageView cancelButton;
     Switch switchDoPublic;
     Intent stepFifth, mainActivity;
-    private static String url;
+    private String url;
     String title, latitude, longitude, text, contact, token;
     boolean isPublished = false;
+
+    DataBaseHelper applicationDB;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_location_fourth);
+
+        applicationDB = DataBaseHelper.getInstance(this);
 
         buttonBackView = (TextView) findViewById(R.id.buttonBackView);
         buttonBackView.setOnClickListener(this);
@@ -147,18 +152,21 @@ public class AddLocationFourthActivity extends AppCompatActivity implements View
         longitude = sharedPref.getString(AddLocationSecondActivity.LOCATION_LONGITUDE, "No key like " + AddLocationSecondActivity.LOCATION_LONGITUDE);
         text = sharedPref.getString(AddLocationThirdActivity.LOCATION_ABOUT, "No key like " + AddLocationThirdActivity.LOCATION_ABOUT);
 
-        SharedPreferences sharedPrefAPP = getSharedPreferences(getString(R.string.APPLICATION_DATA_FILE), Context.MODE_PRIVATE);
-        token = sharedPrefAPP.getString(getString(R.string.USER_TOKEN), "No key like " + getString(R.string.USER_TOKEN));
+        String[] userInfo = applicationDB.retrieveFirstLoginValues();
+        token = userInfo[5];
 
         FacelocationAPI api = retrofit.create(FacelocationAPI.class);
         //Наверно еще нужно отправлять імейл
-        LocationBody location = new LocationBody(title, longitude, latitude, text, contact, token, isPublished);
+//        LocationBody location = new LocationBody(title, longitude, latitude, text, contact, isPublished);
 
 
-        HashMap<String, String> headerMap = new HashMap<String, String>();
-        headerMap.put("Content-Type", "application/json");
+        LocationBody location = new LocationBody(title, longitude, latitude, text, contact, isPublished);
 
-        Call<LocationResponse> call = api.addLocation(headerMap, location);
+        HashMap<String, String> headers = new HashMap<String, String>();
+        headers.put("Content-Type", "application/json");
+        headers.put("X-Auth", token);
+
+        Call<LocationResponse> call = api.addLocation(headers, location);
         call.enqueue(new Callback<LocationResponse>() {
             @Override
             public void onResponse(Call<LocationResponse> call, Response<LocationResponse> response) {
@@ -167,29 +175,28 @@ public class AddLocationFourthActivity extends AppCompatActivity implements View
                 if (response.code() == 200) {
 
                     String title = response.body().getTitle();
-                    int longitude = response.body().getAddress().getMarker().getLongitude();
-                    int latitude = response.body().getAddress().getMarker().getLatitude();
-                    String text = response.body().getText();
-                    String contact = response.body().getContact();
-                    Boolean isPublished = response.body().getPublished();
-                    String locationPicURL = response.body().getCover().getLocation() + response.body().getCover().getFilename();
+                    Log.i(TAG, "ЗАГОЛОВОК: " + title);
+//                    double longitude = response.body().getAddress().getMarker().getLongitude();
+//                    double latitude = response.body().getAddress().getMarker().getLatitude();
+//                    String text = response.body().getText();
+//                    String contact = response.body().getContact();
+//                    Boolean isPublished = response.body().getPublished();
+//                    String locationPicURL = response.body().getCover().getLocation() + response.body().getCover().getFilename();
 
-
-                    Log.i(TAG, "onResponse: \n" +
-                            title + "\n" +
-                            longitude + "\n" +
-                            latitude + "\n" +
-                            text + "\n" +
-                            contact + "\n" +
-                            isPublished + "\n" +
-                            locationPicURL);
+//                    Log.i(TAG, "onResponse: \n" +
+//                            title + "\n" +
+//                            longitude + "\n" +
+//                            latitude + "\n" +
+//                            text + "\n" +
+//                            contact + "\n" +
+//                            isPublished + "\n" +
+//                            locationPicURL);
 
                     stepFifth = new Intent(AddLocationFourthActivity.this, NewEventFirstActivity.class);
                     startActivity(stepFifth);
 
                 } else {
-                    Log.i(TAG, "onResponse: \n" +
-                            response.code());
+                    Log.i(TAG, "onResponse: \n" + response.code());
                 }
             }
 

@@ -5,15 +5,15 @@ import com.google.gson.annotations.SerializedName;
 
 public class User {
 
-    @SerializedName("username")
+    @SerializedName("_id")
     @Expose
-    private String username;
-    @SerializedName("lastname")
-    @Expose
-    private String lastname;
+    private String id;
     @SerializedName("email")
     @Expose
     private String email;
+    @SerializedName("username")
+    @Expose
+    private String username;
     @SerializedName("avatar")
     @Expose
     private String avatar;
@@ -23,51 +23,16 @@ public class User {
     @SerializedName("status")
     @Expose
     private Integer status;
-    @SerializedName("job")
-    @Expose
-    private String job;
-    @SerializedName("company")
-    @Expose
-    private String company;
-    @SerializedName("phone")
-    @Expose
-    private String phone;
-    @SerializedName("country")
-    @Expose
-    private String country;
-    @SerializedName("site")
-    @Expose
-    private String site;
-    @SerializedName("text")
-    @Expose
-    private String text;
     @SerializedName("hide")
     @Expose
     private Hide hide;
-    @SerializedName("alternative")
-    @Expose
-    private Alternative alternative;
-    @SerializedName("created_at")
-    @Expose
-    private String createdAt;
-    @SerializedName("updated_at")
-    @Expose
-    private String updatedAt;
 
-    public String getUsername() {
-        return username;
+    public String getId() {
+        return id;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getEmail() {
@@ -76,6 +41,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getAvatar() {
@@ -102,84 +75,12 @@ public class User {
         this.status = status;
     }
 
-    public String getJob() {
-        return job;
-    }
-
-    public void setJob(String job) {
-        this.job = job;
-    }
-
-    public String getCompany() {
-        return company;
-    }
-
-    public void setCompany(String company) {
-        this.company = company;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getSite() {
-        return site;
-    }
-
-    public void setSite(String site) {
-        this.site = site;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
     public Hide getHide() {
         return hide;
     }
 
     public void setHide(Hide hide) {
         this.hide = hide;
-    }
-
-    public Alternative getAlternative() {
-        return alternative;
-    }
-
-    public void setAlternative(Alternative alternative) {
-        this.alternative = alternative;
-    }
-
-    public String getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public String getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(String updatedAt) {
-        this.updatedAt = updatedAt;
     }
 
 }

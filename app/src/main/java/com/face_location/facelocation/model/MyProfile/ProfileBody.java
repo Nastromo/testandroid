@@ -6,53 +6,53 @@ package com.face_location.facelocation.model.MyProfile;
 
 public class ProfileBody {
 
-    String userEmail, userName, userSoname, userNumber, userJob;
+    String email, username, lastname, phone, job;
 
-    public ProfileBody(String userEmail, String userName, String userSoname, String userNumber, String userJob) {
-        this.userEmail = userEmail;
-        this.userName = userName;
-        this.userSoname = userSoname;
-        this.userNumber = userNumber;
-        this.userJob = userJob;
+    public ProfileBody(String email, String username, String lastname, String phone, String job) {
+        this.email = email;
+        this.username = username;
+        this.lastname = lastname;
+        this.phone = phone;
+        this.job = job;
     }
 
-    public String getUserEmail() {
-        return userEmail;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getUserSoname() {
-        return userSoname;
+    public String getLastname() {
+        return lastname;
     }
 
-    public void setUserSoname(String userSoname) {
-        this.userSoname = userSoname;
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 
-    public String getUserNumber() {
-        return userNumber;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setUserNumber(String userNumber) {
-        this.userNumber = userNumber;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
-    public String getUserJob() {
-        return userJob;
+    public String getJob() {
+        return job;
     }
 
-    public void setUserJob(String userJob) {
-        this.userJob = userJob;
+    public void setJob(String job) {
+        this.job = job;
     }
 }

@@ -7,12 +7,14 @@ import com.face_location.facelocation.model.MyProfile.ProfileResponse;
 import com.face_location.facelocation.model.Registration.RegistrationBody;
 import com.face_location.facelocation.model.Registration.RegistrationResponse;
 
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.HeaderMap;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
@@ -46,12 +48,18 @@ public interface FacelocationAPI {
             @Body LocationBody body
     );
 
+    //Search Location
+    @GET("api/locations")
+    Call <List<LocationResponse>> searchLocation(
+            @HeaderMap Map<String, String> headers
+    );
+
     //Upload User Avatar
     @Multipart
     @POST("api/profile/avatar")
     Call <ResponseBody> uploadAvatar(
             @HeaderMap Map<String, String> headers,
-            @Part MultipartBody.Part avatar
+            @Part MultipartBody.Part file
             );
 
     //Update My Profile
