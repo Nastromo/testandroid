@@ -2,15 +2,16 @@ package com.face_location.facelocation.model.Location;
 
 public class LocationBody {
 
-    String title, longitude, latitude, text, contact;
+    String title, text, contact;
+    float longitude, latitude;
     boolean publised;
 
-    public LocationBody(String title, String longitude, String latitude, String text, String contact, boolean publised) {
+    public LocationBody(String title, String text, String contact, float longitude, float latitude, boolean publised) {
         this.title = title;
-        this.longitude = longitude;
-        this.latitude = latitude;
         this.text = text;
         this.contact = contact;
+        this.longitude = longitude;
+        this.latitude = latitude;
         this.publised = publised;
     }
 
@@ -20,22 +21,6 @@ public class LocationBody {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(String longitude) {
-        this.longitude = longitude;
-    }
-
-    public String getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(String latitude) {
-        this.latitude = latitude;
     }
 
     public String getText() {
@@ -52,6 +37,22 @@ public class LocationBody {
 
     public void setContact(String contact) {
         this.contact = contact;
+    }
+
+    public float getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(float longitude) {
+        this.longitude = longitude;
+    }
+
+    public float getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(float latitude) {
+        this.latitude = latitude;
     }
 
     public boolean isPublised() {

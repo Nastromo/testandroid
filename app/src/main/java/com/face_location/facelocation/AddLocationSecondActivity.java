@@ -120,14 +120,20 @@ public class AddLocationSecondActivity extends AppCompatActivity implements View
                 markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker));
                 Marker marker = mMap.addMarker(markerOptions);
 
-                double lat = toLatLng.latitude;
-                double lng = toLatLng.longitude;
+                double lattt = toLatLng.latitude;
+                double longg = toLatLng.longitude;
+
+                String latttt = String.valueOf(lattt);
+                String lngggg = String.valueOf(longg);
+
+                float lat = Float.parseFloat(latttt);
+                float lng = Float.parseFloat(lngggg);
 
                 //Save Location LatLong to shared preferences file
                 SharedPreferences sharedPref = getSharedPreferences(AddLocationFirstActivity.FILE_LOCATION_DETAILS, Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putString(LOCATION_LATITUDE, String.valueOf(lat));
-                editor.putString(LOCATION_LONGITUDE, String.valueOf(lng));
+                editor.putFloat(LOCATION_LATITUDE, lat);
+                editor.putFloat(LOCATION_LONGITUDE, lng);
                 editor.commit();
 
 

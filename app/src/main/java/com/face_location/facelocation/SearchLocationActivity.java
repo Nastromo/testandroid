@@ -11,7 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.face_location.facelocation.model.FacelocationAPI;
-import com.face_location.facelocation.model.Location.LocationResponse;
+import com.face_location.facelocation.model.Location.LocationGetResponse;
 
 import java.util.HashMap;
 import java.util.List;
@@ -84,16 +84,16 @@ public class SearchLocationActivity extends AppCompatActivity implements View.On
             HashMap<String, String> headerMap = new HashMap<String, String>();
             headerMap.put("Content-Type", "application/json");
 
-            Call<List<LocationResponse>> call = api.searchLocation(headerMap);
-            call.enqueue(new Callback<List<LocationResponse>>() {
+            Call<List<LocationGetResponse>> call = api.searchLocation(headerMap);
+            call.enqueue(new Callback<List<LocationGetResponse>>() {
                 @Override
-                public void onResponse(Call<List<LocationResponse>> call, Response<List<LocationResponse>> response) {
+                public void onResponse(Call<List<LocationGetResponse>> call, Response<List<LocationGetResponse>> response) {
                     Log.i(TAG, "onResponse: " + response.code());
 
                     if (response.code() == 200) {
-                        List <LocationResponse> locations = response.body();
+                        List <LocationGetResponse> locations = response.body();
 
-                        for (LocationResponse location: locations){
+                        for (LocationGetResponse location: locations){
                             if (location.getTitle().equals(searchedLocationTitle)){
                                 locationTitleSearch.setText(location.getTitle());
                                 locationTitleSearch.setOnClickListener(SearchLocationActivity.this);
@@ -114,7 +114,7 @@ public class SearchLocationActivity extends AppCompatActivity implements View.On
                 }
 
                 @Override
-                public void onFailure(Call<List<LocationResponse>> call, Throwable t) {
+                public void onFailure(Call<List<LocationGetResponse>> call, Throwable t) {
                     Log.i(TAG, "onFailure: " + t.toString());
                 }
             });

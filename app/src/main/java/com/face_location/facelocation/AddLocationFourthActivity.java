@@ -79,7 +79,6 @@ public class AddLocationFourthActivity extends AppCompatActivity implements View
 
             case R.id.createLocationReady:
                 createLocation();
-
 //                //Converts bytes to Bitmap
 //                byte[] bytesArray = readBytesFromFile(AddLocationFirstActivity.imgFilePath);
 //                Bitmap decodedByte = BitmapFactory.decodeByteArray(bytesArray, 0, bytesArray.length);
@@ -87,7 +86,6 @@ public class AddLocationFourthActivity extends AppCompatActivity implements View
 //                //Display the Bitmap as an ImageView
 //                imageView2.setImageBitmap(decodedByte);
 //                imageView2.setVisibility(View.VISIBLE);
-
                 break;
 
             case R.id.cancelButton:
@@ -136,7 +134,6 @@ public class AddLocationFourthActivity extends AppCompatActivity implements View
     }
 
     private void createLocation(){
-
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(url)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -148,19 +145,16 @@ public class AddLocationFourthActivity extends AppCompatActivity implements View
         SharedPreferences sharedPref = getSharedPreferences(AddLocationFirstActivity.FILE_LOCATION_DETAILS, Context.MODE_PRIVATE);
 
         title = sharedPref.getString(AddLocationFirstActivity.LOCATION_TITLE, "No key like " + AddLocationFirstActivity.LOCATION_TITLE);
-        latitude = sharedPref.getString(AddLocationSecondActivity.LOCATION_LATITUDE, "No key like " + AddLocationSecondActivity.LOCATION_LATITUDE);
-        longitude = sharedPref.getString(AddLocationSecondActivity.LOCATION_LONGITUDE, "No key like " + AddLocationSecondActivity.LOCATION_LONGITUDE);
+        float latitude = sharedPref.getFloat(AddLocationSecondActivity.LOCATION_LATITUDE, 0f);
+        float longitude = sharedPref.getFloat(AddLocationSecondActivity.LOCATION_LONGITUDE, 0f);
         text = sharedPref.getString(AddLocationThirdActivity.LOCATION_ABOUT, "No key like " + AddLocationThirdActivity.LOCATION_ABOUT);
 
         String[] userInfo = applicationDB.retrieveFirstLoginValues();
         token = userInfo[5];
 
         FacelocationAPI api = retrofit.create(FacelocationAPI.class);
-        //Наверно еще нужно отправлять імейл
-//        LocationBody location = new LocationBody(title, longitude, latitude, text, contact, isPublished);
 
-
-        LocationBody location = new LocationBody(title, longitude, latitude, text, contact, isPublished);
+        LocationBody location = new LocationBody(title, text, contact, longitude, latitude, isPublished);
 
         HashMap<String, String> headers = new HashMap<String, String>();
         headers.put("Content-Type", "application/json");
@@ -170,31 +164,10 @@ public class AddLocationFourthActivity extends AppCompatActivity implements View
         call.enqueue(new Callback<LocationResponse>() {
             @Override
             public void onResponse(Call<LocationResponse> call, Response<LocationResponse> response) {
-                Log.i(TAG, "onResponse: " + response.toString());
 
                 if (response.code() == 200) {
-
-                    String title = response.body().getTitle();
-                    Log.i(TAG, "ЗАГОЛОВОК: " + title);
-//                    double longitude = response.body().getAddress().getMarker().getLongitude();
-//                    double latitude = response.body().getAddress().getMarker().getLatitude();
-//                    String text = response.body().getText();
-//                    String contact = response.body().getContact();
-//                    Boolean isPublished = response.body().getPublished();
-//                    String locationPicURL = response.body().getCover().getLocation() + response.body().getCover().getFilename();
-
-//                    Log.i(TAG, "onResponse: \n" +
-//                            title + "\n" +
-//                            longitude + "\n" +
-//                            latitude + "\n" +
-//                            text + "\n" +
-//                            contact + "\n" +
-//                            isPublished + "\n" +
-//                            locationPicURL);
-
                     stepFifth = new Intent(AddLocationFourthActivity.this, NewEventFirstActivity.class);
                     startActivity(stepFifth);
-
                 } else {
                     Log.i(TAG, "onResponse: \n" + response.code());
                 }

@@ -1,6 +1,7 @@
 package com.face_location.facelocation.model;
 
 import com.face_location.facelocation.model.Location.LocationBody;
+import com.face_location.facelocation.model.Location.LocationGetResponse;
 import com.face_location.facelocation.model.Location.LocationResponse;
 import com.face_location.facelocation.model.MyProfile.ProfileBody;
 import com.face_location.facelocation.model.MyProfile.ProfileResponse;
@@ -50,7 +51,7 @@ public interface FacelocationAPI {
 
     //Search Location
     @GET("api/locations")
-    Call <List<LocationResponse>> searchLocation(
+    Call <List<LocationGetResponse>> searchLocation(
             @HeaderMap Map<String, String> headers
     );
 
@@ -58,7 +59,7 @@ public interface FacelocationAPI {
     @Multipart
     @POST("api/profile/avatar")
     Call <ResponseBody> uploadAvatar(
-            @HeaderMap Map<String, String> headers,
+            @HeaderMap Map<String, String> header,
             @Part MultipartBody.Part file
             );
 
@@ -67,5 +68,11 @@ public interface FacelocationAPI {
     Call<ProfileResponse> updateMyProfile(
             @HeaderMap Map<String, String> headers,
             @Body ProfileBody body
+    );
+
+    //My Profile
+    @GET("api/profile")
+    Call <ProfileResponse> getMyProfile(
+            @HeaderMap Map<String, String> headers
     );
 }
