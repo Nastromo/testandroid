@@ -5,11 +5,21 @@ package com.face_location.facelocation;
  */
 
 public class Event {
-    String name, abour, status, userQuantity;
+    String name, about, status;
+    int userQuantity;
+    String[] avatars;
 
-    public Event(String name, String abour, String status, String userQuantity) {
+    public Event(String name, String about, String status, int userQuantity, String[] avatars) {
         this.name = name;
-        this.abour = abour;
+        this.about = about;
+        this.status = status;
+        this.userQuantity = userQuantity;
+        this.avatars = avatars;
+    }
+
+    public Event(String name, String about, String status, int userQuantity) {
+        this.name = name;
+        this.about = about;
         this.status = status;
         this.userQuantity = userQuantity;
     }
@@ -22,12 +32,12 @@ public class Event {
         this.name = name;
     }
 
-    public String getAbour() {
-        return abour;
+    public String getAbout() {
+        return about;
     }
 
-    public void setAbour(String abour) {
-        this.abour = abour;
+    public void setAbout(String about) {
+        this.about = about;
     }
 
     public String getStatus() {
@@ -38,11 +48,19 @@ public class Event {
         this.status = status;
     }
 
-    public String getUserQuantity() {
+    public int getUserQuantity() {
         return userQuantity;
     }
 
-    public void setUserQuantity(String userQuantity) {
+    public void setUserQuantity(int userQuantity) {
         this.userQuantity = userQuantity;
+    }
+
+    public String[] getAvatars() {
+        return avatars;
+    }
+
+    public void setAvatars(String[] avatars) {
+        this.avatars = avatars;
     }
 }

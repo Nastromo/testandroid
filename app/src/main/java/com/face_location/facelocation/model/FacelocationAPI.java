@@ -1,5 +1,6 @@
 package com.face_location.facelocation.model;
 
+import com.face_location.facelocation.model.Events.MyEventResponse;
 import com.face_location.facelocation.model.Location.LocationBody;
 import com.face_location.facelocation.model.Location.LocationGetResponse;
 import com.face_location.facelocation.model.Location.LocationResponse;
@@ -20,6 +21,7 @@ import retrofit2.http.HeaderMap;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Query;
 
 /**
  * Created by admin on 26.11.17.
@@ -74,5 +76,19 @@ public interface FacelocationAPI {
     @GET("api/profile")
     Call <ProfileResponse> getMyProfile(
             @HeaderMap Map<String, String> headers
+    );
+
+    //My Events
+    @GET("api/events")
+    Call <List<MyEventResponse>> getMyEvents(
+            @HeaderMap Map<String, String> headers,
+            @Query("user") String userID
+    );
+
+    //My Visited Events
+    @GET("api/events")
+    Call <List<MyEventResponse>> getMyVisitedEvents(
+            @HeaderMap Map<String, String> headers,
+            @Query("subscriber") String userID
     );
 }

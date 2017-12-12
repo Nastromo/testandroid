@@ -55,38 +55,89 @@
             </LinearLayout>
 
             <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/forAvatars"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="27dp">
 
                 <ImageView
                     android:id="@+id/userAvatar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
                     android:layout_weight="1"
                     app:srcCompat="@drawable/default_avatar_small" />
-
-                <TextView
-                    android:id="@+id/plus"
-                    android:layout_width="wrap_content"
-                    android:layout_height="35dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:layout_toRightOf="@+id/userAvatar"
-                    android:gravity="center"
-                    android:text="+"
-                    android:textColor="@color/green_stroke"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/usersQuantity"
                     android:layout_width="wrap_content"
                     android:layout_height="35dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_toRightOf="@+id/plus"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/userAvatar"
                     android:gravity="center"
-                    android:text="TextView"
+                    android:textColor="@color/green_stroke"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+
+                <ImageView
+                    android:id="@+id/userAvatarSecond"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginLeft="36dp"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/default_avatar_small" />
+
+                <TextView
+                    android:id="@+id/usersQuantitySecond"
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/userAvatarSecond"
+                    android:gravity="center"
+                    android:textColor="@color/green_stroke"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+
+                <ImageView
+                    android:id="@+id/userAvatarThird"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginLeft="72dp"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/default_avatar_small" />
+
+                <TextView
+                    android:id="@+id/usersQuantityThird"
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/userAvatarThird"
+                    android:gravity="center"
+                    android:textColor="@color/green_stroke"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+
+                <ImageView
+                    android:id="@+id/userAvatarFourth"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginLeft="108dp"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/default_avatar_small" />
+
+                <TextView
+                    android:id="@+id/usersQuantityFourth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/userAvatarFourth"
+                    android:gravity="center"
                     android:textColor="@color/green_stroke"
                     android:textSize="12sp"
                     android:textStyle="bold" />

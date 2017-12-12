@@ -117,6 +117,30 @@
         app:layout_constraintTop_toBottomOf="@+id/emailTextView">
 
         <!-- inputType="textCapSentences|textNoSuggestions" убирает подчеркивание ошибок -->
+ail
+
+        <EditText
+            android:id="@+id/myEmail"
+            fontPath="fonts/OpenSans-SemiBold.ttf"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/rec_white"
+            android:hint="@string/you_email_address"
+            android:inputType="textCapSentences"
+            android:maxLength="50"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="3dp"
+            android:selectAllOnFocus="false"
+            android:singleLine="true"
+            android:textColor="@color/colorBlack"
+            android:textColorHint="@color/colorTextLight"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/enterTitleLocationTip" />
 
     </LinearLayout>
 

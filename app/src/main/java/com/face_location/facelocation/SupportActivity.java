@@ -14,12 +14,13 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.face_location.facelocation.model.DataBase.DataBaseHelper;
 
 import java.util.HashMap;
 
 public class SupportActivity extends AppCompatActivity implements View.OnClickListener{
 
-    EditText newLocationTitle, problemTextEdit;
+    EditText newLocationTitle, problemTextEdit, myEmail;
     TextView buttonBackView;
     Button sendIssue;
     String url, title, problem;
@@ -45,7 +46,14 @@ public class SupportActivity extends AppCompatActivity implements View.OnClickLi
         sendIssue = (Button) findViewById(R.id.sendIssue);
         sendIssue.setOnClickListener(this);
 
+        myEmail = (EditText) findViewById(R.id.myEmail);
+
         url = getResources().getString(R.string.base_url);
+
+        DataBaseHelper applicationDB = DataBaseHelper.getInstance(this);
+        String[] applicationData = applicationDB.retrieveFirstLoginValues();
+
+        myEmail.setText(applicationData[2]);
     }
 
     @Override
