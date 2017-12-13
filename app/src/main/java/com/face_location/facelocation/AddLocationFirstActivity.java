@@ -15,7 +15,7 @@ public class AddLocationFirstActivity extends AppCompatActivity implements View.
     TextView backButtonTextView, forwardButtonTextView;
     Button buttonChosePhoto;
     public static final String LOCATION_TITLE = "title";
-    public static final String FILE_LOCATION_DETAILS = "New Location details";
+    public static final String FILE_LOCATION_DETAILS = "New LocationForAdapter details";
     EditText newLocationTitle;
 
     //TODO проверить чтобы все ключи в файле FILE_EVENT_DETAILS и FILE_LOCATION_DETAILS были уникальными
@@ -57,7 +57,7 @@ public class AddLocationFirstActivity extends AppCompatActivity implements View.
             case R.id.forwardButtonTextView:
                 String locationTitle = newLocationTitle.getText().toString();
 
-                //Save Location name to shared preferences file
+                //Save LocationForAdapter name to shared preferences file
                 SharedPreferences sharedPref = getSharedPreferences(FILE_LOCATION_DETAILS, Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPref.edit();
                 editor.putString(LOCATION_TITLE, locationTitle);

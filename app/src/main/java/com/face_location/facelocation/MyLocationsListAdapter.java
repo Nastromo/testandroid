@@ -15,7 +15,7 @@ import java.util.ArrayList;
  * Created by admin on 29.11.17.
  */
 
-public class MyLocationsListAdapter extends ArrayAdapter<Location> {
+public class MyLocationsListAdapter extends ArrayAdapter<LocationForAdapter> {
 
     private static final String TAG = "MyLocationsListAdapter";
     private Context mContext;
@@ -27,7 +27,7 @@ public class MyLocationsListAdapter extends ArrayAdapter<Location> {
     }
 
 
-    public MyLocationsListAdapter(Context context, int resource, ArrayList<Location> objects) {
+    public MyLocationsListAdapter(Context context, int resource, ArrayList<LocationForAdapter> objects) {
         super(context, resource, objects);
         mContext = context;
         mResource = resource;
@@ -39,10 +39,11 @@ public class MyLocationsListAdapter extends ArrayAdapter<Location> {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         String locationName = getItem(position).getLocationName();
+        Log.i(TAG, "НАЗВАНИЕ ЛОКАЦИЙ: " + locationName.toString() + position);
+
         if (locationName.length() > 25){
             locationName = locationName.substring(0, Math.min(locationName.length(), 25)).trim() + "...";
         }
-
 
 
         try{
@@ -65,22 +66,6 @@ public class MyLocationsListAdapter extends ArrayAdapter<Location> {
 
             holder.locationName.setText(locationName);
 
-
-            //create the imageloader object
-//            ImageLoader imageLoader = ImageLoader.getInstance();
-//
-//            int defaultImage = mContext.getResources().getIdentifier("@drawable/image_failed",null,mContext.getPackageName());
-//
-//            //create display options
-//            DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
-//                    .cacheOnDisc(true).resetViewBeforeLoading(true)
-//                    .showImageForEmptyUri(defaultImage)
-//                    .showImageOnFail(defaultImage)
-//                    .showImageOnLoading(defaultImage).build();
-//
-//            //download and display image from url
-//            imageLoader.displayImage(imgUrl, holder.image, options);
-
             return convertView;
 
         }catch (IllegalArgumentException e){
@@ -89,24 +74,4 @@ public class MyLocationsListAdapter extends ArrayAdapter<Location> {
         }
 
     }
-
-    /**
-     * Required for setting up the Universal Image loader Library
-     */
-//    private void setupImageLoader(){
-//        // UNIVERSAL IMAGE LOADER SETUP
-//        DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
-//                .cacheOnDisc(true).cacheInMemory(true)
-//                .imageScaleType(ImageScaleType.EXACTLY)
-//                .displayer(new FadeInBitmapDisplayer(300)).build();
-//
-//        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
-//                mContext)
-//                .defaultDisplayImageOptions(defaultOptions)
-//                .memoryCache(new WeakMemoryCache())
-//                .discCacheSize(100 * 1024 * 1024).build();
-//
-//        ImageLoader.getInstance().init(config);
-//        // END - UNIVERSAL IMAGE LOADER SETUP
-//    }
 }

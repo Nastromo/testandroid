@@ -173,5 +173,6 @@
     <string name="def_avatar_second">/assets/img/icons/avatar.svg</string>
     <string name="on_air">Зараз відбувається</string>
     <string name="off_air">Вже закінчилась</string>
+    <string name="will_be">Розпочнеться у майбутньому</string>
 
 </resources>

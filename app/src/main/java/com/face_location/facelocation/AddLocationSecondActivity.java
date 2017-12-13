@@ -129,7 +129,7 @@ public class AddLocationSecondActivity extends AppCompatActivity implements View
                 float lat = Float.parseFloat(latttt);
                 float lng = Float.parseFloat(lngggg);
 
-                //Save Location LatLong to shared preferences file
+                //Save LocationForAdapter LatLong to shared preferences file
                 SharedPreferences sharedPref = getSharedPreferences(AddLocationFirstActivity.FILE_LOCATION_DETAILS, Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPref.edit();
                 editor.putFloat(LOCATION_LATITUDE, lat);

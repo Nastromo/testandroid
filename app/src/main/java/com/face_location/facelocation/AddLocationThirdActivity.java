@@ -44,7 +44,7 @@ public class AddLocationThirdActivity extends AppCompatActivity implements View.
 
                 String aboutLocation = somethingAbout.getText().toString();
 
-                //Save Location's about to shared preferences file
+                //Save LocationForAdapter's about to shared preferences file
                 SharedPreferences sharedPref = getSharedPreferences(AddLocationFirstActivity.FILE_LOCATION_DETAILS, Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPref.edit();
                 editor.putString(LOCATION_ABOUT, aboutLocation);

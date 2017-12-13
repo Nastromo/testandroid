@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 public class NewEventFirstActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -18,6 +19,7 @@ public class NewEventFirstActivity extends AppCompatActivity implements View.OnC
     Button cancelEventCreation, successEventCreation;
 //    final CharSequence[] items = {"Red", "Green", "Blue"}; //For AlertDialog
     Spinner spinnerEventType;
+    TextView buttonBackView;
 
     private static final String TAG = "newEvent";
 
@@ -37,6 +39,14 @@ public class NewEventFirstActivity extends AppCompatActivity implements View.OnC
 
         successEventCreation = (Button) findViewById(R.id.successEventCreation);
         successEventCreation.setOnClickListener(this);
+
+        buttonBackView = (TextView) findViewById(R.id.buttonBackView);
+        buttonBackView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
         spinnerEventType = (Spinner) findViewById(R.id.spinnerEventType);
         ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(this,

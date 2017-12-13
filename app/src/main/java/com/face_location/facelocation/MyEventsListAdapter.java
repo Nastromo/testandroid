@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by User on 4/4/2017.
@@ -57,7 +58,7 @@ public class MyEventsListAdapter extends ArrayAdapter<Event> {
         String status = getItem(position).getStatus();
         int userQuantity = getItem(position).getUserQuantity();
         Log.i(TAG, "КОЛИЧЕСТВО ЮЗЕРОВ: " + userQuantity);
-        String[] avatars = getItem(position).getAvatars();
+        List<String> avatars = getItem(position).getAvatars();
 
 
         try{
@@ -92,8 +93,8 @@ public class MyEventsListAdapter extends ArrayAdapter<Event> {
             holder.about.setText(about);
             holder.status.setText(status);
 
-            if (avatars != null && avatars.length > 1){
-                switch (avatars.length){
+            if (avatars != null && avatars.size() > 1){
+                switch (avatars.size()){
                     case 2:
                         holder.userQuantity.setText("");
                         holder.userQuantitySecond.setText("+" + String.valueOf(userQuantity));
@@ -102,7 +103,7 @@ public class MyEventsListAdapter extends ArrayAdapter<Event> {
                         holder.avatarFourth.setVisibility(View.INVISIBLE);
                         Glide
                                 .with(mContext)
-                                .load(avatars[0])
+                                .load(avatars.get(0))
                                 .thumbnail(0.1f) //shows mini image which weight 0.1 from real image while real image is downloading
                                 .apply(RequestOptions
                                         .circleCropTransform())
@@ -110,7 +111,7 @@ public class MyEventsListAdapter extends ArrayAdapter<Event> {
                                 .into(holder.avatar);
                         Glide
                                 .with(mContext)
-                                .load(avatars[1])
+                                .load(avatars.get(1))
                                 .thumbnail(0.1f) //shows mini image which weight 0.1 from real image while real image is downloading
                                 .apply(RequestOptions
                                         .circleCropTransform())
@@ -125,7 +126,7 @@ public class MyEventsListAdapter extends ArrayAdapter<Event> {
                         holder.avatarFourth.setVisibility(View.INVISIBLE);
                         Glide
                                 .with(mContext)
-                                .load(avatars[0])
+                                .load(avatars.get(0))
                                 .thumbnail(0.1f) //shows mini image which weight 0.1 from real image while real image is downloading
                                 .apply(RequestOptions
                                         .circleCropTransform())
@@ -133,7 +134,7 @@ public class MyEventsListAdapter extends ArrayAdapter<Event> {
                                 .into(holder.avatar);
                         Glide
                                 .with(mContext)
-                                .load(avatars[1])
+                                .load(avatars.get(1))
                                 .thumbnail(0.1f) //shows mini image which weight 0.1 from real image while real image is downloading
                                 .apply(RequestOptions
                                         .circleCropTransform())
@@ -141,7 +142,7 @@ public class MyEventsListAdapter extends ArrayAdapter<Event> {
                                 .into(holder.avatarSecond);
                         Glide
                                 .with(mContext)
-                                .load(avatars[2])
+                                .load(avatars.get(2))
                                 .thumbnail(0.1f) //shows mini image which weight 0.1 from real image while real image is downloading
                                 .apply(RequestOptions
                                         .circleCropTransform())
@@ -155,7 +156,7 @@ public class MyEventsListAdapter extends ArrayAdapter<Event> {
 
                         Glide
                                 .with(mContext)
-                                .load(avatars[0])
+                                .load(avatars.get(0))
                                 .thumbnail(0.1f) //shows mini image which weight 0.1 from real image while real image is downloading
                                 .apply(RequestOptions
                                         .circleCropTransform())
@@ -163,7 +164,7 @@ public class MyEventsListAdapter extends ArrayAdapter<Event> {
                                 .into(holder.avatar);
                         Glide
                                 .with(mContext)
-                                .load(avatars[1])
+                                .load(avatars.get(1))
                                 .thumbnail(0.1f) //shows mini image which weight 0.1 from real image while real image is downloading
                                 .apply(RequestOptions
                                         .circleCropTransform())
@@ -171,7 +172,7 @@ public class MyEventsListAdapter extends ArrayAdapter<Event> {
                                 .into(holder.avatarSecond);
                         Glide
                                 .with(mContext)
-                                .load(avatars[2])
+                                .load(avatars.get(2))
                                 .thumbnail(0.1f) //shows mini image which weight 0.1 from real image while real image is downloading
                                 .apply(RequestOptions
                                         .circleCropTransform())
@@ -179,7 +180,7 @@ public class MyEventsListAdapter extends ArrayAdapter<Event> {
                                 .into(holder.avatarThird);
                         Glide
                                 .with(mContext)
-                                .load(avatars[3])
+                                .load(avatars.get(3))
                                 .thumbnail(0.1f) //shows mini image which weight 0.1 from real image while real image is downloading
                                 .apply(RequestOptions
                                         .circleCropTransform())
@@ -193,10 +194,12 @@ public class MyEventsListAdapter extends ArrayAdapter<Event> {
                 holder.avatarSecond.setVisibility(View.INVISIBLE);
                 holder.avatarThird.setVisibility(View.INVISIBLE);
                 holder.avatarFourth.setVisibility(View.INVISIBLE);
+                holder.userQuantityFourth.setText("");
+                holder.userQuantityThird.setText("");
+                holder.userQuantitySecond.setText("");
                 Glide
                         .with(mContext)
-//                        .load(avatars[0])
-                        .load("https://specials-images.forbesimg.com/imageserve/59d5062131358e542c034eb7/416x416.jpg?background=000000&cropX1=419&cropX2=1409&cropY1=53&cropY2=1044")
+                        .load(avatars.get(0))
                         .thumbnail(0.1f) //shows mini image which weight 0.1 from real image while real image is downloading
                         .apply(RequestOptions
                                 .circleCropTransform())

@@ -1,5 +1,7 @@
 package com.face_location.facelocation;
 
+import java.util.List;
+
 /**
  * Created by admin on 29.11.17.
  */
@@ -7,9 +9,9 @@ package com.face_location.facelocation;
 public class Event {
     String name, about, status;
     int userQuantity;
-    String[] avatars;
+    List<String> avatars;
 
-    public Event(String name, String about, String status, int userQuantity, String[] avatars) {
+    public Event(String name, String about, String status, int userQuantity, List<String> avatars) {
         this.name = name;
         this.about = about;
         this.status = status;
@@ -56,11 +58,11 @@ public class Event {
         this.userQuantity = userQuantity;
     }
 
-    public String[] getAvatars() {
+    public List<String> getAvatars() {
         return avatars;
     }
 
-    public void setAvatars(String[] avatars) {
+    public void setAvatars(List<String> avatars) {
         this.avatars = avatars;
     }
 }

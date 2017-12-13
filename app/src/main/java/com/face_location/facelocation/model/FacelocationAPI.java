@@ -44,14 +44,14 @@ public interface FacelocationAPI {
     );
 
 
-    //New Location
+    //New LocationForAdapter
     @POST("api/locations")
     Call<LocationResponse> addLocation(
             @HeaderMap Map<String, String> headers,
             @Body LocationBody body
     );
 
-    //Search Location
+    //Search LocationForAdapter
     @GET("api/locations")
     Call <List<LocationGetResponse>> searchLocation(
             @HeaderMap Map<String, String> headers
@@ -90,5 +90,12 @@ public interface FacelocationAPI {
     Call <List<MyEventResponse>> getMyVisitedEvents(
             @HeaderMap Map<String, String> headers,
             @Query("subscriber") String userID
+    );
+
+    //My Locations
+    @GET("api/locations")
+    Call <List<LocationGetResponse>> getMyLocations(
+            @HeaderMap Map<String, String> headers,
+            @Query("user") String userID
     );
 }

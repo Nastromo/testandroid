@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.face_location.facelocation.model.DataBase.DataBaseHelper;
@@ -42,6 +43,8 @@ public class VisitedEventsFragment extends Fragment{
     String[] applicationData;
     ArrayList<Event> events;
     View rootView;
+    List<String> subscribersAvatars;
+    Button createNewBtn;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,6 +56,15 @@ public class VisitedEventsFragment extends Fragment{
         DataBaseHelper applicationDB = DataBaseHelper.getInstance(getContext());
         applicationData = applicationDB.retrieveFirstLoginValues();
         token = applicationData[5];
+
+        createNewBtn = (Button) rootView.findViewById(R.id.createNewBtn);
+        createNewBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent searchLocationActivity = new Intent(getContext(), SearchLocationActivity.class);
+                startActivity(searchLocationActivity);
+            }
+        });
 
         getMyVisitedEvents();
 
@@ -87,13 +99,14 @@ public class VisitedEventsFragment extends Fragment{
                     name = event.getTitle();
                     about = event.getText();
                     List<Subscriber> subscribers = event.getSubscribers();
-                    //TODO расскоментить когда начнут приходить аватарки сабскрайберов
-//                    String[] subscribersAvatars = subscribers.getAvatar();
-                    String[] subscribersAvatars = {
-                            "https://specials-images.forbesimg.com/imageserve/59d5062131358e542c034eb7/416x416.jpg?background=000000&cropX1=419&cropX2=1409&cropY1=53&cropY2=1044",
-                            "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Ben_Affleck_by_Gage_Skidmore_3.jpg/1200px-Ben_Affleck_by_Gage_Skidmore_3.jpg",
-                            "http://cdn-img.instyle.com/sites/default/files/styles/320x384/public/images/2014/TRANSFORMATIONS/2011c-sandra-bullock-567_1.jpg?itok=yXR6See5"
-                    };
+
+                    subscribersAvatars = new ArrayList<>();
+                    for (Subscriber sub: subscribers){
+                        String subscriberAvatar = sub.getUser().getAvatar_mob();
+                        Log.i(TAG, "URL АВАТАРКИ САБСКРАЙБЕРА: " + subscriberAvatar);
+                        subscribersAvatars.add(subscriberAvatar);
+                    }
+
                     status = event.getStatus();
 
                     switch (status){

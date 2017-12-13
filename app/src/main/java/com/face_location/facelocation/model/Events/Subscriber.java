@@ -9,7 +9,7 @@ public class Subscriber {
 
     @SerializedName("user")
     @Expose
-    private String user;
+    private User_ user;
     @SerializedName("code")
     @Expose
     private String code;
@@ -29,11 +29,11 @@ public class Subscriber {
     @Expose
     private List<String> tags = null;
 
-    public String getUser() {
+    public User_ getUser() {
         return user;
     }
 
-    public void setUser(String user) {
+    public void setUser(User_ user) {
         this.user = user;
     }
 

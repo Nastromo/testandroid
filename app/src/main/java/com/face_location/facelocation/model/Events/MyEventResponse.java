@@ -1,9 +1,5 @@
 package com.face_location.facelocation.model.Events;
 
-/**
- * Created by admin on 12.12.17.
- */
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -46,7 +42,7 @@ public class MyEventResponse {
     private Boolean _private;
     @SerializedName("announcements")
     @Expose
-    private List<Object> announcements = null;
+    private List<Announcement> announcements = null;
     @SerializedName("subscribers")
     @Expose
     private List<Subscriber> subscribers = null;
@@ -166,11 +162,11 @@ public class MyEventResponse {
         this._private = _private;
     }
 
-    public List<Object> getAnnouncements() {
+    public List<Announcement> getAnnouncements() {
         return announcements;
     }
 
-    public void setAnnouncements(List<Object> announcements) {
+    public void setAnnouncements(List<Announcement> announcements) {
         this.announcements = announcements;
     }
 

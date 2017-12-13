@@ -3,7 +3,7 @@ package com.face_location.facelocation.model.Events;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Contact {
+public class User_ {
 
     @SerializedName("_id")
     @Expose
@@ -17,6 +17,11 @@ public class Contact {
     @SerializedName("avatar")
     @Expose
     private String avatar;
+
+    @SerializedName("avatar_mob")
+    @Expose
+    private String avatar_mob;
+
     @SerializedName("role")
     @Expose
     private String role;
@@ -25,7 +30,7 @@ public class Contact {
     private Integer status;
     @SerializedName("hide")
     @Expose
-    private Hide_ hide;
+    private Hide__ hide;
     @SerializedName("lastname")
     @Expose
     private String lastname;
@@ -35,6 +40,14 @@ public class Contact {
     @SerializedName("job")
     @Expose
     private String job;
+
+    public String getAvatar_mob() {
+        return avatar_mob;
+    }
+
+    public void setAvatar_mob(String avatar_mob) {
+        this.avatar_mob = avatar_mob;
+    }
 
     public String getId() {
         return id;
@@ -84,11 +97,11 @@ public class Contact {
         this.status = status;
     }
 
-    public Hide_ getHide() {
+    public Hide__ getHide() {
         return hide;
     }
 
-    public void setHide(Hide_ hide) {
+    public void setHide(Hide__ hide) {
         this.hide = hide;
     }
 
@@ -117,4 +130,3 @@ public class Contact {
     }
 
 }
-

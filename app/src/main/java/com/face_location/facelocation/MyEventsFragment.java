@@ -8,16 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.face_location.facelocation.model.DataBase.DataBaseHelper;
 import com.face_location.facelocation.model.Events.MyEventResponse;
 import com.face_location.facelocation.model.Events.Subscriber;
 import com.face_location.facelocation.model.FacelocationAPI;
-
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,6 +39,8 @@ public class MyEventsFragment extends Fragment {
     String[] applicationData;
     ArrayList<Event> events;
     View rootView;
+    List<String> subscribersAvatars;
+    Button createNewBtn;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,6 +52,15 @@ public class MyEventsFragment extends Fragment {
         DataBaseHelper applicationDB = DataBaseHelper.getInstance(getContext());
         applicationData = applicationDB.retrieveFirstLoginValues();
         token = applicationData[5];
+
+        createNewBtn = (Button) rootView.findViewById(R.id.createNewBtn);
+        createNewBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent searchLocationActivity = new Intent(getContext(), SearchLocationActivity.class);
+                startActivity(searchLocationActivity);
+            }
+        });
 
         getMyEvents();
 
@@ -87,13 +95,14 @@ public class MyEventsFragment extends Fragment {
                     name = event.getTitle();
                     about = event.getText();
                     List<Subscriber> subscribers = event.getSubscribers();
-                    //TODO расскоментить когда начнут приходить аватарки сабскрайберов
-//                    String[] subscribersAvatars = subscribers.getAvatar();
-                    String[] subscribersAvatars = {
-                            "https://specials-images.forbesimg.com/imageserve/59d5062131358e542c034eb7/416x416.jpg?background=000000&cropX1=419&cropX2=1409&cropY1=53&cropY2=1044",
-                            "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Ben_Affleck_by_Gage_Skidmore_3.jpg/1200px-Ben_Affleck_by_Gage_Skidmore_3.jpg",
-                            "http://cdn-img.instyle.com/sites/default/files/styles/320x384/public/images/2014/TRANSFORMATIONS/2011c-sandra-bullock-567_1.jpg?itok=yXR6See5"
-                    };
+
+                    subscribersAvatars = new ArrayList<>();
+                    for (Subscriber sub: subscribers){
+                        String subscriberAvatar = sub.getUser().getAvatar_mob();
+                        Log.i(TAG, "URL АВАТАРКИ САБСКРАЙБЕРА: " + subscriberAvatar);
+                        subscribersAvatars.add(subscriberAvatar);
+                    }
+
                     status = event.getStatus();
 
                     switch (status){
@@ -104,18 +113,18 @@ public class MyEventsFragment extends Fragment {
                         case 1:
                             statusString = getString(R.string.off_air);
                             break;
-                            
+
                         case 2:
-                            eventStartTime = event.getTime().getStart();
-                            Log.i(TAG, "ВРЕМЯ ПОЛУЧИЛ: " + eventStartTime);
-
-                            String dateTime = "2017-08-23T08:08:00Z"; //TODO всавить сюда eventStartTime, когда сервер будет возвращать правильную дату
-                            DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ssZ");
-                            DateTime jodatime = dtf.parseDateTime(dateTime);
-                            DateTimeFormatter dtfOut = DateTimeFormat.forPattern("dd.MM.yyyy");
-
-                            Log.i(TAG, "ПЕРЕФОРМАТИРОВАЛ: " + dtfOut.print(jodatime));
-                            statusString = "Розпочнеться: " + dtfOut.print(jodatime);
+//                            eventStartTime = event.getTime().getStart();
+//                            Log.i(TAG, "ВРЕМЯ ПОЛУЧИЛ: " + eventStartTime);
+//
+//                            String dateTime = "2017-08-23T08:08:00Z"; //TODO всавить сюда eventStartTime, когда сервер будет возвращать правильную дату
+//                            DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ssZ");
+//                            DateTime jodatime = dtf.parseDateTime(dateTime);
+//                            DateTimeFormatter dtfOut = DateTimeFormat.forPattern("dd.MM.yyyy");
+//
+//                            Log.i(TAG, "ПЕРЕФОРМАТИРОВАЛ: " + dtfOut.print(jodatime));
+                            statusString = getString(R.string.will_be);
                     }
                     events.add(new Event(name, about, statusString, subscribers.size(), subscribersAvatars));
                 }

@@ -312,11 +312,11 @@ public class MainActivity extends AppCompatActivity
             if (ContextCompat.checkSelfPermission(this,
                     Manifest.permission.ACCESS_FINE_LOCATION)
                     == PackageManager.PERMISSION_GRANTED) {
-                //Location Permission already granted
+                //LocationForAdapter Permission already granted
                 buildGoogleApiClient();
                 mMap.setMyLocationEnabled(true);
             } else {
-                //Request Location Permission
+                //Request LocationForAdapter Permission
                 checkLocationPermission();
             }
         }
@@ -597,7 +597,7 @@ public class MainActivity extends AppCompatActivity
                 Place place = PlaceAutocomplete.getPlace(this, data);
 
                 //TODO Delete this block off code
-                // Uncomment this if you need Location Title and details
+                // Uncomment this if you need LocationForAdapter Title and details
 //                placeNameString = place.getName().toString();
 //                placeAddressString =  place.getAddress().toString();
 //

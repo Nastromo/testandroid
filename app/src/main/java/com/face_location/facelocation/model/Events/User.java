@@ -14,18 +14,14 @@ public class User {
     @SerializedName("username")
     @Expose
     private String username;
-    @SerializedName("lastname")
-    @Expose
-    private String lastname;
     @SerializedName("avatar")
     @Expose
     private String avatar;
-    @SerializedName("phone")
+
+    @SerializedName("avatar_mob")
     @Expose
-    private String phone;
-    @SerializedName("job")
-    @Expose
-    private String job;
+    private String avatar_mob;
+
     @SerializedName("role")
     @Expose
     private String role;
@@ -35,6 +31,23 @@ public class User {
     @SerializedName("hide")
     @Expose
     private Hide hide;
+    @SerializedName("lastname")
+    @Expose
+    private String lastname;
+    @SerializedName("phone")
+    @Expose
+    private String phone;
+    @SerializedName("job")
+    @Expose
+    private String job;
+
+    public String getAvatar_mob() {
+        return avatar_mob;
+    }
+
+    public void setAvatar_mob(String avatar_mob) {
+        this.avatar_mob = avatar_mob;
+    }
 
     public String getId() {
         return id;
@@ -60,36 +73,12 @@ public class User {
         this.username = username;
     }
 
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-
     public String getAvatar() {
         return avatar;
     }
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getJob() {
-        return job;
-    }
-
-    public void setJob(String job) {
-        this.job = job;
     }
 
     public String getRole() {
@@ -114,6 +103,30 @@ public class User {
 
     public void setHide(Hide hide) {
         this.hide = hide;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getJob() {
+        return job;
+    }
+
+    public void setJob(String job) {
+        this.job = job;
     }
 
 }
