@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -16,11 +17,16 @@ public class AddLocationThirdActivity extends AppCompatActivity implements View.
     ImageView cancel;
     EditText somethingAbout;
     public static final String LOCATION_ABOUT = "text";
+    String locationID;
+    private static final String TAG = "AddLocationThird";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_location_third);
+
+        locationID = getIntent().getStringExtra("id");
+        Log.i(TAG, "ID ВЫБРАННОЙ ЛОКАЦИИ: " + locationID);
 
         backButtonView = (TextView) findViewById(R.id.buttonBackView);
         backButtonView.setOnClickListener(this);
@@ -51,6 +57,7 @@ public class AddLocationThirdActivity extends AppCompatActivity implements View.
                 editor.commit();
 
                 Intent fourthStep = new Intent(this, AddLocationFourthActivity.class);
+                fourthStep.putExtra("id", locationID);
                 startActivity(fourthStep);
                 break;
             case R.id.cancel:

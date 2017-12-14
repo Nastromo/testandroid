@@ -33,12 +33,14 @@ public class MyLocationsFragment extends Fragment {
 
     ListView listView;
     ArrayList<LocationForAdapter> locations;
-    List<String> locationsForAdapter;
     View rootView;
     String locationName, url, token;
     String[] applicationData;
     private static final String TAG = "MyLocationsFragment";
     Button createNewBtn;
+    public static boolean isEditable = false;
+    public static String userID;
+    public static List<String> locationID;
 
 
     @Override
@@ -56,6 +58,7 @@ public class MyLocationsFragment extends Fragment {
         createNewBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                isEditable = false;
                 Intent addLocationFirstActivity = new Intent(getContext(), AddLocationFirstActivity.class);
                 startActivity(addLocationFirstActivity);
             }
@@ -79,7 +82,7 @@ public class MyLocationsFragment extends Fragment {
         headers.put("Content-Type", "application/json");
         headers.put("X-Auth", token);
 
-        String userID = applicationData[0];
+        userID = applicationData[0];
 
         Call<List<LocationGetResponse>> call = api.getMyLocations(headers, userID);
         call.enqueue(new Callback<List<LocationGetResponse>>() {
@@ -89,13 +92,16 @@ public class MyLocationsFragment extends Fragment {
                 Log.i(TAG, "ОТВЕТ СЕРВЕРА: " + response.toString());
 
                 locations = new ArrayList<>();
+                locationID = new ArrayList<>();
                 List<LocationGetResponse> mylocations = response.body();
                 for (LocationGetResponse location: mylocations){
                     locationName = location.getTitle();
+                    locationID.add(location.getId());
                     Log.i(TAG, "НАЗВАНИЕ ЛОКАЦИИ: " + locationName);
+                    Log.i(TAG, "ID ЛОКАЦИИ: " + location.getId());
                     locations.add(new LocationForAdapter(locationName));
                 }
-
+                Log.i(TAG, "РАЗМЕР СПИСКА ПЕРВАЯ ПРОВЕРКА: " + locationID.size() + "   " + locations.size());
                 listView = (ListView) rootView.findViewById(R.id.locationListView);
                 MyLocationsListAdapter myLocationsFragment = new MyLocationsListAdapter(getContext(), R.layout.my_location_card, locations);
                 listView.setAdapter(myLocationsFragment);
@@ -104,9 +110,10 @@ public class MyLocationsFragment extends Fragment {
 
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        //TODO редактирование данных локации
-
+                        isEditable = true;
+                        Log.i(TAG, "РАЗМЕР СПИСКА: " + locationID.size());
                         Intent addLocationFirstActivity = new Intent(getContext(), AddLocationFirstActivity.class);
+                        addLocationFirstActivity.putExtra("id", locationID.get(i));
                         startActivity(addLocationFirstActivity);
                     }
                 });

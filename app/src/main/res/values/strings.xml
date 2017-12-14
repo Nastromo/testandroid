@@ -174,5 +174,8 @@
     <string name="on_air">Зараз відбувається</string>
     <string name="off_air">Вже закінчилась</string>
     <string name="will_be">Розпочнеться у майбутньому</string>
+    <string name="semelar_events">СХОЖІ ПОДІЇ</string>
+    <string name="view_event">переглянути</string>
+    <string name="save_changes">Зберегти зміни</string>
 
 </resources>

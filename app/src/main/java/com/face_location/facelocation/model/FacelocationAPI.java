@@ -3,6 +3,7 @@ package com.face_location.facelocation.model;
 import com.face_location.facelocation.model.Events.MyEventResponse;
 import com.face_location.facelocation.model.Location.LocationBody;
 import com.face_location.facelocation.model.Location.LocationGetResponse;
+import com.face_location.facelocation.model.Location.LocationPutResponse;
 import com.face_location.facelocation.model.Location.LocationResponse;
 import com.face_location.facelocation.model.MyProfile.ProfileBody;
 import com.face_location.facelocation.model.MyProfile.ProfileResponse;
@@ -20,7 +21,9 @@ import retrofit2.http.GET;
 import retrofit2.http.HeaderMap;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Part;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
@@ -97,5 +100,13 @@ public interface FacelocationAPI {
     Call <List<LocationGetResponse>> getMyLocations(
             @HeaderMap Map<String, String> headers,
             @Query("user") String userID
+    );
+
+    //Update My Location
+    @PUT("api/locations/{locationID}")
+    Call <LocationPutResponse> updateLocation(
+            @HeaderMap Map<String, String> headers,
+            @Path("locationID") String locationID,
+            @Body LocationBody body
     );
 }

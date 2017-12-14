@@ -34,13 +34,14 @@ public class MyEventsFragment extends Fragment {
 
     ListView listView;
     private static final String TAG = "MyEventsFragment";
-    String url, token, name, about, statusString, eventStartTime;
+    String url, token, name, about, statusString, eventStartTimem, eventID;
     int status;
     String[] applicationData;
     ArrayList<Event> events;
     View rootView;
     List<String> subscribersAvatars;
     Button createNewBtn;
+    List<String> eventsID;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -90,10 +91,13 @@ public class MyEventsFragment extends Fragment {
                 Log.i(TAG, "ОТВЕТ СЕРВЕРА: " + response.toString());
 
                 events = new ArrayList<>();
+                eventsID = new ArrayList<>();
                 List<MyEventResponse> myEvents = response.body();
                 for (MyEventResponse event: myEvents){
                     name = event.getTitle();
                     about = event.getText();
+                    eventsID.add(event.getId());
+                    Log.i(TAG, "ID ИВЕНТА: " + event.getId());
                     List<Subscriber> subscribers = event.getSubscribers();
 
                     subscribersAvatars = new ArrayList<>();
@@ -138,8 +142,9 @@ public class MyEventsFragment extends Fragment {
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        Intent eventdActivity = new Intent(getContext(), EventActivity.class);
-                        startActivity(eventdActivity);
+                        Intent eventActivity = new Intent(getContext(), EventActivity.class);
+                        eventActivity.putExtra("id", eventsID.get(i));
+                        startActivity(eventActivity);
                     }
                 });
             }

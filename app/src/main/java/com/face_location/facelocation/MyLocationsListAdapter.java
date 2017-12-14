@@ -24,6 +24,7 @@ public class MyLocationsListAdapter extends ArrayAdapter<LocationForAdapter> {
 
     private static class ViewHolder {
         TextView locationName;
+        TextView locationID;
     }
 
 
@@ -56,7 +57,6 @@ public class MyLocationsListAdapter extends ArrayAdapter<LocationForAdapter> {
 
                 holder= new ViewHolder();
                 holder.locationName = (TextView) convertView.findViewById(R.id.locationName);
-
                 convertView.setTag(holder);
 
             }
@@ -65,6 +65,7 @@ public class MyLocationsListAdapter extends ArrayAdapter<LocationForAdapter> {
             }
 
             holder.locationName.setText(locationName);
+
 
             return convertView;
 

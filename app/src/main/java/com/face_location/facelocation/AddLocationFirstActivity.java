@@ -5,18 +5,19 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 public class AddLocationFirstActivity extends AppCompatActivity implements View.OnClickListener {
 
     TextView backButtonTextView, forwardButtonTextView;
-    Button buttonChosePhoto;
     public static final String LOCATION_TITLE = "title";
-    public static final String FILE_LOCATION_DETAILS = "New LocationForAdapter details";
+    public static final String FILE_LOCATION_DETAILS = "Location details";
     EditText newLocationTitle;
+    String locationID;
+    public static final String TAG = "AddLocationFirst";
 
     //TODO проверить чтобы все ключи в файле FILE_EVENT_DETAILS и FILE_LOCATION_DETAILS были уникальными
 
@@ -32,6 +33,9 @@ public class AddLocationFirstActivity extends AppCompatActivity implements View.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_location_first);
+
+        locationID = getIntent().getStringExtra("id");
+        Log.i(TAG, "ID ВЫБРАННОЙ ЛОКАЦИИ: " + locationID);
 
         backButtonTextView = (TextView) findViewById(R.id.buttonBackView);
         backButtonTextView.setOnClickListener(this);
@@ -64,6 +68,7 @@ public class AddLocationFirstActivity extends AppCompatActivity implements View.
                 editor.commit();
 
                 Intent secondStep = new Intent(this, AddLocationSecondActivity.class);
+                secondStep.putExtra("id", locationID);
                 startActivity(secondStep);
                 break;
 
