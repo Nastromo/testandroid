@@ -117,4 +117,13 @@ public interface FacelocationAPI {
             @HeaderMap Map<String, String> headers,
             @Path("eventID") String eventID
     );
+
+    //Get Similar Events
+    @GET("api/events/")
+    Call <List<EventResponse>> getSimilarEvent(
+            @HeaderMap Map<String, String> headers,
+            @Query("limit") int limit,
+            @Query("exclude") String eventID,
+            @Query("start") String date
+    );
 }

@@ -1,5 +1,7 @@
 package com.face_location.facelocation;
 
+import java.util.List;
+
 /**
  * Created by admin on 14.12.17.
  */
@@ -9,54 +11,18 @@ public class SimilarEvent {
     private String eventTitle;
     private String eventDate;
     private String passType;
-    private String userQuantity;
+    private int userQuantity;
 
     private String mainPicURL;
-    private String userPicURL;
-    private String userPicSecondURL;
-    private String userPicThirdURL;
+    List<String> subsAvatars;
 
-    public SimilarEvent(String eventTitle, String eventDate) {
-        this.eventTitle = eventTitle;
-        this.eventDate = eventDate;
-    }
-
-    public SimilarEvent(String eventTitle, String eventDate, String passType, String userQuantity, String mainPicURL, String userPicURL, String userPicSecondURL, String userPicThirdURL) {
+    public SimilarEvent(String eventTitle, String eventDate, String passType, int userQuantity, String mainPicURL, List<String> subsAvatars) {
         this.eventTitle = eventTitle;
         this.eventDate = eventDate;
         this.passType = passType;
         this.userQuantity = userQuantity;
         this.mainPicURL = mainPicURL;
-        this.userPicURL = userPicURL;
-        this.userPicSecondURL = userPicSecondURL;
-        this.userPicThirdURL = userPicThirdURL;
-    }
-
-    public SimilarEvent(String eventTitle, String eventDate, String passType, String userQuantity, String mainPicURL, String userPicURL, String userPicSecondURL) {
-        this.eventTitle = eventTitle;
-        this.eventDate = eventDate;
-        this.passType = passType;
-        this.userQuantity = userQuantity;
-        this.mainPicURL = mainPicURL;
-        this.userPicURL = userPicURL;
-        this.userPicSecondURL = userPicSecondURL;
-    }
-
-    public SimilarEvent(String eventTitle, String eventDate, String passType, String userQuantity, String mainPicURL, String userPicURL) {
-        this.eventTitle = eventTitle;
-        this.eventDate = eventDate;
-        this.passType = passType;
-        this.userQuantity = userQuantity;
-        this.mainPicURL = mainPicURL;
-        this.userPicURL = userPicURL;
-    }
-
-    public SimilarEvent(String eventTitle, String eventDate, String passType, String userQuantity, String mainPicURL) {
-        this.eventTitle = eventTitle;
-        this.eventDate = eventDate;
-        this.passType = passType;
-        this.userQuantity = userQuantity;
-        this.mainPicURL = mainPicURL;
+        this.subsAvatars = subsAvatars;
     }
 
     public String getEventTitle() {
@@ -83,11 +49,11 @@ public class SimilarEvent {
         this.passType = passType;
     }
 
-    public String getUserQuantity() {
+    public int getUserQuantity() {
         return userQuantity;
     }
 
-    public void setUserQuantity(String userQuantity) {
+    public void setUserQuantity(int userQuantity) {
         this.userQuantity = userQuantity;
     }
 
@@ -99,27 +65,23 @@ public class SimilarEvent {
         this.mainPicURL = mainPicURL;
     }
 
-    public String getUserPicURL() {
-        return userPicURL;
+    public List<String> getSubsAvatars() {
+        return subsAvatars;
     }
 
-    public void setUserPicURL(String userPicURL) {
-        this.userPicURL = userPicURL;
+    public void setSubsAvatars(List<String> subsAvatars) {
+        this.subsAvatars = subsAvatars;
     }
 
-    public String getUserPicSecondURL() {
-        return userPicSecondURL;
-    }
-
-    public void setUserPicSecondURL(String userPicSecondURL) {
-        this.userPicSecondURL = userPicSecondURL;
-    }
-
-    public String getUserPicThirdURL() {
-        return userPicThirdURL;
-    }
-
-    public void setUserPicThirdURL(String userPicThirdURL) {
-        this.userPicThirdURL = userPicThirdURL;
+    @Override
+    public String toString() {
+        return "SimilarEvent{" +
+                "eventTitle='" + eventTitle + '\'' +
+                ", eventDate='" + eventDate + '\'' +
+                ", passType='" + passType + '\'' +
+                ", userQuantity=" + userQuantity +
+                ", mainPicURL='" + mainPicURL + '\'' +
+                ", subsAvatars=" + subsAvatars +
+                '}';
     }
 }

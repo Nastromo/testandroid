@@ -41,6 +41,7 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
     List<SimilarEvent> similarEventList;
     private TextView eventTitleView, eventDateView, eventLocationView, passTypeView, eventTimeView, eventDescriptionView, userQuantity, userQuantitySecond, userQuantityThird;
     ImageView eventPhoto, userAvatar, userAvatarSecond, userAvatarThird;
+    String eventDate;
 
 
     @Override
@@ -82,21 +83,7 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
         recyclerView.setFocusable(false);
 
         getEvent(eventID);
-
-        similarEventList = new ArrayList<>();
-
-        SimilarEvent events = new SimilarEvent("Большое событие", "17 января");
-        SimilarEvent events2 = new SimilarEvent("Событие", "21 декабря");
-        SimilarEvent events3 = new SimilarEvent("Маленькое событие", "13 марта");
-
-        similarEventList.add(events);
-        similarEventList.add(events2);
-        similarEventList.add(events3);
-
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(similarEventList);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-
+        getSimilarEvent(eventID);
     }
 
 
@@ -127,8 +114,6 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
         headers.put("Content-Type", "application/json");
         headers.put("X-Auth", token);
 
-        String userID = applicationData[0];
-
         Call<EventResponse> call = api.getMyEvent(headers, eventID);
         call.enqueue(new Callback<EventResponse>() {
             @Override
@@ -136,7 +121,7 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
                 Log.i(TAG, "ОТВЕТ СЕРВЕРА: " + response.toString());
 
                 String eventTitle = response.body().getTitle();
-                String eventDate = response.body().getTime().getStart();
+                eventDate = response.body().getTime().getStart();
                 String eventPassType = response.body().getType().getTitle();
 
                 List<Location> eventLocations = response.body().getLocations();
@@ -293,6 +278,68 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
 
             @Override
             public void onFailure(Call<EventResponse> call, Throwable t) {
+                Log.i(TAG, "onFailure: " + t.toString());
+            }
+        });
+    }
+
+    public void getSimilarEvent(String eventID) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(url)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+
+        FacelocationAPI api = retrofit.create(FacelocationAPI.class);
+
+        HashMap<String, String> headers = new HashMap<String, String>();
+        headers.put("Content-Type", "application/json");
+        headers.put("X-Auth", token);
+
+        int limit = 3;
+
+        Call<List<EventResponse>> call = api.getSimilarEvent(headers, limit, eventID, eventDate);
+        call.enqueue(new Callback<List<EventResponse>>() {
+            @Override
+            public void onResponse(Call<List<EventResponse>> call, Response<List<EventResponse>> response) {
+                Log.i(TAG, "ОТВЕТ СЕРВЕРА SIMILAR: " + response.toString());
+                List<EventResponse> eventsResponse = response.body();
+
+                similarEventList = new ArrayList<>();
+                for (int i = 0; i < eventsResponse.size(); i++) {
+                    EventResponse event = eventsResponse.get(i);
+
+                    String similarEventTitle = event.getTitle();
+                    String similarEventDate = event.getTime().getStart();
+                    String similarEventDateShort = similarEventDate.substring(0, Math.min(similarEventDate.length(), 10));
+                    int similarEventUserQua = event.getSubscribers().size();
+
+                    List<Subscriber> subscribers = event.getSubscribers();
+                    List<String> subsAvatars = new ArrayList<>();
+                    for (int j = 0; j < subscribers.size(); j++) {
+                        Subscriber subscriber = subscribers.get(j);
+                        String subAvatar = subscriber.getUser().getAvatarMob();
+                        subsAvatars.add(subAvatar);
+                    }
+
+                    String mainPic = event.getCover().getLocationMob();
+
+                    similarEventList.add(new SimilarEvent(
+                            similarEventTitle,
+                            similarEventDateShort,
+                            "passsssss",
+                            similarEventUserQua,
+                            mainPic,
+                            subsAvatars));
+                }
+
+                RecyclerViewAdapter adapter = new RecyclerViewAdapter(EventActivity.this, similarEventList);
+                recyclerView.setAdapter(adapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(EventActivity.this, LinearLayoutManager.HORIZONTAL, false));
+            }
+
+            @Override
+            public void onFailure(Call<List<EventResponse>> call, Throwable t) {
                 Log.i(TAG, "onFailure: " + t.toString());
             }
         });
