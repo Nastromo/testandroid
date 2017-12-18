@@ -19,18 +19,78 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <TextView
-                    android:id="@+id/userQuantity"
+                <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/forAvatars"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="2dp"
-                    android:layout_marginTop="16dp"
-                    android:text="userQuantity"
-                    android:textColor="@color/green"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toEndOf="@+id/plus"
-                    app:layout_constraintTop_toBottomOf="@+id/goingText" />
+                    android:layout_marginStart="35dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/goingText">
+
+                    <ImageView
+                        android:id="@+id/userAvatar"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_weight="1"
+                        app:srcCompat="@drawable/default_avatar_small" />
+
+                    <TextView
+                        android:id="@+id/usersQuantity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="35dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:layout_toRightOf="@+id/userAvatar"
+                        android:gravity="center"
+                        android:textColor="@color/green_stroke"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+
+                    <ImageView
+                        android:id="@+id/userAvatarSecond"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_marginLeft="36dp"
+                        android:layout_weight="1"
+                        app:srcCompat="@drawable/default_avatar_small" />
+
+                    <TextView
+                        android:id="@+id/usersQuantitySecond"
+                        android:layout_width="wrap_content"
+                        android:layout_height="35dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:layout_toRightOf="@+id/userAvatarSecond"
+                        android:gravity="center"
+                        android:textColor="@color/green_stroke"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+
+                    <ImageView
+                        android:id="@+id/userAvatarThird"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_marginLeft="72dp"
+                        android:layout_weight="1"
+                        app:srcCompat="@drawable/default_avatar_small" />
+
+                    <TextView
+                        android:id="@+id/usersQuantityThird"
+                        android:layout_width="wrap_content"
+                        android:layout_height="35dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:layout_toRightOf="@+id/userAvatarThird"
+                        android:gravity="center"
+                        android:textColor="@color/green_stroke"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+
+                </RelativeLayout>
 
                 <TextView
                     android:id="@+id/backTextView"
@@ -51,20 +111,10 @@
                     android:layout_marginStart="35dp"
                     android:layout_marginTop="8dp"
                     android:text="eventTitle"
-                    android:textSize="13sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/onAirImage" />
-
-                <TextView
-                    android:id="@+id/eventDay"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="35dp"
-                    android:text="eventDay"
-                    android:textSize="12sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/eventDate" />
 
                 <TextView
                     android:id="@+id/locationText"
@@ -84,7 +134,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="42dp"
                     android:layout_marginEnd="35dp"
-                    android:layout_marginTop="46dp"
+                    android:layout_marginTop="45dp"
                     android:background="@drawable/rec_fill_maincolor"
                     android:text="@string/localiz"
                     android:textAllCaps="false"
@@ -92,7 +142,7 @@
                     android:textSize="12sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/eventDay" />
+                    app:layout_constraintTop_toBottomOf="@+id/eventDate" />
 
                 <TextView
                     android:id="@+id/goingText"
@@ -108,16 +158,6 @@
                     app:layout_constraintTop_toBottomOf="@+id/eventPhoto" />
 
                 <ImageView
-                    android:id="@+id/userGoingPics"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="35dp"
-                    android:layout_marginTop="8dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/goingText"
-                    app:srcCompat="@drawable/default_avatar_small" />
-
-                <ImageView
                     android:id="@+id/eventPhoto"
                     android:layout_width="0dp"
                     android:layout_height="150dp"
@@ -127,19 +167,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/passType"
                     app:srcCompat="@drawable/rec_gradient" />
-
-                <TextView
-                    android:id="@+id/plus"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="16dp"
-                    android:text="+"
-                    android:textColor="@color/green"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toEndOf="@+id/userGoingPics"
-                    app:layout_constraintTop_toBottomOf="@+id/goingText" />
 
                 <TextView
                     android:id="@+id/eventDescription"
@@ -195,7 +222,7 @@
                     android:textSize="12sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/userGoingPics" />
+                    app:layout_constraintTop_toBottomOf="@+id/forAvatars" />
 
                 <TextView
                     android:id="@+id/eventTime"
@@ -224,7 +251,7 @@
                     android:layout_marginEnd="35dp"
                     android:layout_marginTop="82dp"
                     android:text="eventDate"
-                    android:textSize="13sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

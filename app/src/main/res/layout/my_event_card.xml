@@ -126,7 +126,7 @@
                     android:id="@+id/userAvatarFourth"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
-                    android:layout_marginLeft="108dp"
+                    android:layout_toEndOf="@+id/userAvatarThird"
                     android:layout_weight="1"
                     app:srcCompat="@drawable/default_avatar_small" />
 

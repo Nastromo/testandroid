@@ -1,6 +1,7 @@
 package com.face_location.facelocation.model;
 
 import com.face_location.facelocation.model.Events.MyEventResponse;
+import com.face_location.facelocation.model.GetEvent.EventResponse;
 import com.face_location.facelocation.model.Location.LocationBody;
 import com.face_location.facelocation.model.Location.LocationGetResponse;
 import com.face_location.facelocation.model.Location.LocationPutResponse;
@@ -108,5 +109,12 @@ public interface FacelocationAPI {
             @HeaderMap Map<String, String> headers,
             @Path("locationID") String locationID,
             @Body LocationBody body
+    );
+
+    //Get My Event
+    @GET("api/events/{eventID}")
+    Call<EventResponse> getMyEvent(
+            @HeaderMap Map<String, String> headers,
+            @Path("eventID") String eventID
     );
 }
