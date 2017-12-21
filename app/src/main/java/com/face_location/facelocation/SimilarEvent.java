@@ -11,15 +11,17 @@ public class SimilarEvent {
     private String eventTitle;
     private String eventDate;
     private String passType;
+    private String ID;
     private int userQuantity;
 
     private String mainPicURL;
     List<String> subsAvatars;
 
-    public SimilarEvent(String eventTitle, String eventDate, String passType, int userQuantity, String mainPicURL, List<String> subsAvatars) {
+    public SimilarEvent(String eventTitle, String eventDate, String passType, String ID, int userQuantity, String mainPicURL, List<String> subsAvatars) {
         this.eventTitle = eventTitle;
         this.eventDate = eventDate;
         this.passType = passType;
+        this.ID = ID;
         this.userQuantity = userQuantity;
         this.mainPicURL = mainPicURL;
         this.subsAvatars = subsAvatars;
@@ -47,6 +49,14 @@ public class SimilarEvent {
 
     public void setPassType(String passType) {
         this.passType = passType;
+    }
+
+    public String getID() {
+        return ID;
+    }
+
+    public void setID(String ID) {
+        this.ID = ID;
     }
 
     public int getUserQuantity() {
@@ -79,6 +89,7 @@ public class SimilarEvent {
                 "eventTitle='" + eventTitle + '\'' +
                 ", eventDate='" + eventDate + '\'' +
                 ", passType='" + passType + '\'' +
+                ", ID='" + ID + '\'' +
                 ", userQuantity=" + userQuantity +
                 ", mainPicURL='" + mainPicURL + '\'' +
                 ", subsAvatars=" + subsAvatars +

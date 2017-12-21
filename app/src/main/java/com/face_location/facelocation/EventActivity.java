@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -42,6 +43,7 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
     private TextView eventTitleView, eventDateView, eventLocationView, passTypeView, eventTimeView, eventDescriptionView, userQuantity, userQuantitySecond, userQuantityThird;
     ImageView eventPhoto, userAvatar, userAvatarSecond, userAvatarThird;
     String eventDate;
+    LinearLayout linearLayout2;
 
 
     @Override
@@ -57,6 +59,15 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
         token = applicationData[5];
 
         eventID = getIntent().getStringExtra("id");
+
+        linearLayout2 = (LinearLayout) findViewById(R.id.linearLayout2);
+        linearLayout2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent editEvent = new Intent(EventActivity.this, SearchLocationActivity.class);
+                startActivity(editEvent);
+            }
+        });
 
         eventTitleView = (TextView) findViewById(R.id.eventTitle);
         eventDateView = (TextView) findViewById(R.id.eventDate);
@@ -289,7 +300,6 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-
         FacelocationAPI api = retrofit.create(FacelocationAPI.class);
 
         HashMap<String, String> headers = new HashMap<String, String>();
@@ -298,7 +308,7 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
 
         int limit = 3;
 
-        Call<List<EventResponse>> call = api.getSimilarEvent(headers, limit, eventID, eventDate);
+        Call<List<EventResponse>> call = api.getSimilarEvent(headers, limit, eventID, eventDate, "592ef2a2bf518a2430ee9ad9");
         call.enqueue(new Callback<List<EventResponse>>() {
             @Override
             public void onResponse(Call<List<EventResponse>> call, Response<List<EventResponse>> response) {
@@ -310,8 +320,14 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
                     EventResponse event = eventsResponse.get(i);
 
                     String similarEventTitle = event.getTitle();
+                    String similarEventTitleShort = similarEventTitle;
+                    if (similarEventTitle.length() > 29){
+                        similarEventTitleShort = similarEventTitle.substring(0, Math.min(similarEventTitle.length(), 29)) + "...";
+                    }
+
                     String similarEventDate = event.getTime().getStart();
                     String similarEventDateShort = similarEventDate.substring(0, Math.min(similarEventDate.length(), 10));
+                    String similarEventType = event.getType().getTitle();
                     int similarEventUserQua = event.getSubscribers().size();
 
                     List<Subscriber> subscribers = event.getSubscribers();
@@ -323,11 +339,13 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
                     }
 
                     String mainPic = event.getCover().getLocationMob();
+                    String eventID = event.getId();
 
                     similarEventList.add(new SimilarEvent(
-                            similarEventTitle,
+                            similarEventTitleShort,
                             similarEventDateShort,
-                            "passsssss",
+                            similarEventType,
+                            eventID,
                             similarEventUserQua,
                             mainPic,
                             subsAvatars));
@@ -343,5 +361,11 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
                 Log.i(TAG, "onFailure: " + t.toString());
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getSimilarEvent(eventID);
     }
 }

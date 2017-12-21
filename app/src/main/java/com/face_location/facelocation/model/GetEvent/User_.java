@@ -23,6 +23,11 @@ public class User_ {
     @SerializedName("status")
     @Expose
     private Integer status;
+
+    @SerializedName("username")
+    @Expose
+    private String username;
+
     @SerializedName("hide")
     @Expose
     private Hide__ hide;
@@ -83,4 +88,11 @@ public class User_ {
         this.hide = hide;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 }

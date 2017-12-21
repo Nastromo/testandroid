@@ -1,6 +1,7 @@
 package com.face_location.facelocation;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +17,13 @@ import java.util.List;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
     private List<SimilarEvent> similarEventList;
-    private Context mContext;
+    private static Context mContext;
+    static String similarEventID;
+
+    public RecyclerViewAdapter(Context context, List<SimilarEvent> events) {
+        similarEventList = events;
+        mContext = context;
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
 
@@ -31,8 +38,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public ImageView userAvatarThird;
 
 
-        public ViewHolder(final View itemView) {
+        public ViewHolder(final View itemView){
             super(itemView);
+
             eventTitle = (TextView) itemView.findViewById(R.id.eventTitle);
             eventDate = (TextView) itemView.findViewById(R.id.eventDate);
             passType = (TextView) itemView.findViewById(R.id.passType);
@@ -44,14 +52,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             userAvatar = (ImageView) itemView.findViewById(R.id.userAvatar);
             userAvatarSecond = (ImageView) itemView.findViewById(R.id.userAvatarSecond);
             userAvatarThird = (ImageView) itemView.findViewById(R.id.userAvatarThird);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int pos = getAdapterPosition();
+                    Intent similarEventActivity = new Intent(mContext, EventActivity.class);
+                    similarEventActivity.putExtra("id", similarEventID);
+                    mContext.startActivity(similarEventActivity);
+                }
+            });
         }
     }
 
-
-    public RecyclerViewAdapter(Context context, List<SimilarEvent> events) {
-        similarEventList = events;
-        mContext = context;
-    }
 
 
     @Override
@@ -69,6 +82,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         TextView eventTitle = viewHolder.eventTitle;
         eventTitle.setText(event.getEventTitle());
+
+        similarEventID = event.getID();
 
         TextView eventDate = viewHolder.eventDate;
         eventDate.setText(event.getEventDate());

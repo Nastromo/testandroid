@@ -8,6 +8,7 @@ import com.face_location.facelocation.model.Location.LocationPutResponse;
 import com.face_location.facelocation.model.Location.LocationResponse;
 import com.face_location.facelocation.model.MyProfile.ProfileBody;
 import com.face_location.facelocation.model.MyProfile.ProfileResponse;
+import com.face_location.facelocation.model.PostEvent.EventBody;
 import com.face_location.facelocation.model.Registration.RegistrationBody;
 import com.face_location.facelocation.model.Registration.RegistrationResponse;
 
@@ -124,6 +125,14 @@ public interface FacelocationAPI {
             @HeaderMap Map<String, String> headers,
             @Query("limit") int limit,
             @Query("exclude") String eventID,
-            @Query("start") String date
+            @Query("start") String date,
+            @Query("type") String type
+    );
+
+    //Create new Event
+    @POST("api/events")
+    Call<EventResponse> createEvent(
+            @HeaderMap Map<String, String> headers,
+            @Body EventBody body
     );
 }

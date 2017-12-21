@@ -6,13 +6,14 @@ package com.face_location.facelocation;
 
 public class Attention {
 
-   private String title, body, userName, time;
+   private String title, body, userName, time, avatar;
 
-    public Attention(String title, String body, String userName, String time) {
+    public Attention(String title, String body, String userName, String time, String avatar) {
         this.title = title;
         this.body = body;
         this.userName = userName;
         this.time = time;
+        this.avatar = avatar;
     }
 
     public String getTitle() {
@@ -45,5 +46,13 @@ public class Attention {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }

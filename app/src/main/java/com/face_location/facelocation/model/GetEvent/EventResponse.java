@@ -1,8 +1,9 @@
 package com.face_location.facelocation.model.GetEvent;
 
-import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
 
 public class EventResponse {
 
@@ -41,7 +42,7 @@ public class EventResponse {
     private Boolean _private;
     @SerializedName("announcements")
     @Expose
-    private List<Object> announcements = null;
+    private List<Announcement> announcements = null;
     @SerializedName("subscribers")
     @Expose
     private List<Subscriber> subscribers = null;
@@ -68,7 +69,7 @@ public class EventResponse {
     private Time_ time;
     @SerializedName("files")
     @Expose
-    private List<Object> files = null;
+    private List<File> files = null;
     @SerializedName("cover")
     @Expose
     private Cover_ cover;
@@ -153,19 +154,19 @@ public class EventResponse {
         this.createdAt = createdAt;
     }
 
-    public Boolean getPrivate() {
+    public Boolean get_private() {
         return _private;
     }
 
-    public void setPrivate(Boolean _private) {
+    public void set_private(Boolean _private) {
         this._private = _private;
     }
 
-    public List<Object> getAnnouncements() {
+    public List<Announcement> getAnnouncements() {
         return announcements;
     }
 
-    public void setAnnouncements(List<Object> announcements) {
+    public void setAnnouncements(List<Announcement> announcements) {
         this.announcements = announcements;
     }
 
@@ -233,11 +234,11 @@ public class EventResponse {
         this.time = time;
     }
 
-    public List<Object> getFiles() {
+    public List<File> getFiles() {
         return files;
     }
 
-    public void setFiles(List<Object> files) {
+    public void setFiles(List<File> files) {
         this.files = files;
     }
 
@@ -248,6 +249,5 @@ public class EventResponse {
     public void setCover(Cover_ cover) {
         this.cover = cover;
     }
-
 }
 

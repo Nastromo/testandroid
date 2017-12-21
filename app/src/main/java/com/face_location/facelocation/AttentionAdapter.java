@@ -7,7 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
 
@@ -24,6 +28,7 @@ public class AttentionAdapter extends ArrayAdapter<Attention> {
 
     private static class ViewHolder {
         TextView userName, postTime, attentionTitle, bodyText;
+        ImageView userAvatar;
     }
 
 
@@ -52,8 +57,7 @@ public class AttentionAdapter extends ArrayAdapter<Attention> {
 
         String bodyText = getItem(position).getBody();
 
-
-
+        String userAvatar = getItem(position).getAvatar();
         try{
 
             ViewHolder holder;
@@ -67,6 +71,7 @@ public class AttentionAdapter extends ArrayAdapter<Attention> {
                 holder.postTime = (TextView) convertView.findViewById(R.id.someText);
                 holder.attentionTitle = (TextView) convertView.findViewById(R.id.attentionTitle);
                 holder.bodyText = (TextView) convertView.findViewById(R.id.bodyText);
+                holder.userAvatar = (ImageView) convertView.findViewById(R.id.imageView2);
 
                 convertView.setTag(holder);
 
@@ -80,21 +85,15 @@ public class AttentionAdapter extends ArrayAdapter<Attention> {
             holder.attentionTitle.setText(attentionTitle);
             holder.bodyText.setText(bodyText);
 
+            Glide
+                    .with(mContext)
+                    .load(userAvatar)
+                    .thumbnail(0.1f) //shows mini image which weight 0.1 from real image while real image is downloading
+                    .apply(RequestOptions
+                            .circleCropTransform())
+                    //      .placeholder(R.drawable.oval)) //shows drawable while real/mini image is downloading
+                    .into(holder.userAvatar);
 
-            //create the imageloader object
-//            ImageLoader imageLoader = ImageLoader.getInstance();
-//
-//            int defaultImage = mContext.getResources().getIdentifier("@drawable/image_failed",null,mContext.getPackageName());
-//
-//            //create display options
-//            DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
-//                    .cacheOnDisc(true).resetViewBeforeLoading(true)
-//                    .showImageForEmptyUri(defaultImage)
-//                    .showImageOnFail(defaultImage)
-//                    .showImageOnLoading(defaultImage).build();
-//
-//            //download and display image from url
-//            imageLoader.displayImage(imgUrl, holder.image, options);
 
             return convertView;
 
@@ -104,24 +103,4 @@ public class AttentionAdapter extends ArrayAdapter<Attention> {
         }
 
     }
-
-    /**
-     * Required for setting up the Universal Image loader Library
-     */
-//    private void setupImageLoader(){
-//        // UNIVERSAL IMAGE LOADER SETUP
-//        DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
-//                .cacheOnDisc(true).cacheInMemory(true)
-//                .imageScaleType(ImageScaleType.EXACTLY)
-//                .displayer(new FadeInBitmapDisplayer(300)).build();
-//
-//        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
-//                mContext)
-//                .defaultDisplayImageOptions(defaultOptions)
-//                .memoryCache(new WeakMemoryCache())
-//                .discCacheSize(100 * 1024 * 1024).build();
-//
-//        ImageLoader.getInstance().init(config);
-//        // END - UNIVERSAL IMAGE LOADER SETUP
-//    }
 }

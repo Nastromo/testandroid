@@ -177,5 +177,6 @@
     <string name="semelar_events">СХОЖІ ПОДІЇ</string>
     <string name="view_event">переглянути</string>
     <string name="save_changes">Зберегти зміни</string>
+    <string name="edit_text">РЕДАГУВАТИ</string>
 
 </resources>
