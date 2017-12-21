@@ -1,5 +1,6 @@
 package com.face_location.facelocation;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -8,13 +9,20 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.face_location.facelocation.model.DataBase.DataBaseHelper;
 
 public class LocalizedActivity extends AppCompatActivity {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
     String TAG = "LocalizedActivity";
+    DataBaseHelper applicationDB;
+    String[] userArrayData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +46,35 @@ public class LocalizedActivity extends AppCompatActivity {
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabsLocalized);
+
+        applicationDB = DataBaseHelper.getInstance(this);
+        userArrayData = applicationDB.retrieveFirstLoginValues();
+
+        ImageView avatar = (ImageView) findViewById(R.id.avatar);
+
+        String userAvatar = userArrayData[10];
+
+        if (userAvatar != null){
+            avatar.setBackground(null);
+            Glide
+                    .with(LocalizedActivity.this)
+                    .load(userAvatar)
+                    .thumbnail(0.1f) //shows mini image which weight 0.1 from real image while real image is downloading
+                    .apply(RequestOptions
+                            .circleCropTransform())
+                    //      .placeholder(R.drawable.oval)) //shows drawable while real/mini image is downloading
+                    .into(avatar);
+        }
+
+
+
+        avatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myProfile = new Intent(LocalizedActivity.this, MyProfileActivity.class);
+                startActivity(myProfile);
+            }
+        });
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
@@ -79,4 +116,6 @@ public class LocalizedActivity extends AppCompatActivity {
                 return 4;
             }
     }
+
+
 }
