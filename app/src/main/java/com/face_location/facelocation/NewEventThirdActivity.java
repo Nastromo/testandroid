@@ -67,18 +67,19 @@ public class NewEventThirdActivity extends AppCompatActivity implements View.OnC
 
             case R.id.forwardButtonTextView:
                 String publicityEvent = spinnerEventPublicity.getSelectedItem().toString();
+                boolean isPublic = true;
                 Log.i(TAG, "Тип публичности: " + publicityEvent);
                 if (publicityEvent.equals("Відкритий")){
-                    publicityEvent = "true";
+                    isPublic = true;
                 } else {
-                publicityEvent = "false";
+                    isPublic = false;
                 }
-                Log.i(TAG, "Тип публичности логический: " + publicityEvent);
+                Log.i(TAG, "Тип публичности логический: " + isPublic);
 
                 //Save Event publicity to shared preferences file
                 SharedPreferences sharedPref = getSharedPreferences(NewEventFirstActivity.FILE_EVENT_DETAILS, Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putString(EVENT_PUBLICITY, publicityEvent);
+                editor.putBoolean(EVENT_PUBLICITY, isPublic);
                 editor.commit();
 
                 Intent newEventFourthActivity = new Intent(this, NewEventFourthActivity.class);

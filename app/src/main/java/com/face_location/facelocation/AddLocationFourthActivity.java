@@ -181,6 +181,9 @@ public class AddLocationFourthActivity extends AppCompatActivity implements View
 
                 if (response.code() == 200) {
                     stepFifth = new Intent(AddLocationFourthActivity.this, NewEventFirstActivity.class);
+                    String locationIDResponse = response.body().getId();
+                    Log.i(TAG, "ID ЛОКАЦИИ: " + locationIDResponse);
+                    stepFifth.putExtra("locationID", locationIDResponse);
                     startActivity(stepFifth);
                 } else {
                     Log.i(TAG, "onResponse: \n" + response.code());
@@ -229,6 +232,9 @@ public class AddLocationFourthActivity extends AppCompatActivity implements View
 
                 if (response.code() == 200) {
                     stepFifth = new Intent(AddLocationFourthActivity.this, NewEventFirstActivity.class);
+                    String locationIDResponse = response.body().getId();
+                    Log.i(TAG, "ID ЛОКАЦИИ: " + locationIDResponse);
+                    stepFifth.putExtra("locationID", locationIDResponse);
                     startActivity(stepFifth);
                 } else {
                     Log.i(TAG, "onResponse: \n" + response.code());

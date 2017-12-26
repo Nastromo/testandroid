@@ -7,21 +7,21 @@ import java.util.List;
  */
 
 public class EventBody {
-    String title, text, start, end, type;
-    boolean isprivate;
-    int seats, frequency;
+    String title, text, start, end;
+    boolean isPrivate;
+    int seats, frequency, type;
     List<Schedules> schedules;
-    String[] locations;
+    List<Locations> locations;
 
-    public EventBody(String title, String text, String start, String end, String type, boolean isprivate, int seats, int frequency, List<Schedules> schedules, String[] locations) {
+    public EventBody(String title, String text, String start, String end, boolean isPrivate, int seats, int frequency, int type, List<Schedules> schedules, List<Locations> locations) {
         this.title = title;
         this.text = text;
         this.start = start;
         this.end = end;
-        this.type = type;
-        this.isprivate = isprivate;
+        this.isPrivate = isPrivate;
         this.seats = seats;
         this.frequency = frequency;
+        this.type = type;
         this.schedules = schedules;
         this.locations = locations;
     }
@@ -58,20 +58,12 @@ public class EventBody {
         this.end = end;
     }
 
-    public String getType() {
-        return type;
+    public boolean isPrivate() {
+        return isPrivate;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public boolean isIsprivate() {
-        return isprivate;
-    }
-
-    public void setIsprivate(boolean isprivate) {
-        this.isprivate = isprivate;
+    public void setPrivate(boolean aPrivate) {
+        isPrivate = aPrivate;
     }
 
     public int getSeats() {
@@ -90,6 +82,14 @@ public class EventBody {
         this.frequency = frequency;
     }
 
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
     public List<Schedules> getSchedules() {
         return schedules;
     }
@@ -98,11 +98,11 @@ public class EventBody {
         this.schedules = schedules;
     }
 
-    public String[] getLocations() {
+    public List<Locations> getLocations() {
         return locations;
     }
 
-    public void setLocations(String[] locations) {
+    public void setLocations(List<Locations> locations) {
         this.locations = locations;
     }
 }

@@ -21,11 +21,14 @@ public class NewEventFourthActivity extends AppCompatActivity implements View.On
     public static final String EVENT_PLACES = "seats";
     public static final String EVENT_PERIOD = "frequency";
 //    ImageView imageView2;
+    int frequency;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_event_fourth);
+
+        frequency = -1;
 
         buttonBackView = (TextView) findViewById(R.id.buttonBackView);
         buttonBackView.setOnClickListener(this);
@@ -64,6 +67,7 @@ public class NewEventFourthActivity extends AppCompatActivity implements View.On
             case R.id.forwardButtonTextView:
                 String placesEvent = placesQuantity.getText().toString();
                 Log.i(TAG, "Количество мест: " + placesEvent);
+                int places = Integer.parseInt(placesEvent);
 
                 String periodEvent = spinnerEventPeriod.getSelectedItem().toString();
                 Log.i(TAG, "Периодичность: " + periodEvent);
@@ -71,26 +75,26 @@ public class NewEventFourthActivity extends AppCompatActivity implements View.On
                 //TODO спросить Диму, какие значения соответствуют словам
                 switch (periodEvent){
                     case "Одноразово":
-                        periodEvent = "0";
-                        Log.i(TAG, "Периодичность: " + periodEvent);
+                        frequency = 0;
+                        Log.i(TAG, "Периодичность: " + String.valueOf(frequency));
                         break;
 
                     case "Щотижнево":
-                        periodEvent = "1";
-                        Log.i(TAG, "Периодичность: " + periodEvent);
+                        frequency = 1;
+                        Log.i(TAG, "Периодичность: " + String.valueOf(frequency));
                         break;
 
                     case "Без кінця":
-                        periodEvent = "2";
-                        Log.i(TAG, "Периодичность: " + periodEvent);
+                        frequency = 2;
+                        Log.i(TAG, "Периодичность: " + String.valueOf(frequency));
                         break;
                 }
 
                 //Save Event place quantity to shared preferences file
                 SharedPreferences sharedPref = getSharedPreferences(NewEventFirstActivity.FILE_EVENT_DETAILS, Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putString(EVENT_PLACES, placesEvent);
-                editor.putString(EVENT_PERIOD, periodEvent);
+                editor.putInt(EVENT_PLACES, places);
+                editor.putInt(EVENT_PERIOD, frequency);
                 editor.commit();
 
                 Intent newEventFifthActivity = new Intent(this, NewEventFifthActivity.class);
