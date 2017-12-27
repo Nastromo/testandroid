@@ -82,6 +82,7 @@ public class MyEventsFragment extends Fragment {
         headers.put("X-Auth", token);
 
         String userID = applicationData[0];
+        Log.i(TAG, "USER ID: " + userID);
 
         Call<List<MyEventResponse>> call = api.getMyEvents(headers, userID);
         call.enqueue(new Callback<List<MyEventResponse>>() {
@@ -119,7 +120,7 @@ public class MyEventsFragment extends Fragment {
                             break;
 
                         case 2:
-//                            eventStartTime = event.getTime().getStart();
+//                            eventStartTime = event.getScheduleTime().getStart();
 //                            Log.i(TAG, "ВРЕМЯ ПОЛУЧИЛ: " + eventStartTime);
 //
 //                            String dateTime = "2017-08-23T08:08:00Z"; //TODO всавить сюда eventStartTime, когда сервер будет возвращать правильную дату

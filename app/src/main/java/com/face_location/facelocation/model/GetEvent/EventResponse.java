@@ -19,12 +19,9 @@ public class EventResponse {
     @SerializedName("seats")
     @Expose
     private Integer seats;
-    @SerializedName("category")
-    @Expose
-    private Category category;
     @SerializedName("type")
     @Expose
-    private Type type;
+    private Integer type;
     @SerializedName("user")
     @Expose
     private User user;
@@ -37,6 +34,9 @@ public class EventResponse {
     @SerializedName("created_at")
     @Expose
     private String createdAt;
+    @SerializedName("isPrivate")
+    @Expose
+    private Boolean isPrivate;
     @SerializedName("private")
     @Expose
     private Boolean _private;
@@ -57,7 +57,7 @@ public class EventResponse {
     private List<Object> sponsors = null;
     @SerializedName("schedules")
     @Expose
-    private List<Schedule> schedules = null;
+    private List<Object> schedules = null;
     @SerializedName("status")
     @Expose
     private Integer status;
@@ -66,7 +66,7 @@ public class EventResponse {
     private Boolean published;
     @SerializedName("time")
     @Expose
-    private Time_ time;
+    private Time time;
     @SerializedName("files")
     @Expose
     private List<File> files = null;
@@ -106,19 +106,11 @@ public class EventResponse {
         this.seats = seats;
     }
 
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
-    public Type getType() {
+    public Integer getType() {
         return type;
     }
 
-    public void setType(Type type) {
+    public void setType(Integer type) {
         this.type = type;
     }
 
@@ -154,11 +146,19 @@ public class EventResponse {
         this.createdAt = createdAt;
     }
 
-    public Boolean get_private() {
+    public Boolean getIsPrivate() {
+        return isPrivate;
+    }
+
+    public void setIsPrivate(Boolean isPrivate) {
+        this.isPrivate = isPrivate;
+    }
+
+    public Boolean getPrivate() {
         return _private;
     }
 
-    public void set_private(Boolean _private) {
+    public void setPrivate(Boolean _private) {
         this._private = _private;
     }
 
@@ -202,11 +202,11 @@ public class EventResponse {
         this.sponsors = sponsors;
     }
 
-    public List<Schedule> getSchedules() {
+    public List<Object> getSchedules() {
         return schedules;
     }
 
-    public void setSchedules(List<Schedule> schedules) {
+    public void setSchedules(List<Object> schedules) {
         this.schedules = schedules;
     }
 
@@ -226,11 +226,11 @@ public class EventResponse {
         this.published = published;
     }
 
-    public Time_ getTime() {
+    public Time getTime() {
         return time;
     }
 
-    public void setTime(Time_ time) {
+    public void setTime(Time time) {
         this.time = time;
     }
 
@@ -249,5 +249,6 @@ public class EventResponse {
     public void setCover(Cover_ cover) {
         this.cover = cover;
     }
+
 }
 

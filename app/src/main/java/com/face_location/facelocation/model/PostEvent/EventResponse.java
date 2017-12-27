@@ -1,15 +1,15 @@
-package com.face_location.facelocation.model.Events;
+package com.face_location.facelocation.model.PostEvent;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class MyEventResponse {
+public class EventResponse {
 
-    @SerializedName("_id")
+    @SerializedName("__v")
     @Expose
-    private String id;
+    private Integer v;
     @SerializedName("title")
     @Expose
     private String title;
@@ -19,36 +19,36 @@ public class MyEventResponse {
     @SerializedName("seats")
     @Expose
     private Integer seats;
-    @SerializedName("category")
-    @Expose
-    private Category category;
     @SerializedName("type")
     @Expose
     private Integer type;
     @SerializedName("user")
     @Expose
-    private User user;
+    private String user;
     @SerializedName("contact")
     @Expose
-    private Contact contact;
-    @SerializedName("__v")
+    private String contact;
+    @SerializedName("_id")
     @Expose
-    private Integer v;
+    private String id;
     @SerializedName("created_at")
     @Expose
     private String createdAt;
-    @SerializedName("private")
+    @SerializedName("isPrivate")
     @Expose
     private Boolean isPrivate;
+    @SerializedName("private")
+    @Expose
+    private Boolean _private;
     @SerializedName("announcements")
     @Expose
-    private List<Announcement> announcements = null;
+    private List<Object> announcements = null;
     @SerializedName("subscribers")
     @Expose
     private List<Subscriber> subscribers = null;
     @SerializedName("locations")
     @Expose
-    private List<Location> locations = null;
+    private List<String> locations = null;
     @SerializedName("tags")
     @Expose
     private List<Object> tags = null;
@@ -64,22 +64,22 @@ public class MyEventResponse {
     @SerializedName("published")
     @Expose
     private Boolean published;
-    @SerializedName("time")
+    @SerializedName("scheduleTime")
     @Expose
-    private Time_ time;
+    private ScheduleTime scheduleTime;
     @SerializedName("files")
     @Expose
     private List<Object> files = null;
     @SerializedName("cover")
     @Expose
-    private Cover_ cover;
+    private Cover cover;
 
-    public String getId() {
-        return id;
+    public Integer getV() {
+        return v;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setV(Integer v) {
+        this.v = v;
     }
 
     public String getTitle() {
@@ -106,14 +106,6 @@ public class MyEventResponse {
         this.seats = seats;
     }
 
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
     public Integer getType() {
         return type;
     }
@@ -122,28 +114,28 @@ public class MyEventResponse {
         this.type = type;
     }
 
-    public User getUser() {
+    public String getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(String user) {
         this.user = user;
     }
 
-    public Contact getContact() {
+    public String getContact() {
         return contact;
     }
 
-    public void setContact(Contact contact) {
+    public void setContact(String contact) {
         this.contact = contact;
     }
 
-    public Integer getV() {
-        return v;
+    public String getId() {
+        return id;
     }
 
-    public void setV(Integer v) {
-        this.v = v;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getCreatedAt() {
@@ -154,19 +146,27 @@ public class MyEventResponse {
         this.createdAt = createdAt;
     }
 
-    public Boolean getPrivate() {
+    public Boolean getIsPrivate() {
         return isPrivate;
     }
 
-    public void setPrivate(Boolean aPrivate) {
-        isPrivate = aPrivate;
+    public void setIsPrivate(Boolean isPrivate) {
+        this.isPrivate = isPrivate;
     }
 
-    public List<Announcement> getAnnouncements() {
+    public Boolean getPrivate() {
+        return _private;
+    }
+
+    public void setPrivate(Boolean _private) {
+        this._private = _private;
+    }
+
+    public List<Object> getAnnouncements() {
         return announcements;
     }
 
-    public void setAnnouncements(List<Announcement> announcements) {
+    public void setAnnouncements(List<Object> announcements) {
         this.announcements = announcements;
     }
 
@@ -178,11 +178,11 @@ public class MyEventResponse {
         this.subscribers = subscribers;
     }
 
-    public List<Location> getLocations() {
+    public List<String> getLocations() {
         return locations;
     }
 
-    public void setLocations(List<Location> locations) {
+    public void setLocations(List<String> locations) {
         this.locations = locations;
     }
 
@@ -226,12 +226,12 @@ public class MyEventResponse {
         this.published = published;
     }
 
-    public Time_ getTime() {
-        return time;
+    public ScheduleTime getScheduleTime() {
+        return scheduleTime;
     }
 
-    public void setTime(Time_ time) {
-        this.time = time;
+    public void setScheduleTime(ScheduleTime scheduleTime) {
+        this.scheduleTime = scheduleTime;
     }
 
     public List<Object> getFiles() {
@@ -242,12 +242,11 @@ public class MyEventResponse {
         this.files = files;
     }
 
-    public Cover_ getCover() {
+    public Cover getCover() {
         return cover;
     }
 
-    public void setCover(Cover_ cover) {
+    public void setCover(Cover cover) {
         this.cover = cover;
     }
-
 }

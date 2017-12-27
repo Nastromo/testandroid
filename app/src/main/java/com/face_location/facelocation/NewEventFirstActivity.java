@@ -20,6 +20,7 @@ public class NewEventFirstActivity extends AppCompatActivity implements View.OnC
 //    final CharSequence[] items = {"Red", "Green", "Blue"}; //For AlertDialog
     Spinner spinnerEventType;
     TextView buttonBackView;
+    int type;
 
     private static final String TAG = "newEvent";
 
@@ -76,7 +77,7 @@ public class NewEventFirstActivity extends AppCompatActivity implements View.OnC
               Log.i(TAG, "Название события: " + titleEvent);
 
               String typeEvent = spinnerEventType.getSelectedItem().toString();
-              int type = -1;
+              type = 57;
               switch (typeEvent){
                   case "концерт":
                       type = 0;

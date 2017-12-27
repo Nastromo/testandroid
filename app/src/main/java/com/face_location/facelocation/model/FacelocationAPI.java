@@ -131,8 +131,17 @@ public interface FacelocationAPI {
 
     //Create new Event
     @POST("api/events")
-    Call<EventResponse> createEvent(
+    Call<com.face_location.facelocation.model.PostEvent.EventResponse> createEvent(
             @HeaderMap Map<String, String> headers,
             @Body EventBody body
+    );
+
+    //Upload Event Cover
+    @Multipart
+    @POST("api/events/{eventID}/upload-cover")
+    Call <ResponseBody> uploadEventCover(
+            @HeaderMap Map<String, String> header,
+            @Path("eventID") String eventID,
+            @Part MultipartBody.Part file
     );
 }

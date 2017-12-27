@@ -30,6 +30,7 @@ public class SearchLocationActivity extends AppCompatActivity implements View.On
     public static final String TAG = "SearchLocationActivity";
     String url, searchedLocationTitle;
     Intent newEventFirstActivity;
+    String locationID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +96,9 @@ public class SearchLocationActivity extends AppCompatActivity implements View.On
 
                         for (LocationGetResponse location: locations){
                             if (location.getTitle().equals(searchedLocationTitle)){
+
+                                locationID = location.getId();
+
                                 locationTitleSearch.setText(location.getTitle());
                                 locationTitleSearch.setOnClickListener(SearchLocationActivity.this);
 
@@ -126,10 +130,12 @@ public class SearchLocationActivity extends AppCompatActivity implements View.On
         switch (view.getId()){
             case R.id.locationTitleSearch:
                 newEventFirstActivity = new Intent(this, NewEventFirstActivity.class);
+                newEventFirstActivity.putExtra("locationID", locationID);
                 startActivity(newEventFirstActivity);
 
             case R.id.locationAbout:
                 newEventFirstActivity = new Intent(this, NewEventFirstActivity.class);
+                newEventFirstActivity.putExtra("locationID", locationID);
                 startActivity(newEventFirstActivity);
         }
     }

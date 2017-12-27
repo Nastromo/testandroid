@@ -44,6 +44,7 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
     ImageView eventPhoto, userAvatar, userAvatarSecond, userAvatarThird;
     String eventDate;
     LinearLayout linearLayout2;
+    static int eventPassTypeInt;
 
 
     @Override
@@ -59,6 +60,7 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
         token = applicationData[5];
 
         eventID = getIntent().getStringExtra("id");
+        Log.i(TAG, "ID ИВЕНТА НА КОТОРЫЙ НАЖАЛИ: " + eventID);
 
         linearLayout2 = (LinearLayout) findViewById(R.id.linearLayout2);
         linearLayout2.setOnClickListener(new View.OnClickListener() {
@@ -133,7 +135,46 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
 
                 String eventTitle = response.body().getTitle();
                 eventDate = response.body().getTime().getStart();
-                String eventPassType = response.body().getType().getTitle();
+
+                eventPassTypeInt = 57;
+
+                eventPassTypeInt = response.body().getType();
+                Log.i(TAG, "ТИП СОБЫТИЯ: " + eventPassTypeInt);
+
+
+                String eventPassType = "Подія";
+                switch (eventPassTypeInt){
+                    case 0:
+                        eventPassType = "концерт";
+                        break;
+                    case 1:
+                        eventPassType = "бізнес";
+                        break;
+                    case 2:
+                        eventPassType = "розваги";
+                        break;
+                    case 3:
+                        eventPassType = "акції";
+                        break;
+                    case 4:
+                        eventPassType = "спорт";
+                        break;
+                    case 5:
+                        eventPassType = "зустріч";
+                        break;
+                    case 6:
+                        eventPassType = "кафе";
+                        break;
+                    case 7:
+                        eventPassType = "семінар";
+                        break;
+                    case 8:
+                        eventPassType = "конференція";
+                        break;
+                    case 9:
+                        eventPassType = "тренінг";
+                        break;
+                }
 
                 List<Location> eventLocations = response.body().getLocations();
                 Location eventLocation = eventLocations.get(0);
@@ -308,7 +349,7 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
 
         int limit = 3;
 
-        Call<List<EventResponse>> call = api.getSimilarEvent(headers, limit, eventID, eventDate, "592ef2a2bf518a2430ee9ad9");
+        Call<List<EventResponse>> call = api.getSimilarEvent(headers, limit, eventID, eventDate, "1");
         call.enqueue(new Callback<List<EventResponse>>() {
             @Override
             public void onResponse(Call<List<EventResponse>> call, Response<List<EventResponse>> response) {
@@ -327,7 +368,7 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
 
                     String similarEventDate = event.getTime().getStart();
                     String similarEventDateShort = similarEventDate.substring(0, Math.min(similarEventDate.length(), 10));
-                    String similarEventType = event.getType().getTitle();
+                    int similarEventType = event.getType();
                     int similarEventUserQua = event.getSubscribers().size();
 
                     List<Subscriber> subscribers = event.getSubscribers();
@@ -366,6 +407,7 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onResume() {
         super.onResume();
+        getEvent(eventID);
         getSimilarEvent(eventID);
     }
 }

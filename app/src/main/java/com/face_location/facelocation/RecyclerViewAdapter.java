@@ -3,6 +3,7 @@ package com.face_location.facelocation;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private List<SimilarEvent> similarEventList;
     private static Context mContext;
     static String similarEventID;
+    private static final String TAG = "RecyclerViewAdapter";
 
     public RecyclerViewAdapter(Context context, List<SimilarEvent> events) {
         similarEventList = events;
@@ -89,16 +91,55 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         eventDate.setText(event.getEventDate());
 
         TextView passType = viewHolder.passType;
-        passType.setText(event.getPassType());
+
+        int eventPassTypeInt = 57;
+        try{
+            eventPassTypeInt = event.getPassType();
+        }catch (Exception e){
+            Log.i(TAG, "ВЫЫЛЕТЕЛО ИСКЛЮЧЕНИЕ: " + e.toString());
+        }
+
+        String eventPassType = "Подія";
+        switch (eventPassTypeInt){
+            case 0:
+                eventPassType = "концерт";
+                break;
+            case 1:
+                eventPassType = "бізнес";
+                break;
+            case 2:
+                eventPassType = "розваги";
+                break;
+            case 3:
+                eventPassType = "акції";
+                break;
+            case 4:
+                eventPassType = "спорт";
+                break;
+            case 5:
+                eventPassType = "зустріч";
+                break;
+            case 6:
+                eventPassType = "кафе";
+                break;
+            case 7:
+                eventPassType = "семінар";
+                break;
+            case 8:
+                eventPassType = "конференція";
+                break;
+            case 9:
+                eventPassType = "тренінг";
+                break;
+        }
+
+
+        passType.setText(eventPassType);
 
         ImageView mainPic = viewHolder.mainPic;
         Glide
                 .with(mContext)
                 .load(event.getMainPicURL())
-                .thumbnail(0.1f) //shows mini image which weight 0.1 from real image while real image is downloading
-                .apply(RequestOptions
-                        .centerCropTransform())
-                //      .placeholder(R.drawable.oval)) //shows drawable while real/mini image is downloading
                 .into(mainPic);
 
         TextView userQuantity = viewHolder.userQuantity;

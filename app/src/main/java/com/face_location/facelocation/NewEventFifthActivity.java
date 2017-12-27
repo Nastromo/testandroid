@@ -54,7 +54,7 @@ public class NewEventFifthActivity extends AppCompatActivity implements View.OnC
                 stringBuilderStart.append("-");
                 stringBuilderStart.append(day);
                 stringBuilderStart.append("T");
-                stringBuilderStart.append("00:00:000Z");
+                stringBuilderStart.append("00:00:00.000Z");
                 startDate = stringBuilderStart.toString();
                 Log.i(TAG,"Дата старта: " + startDate);
                 break;
@@ -66,7 +66,7 @@ public class NewEventFifthActivity extends AppCompatActivity implements View.OnC
                 stringBuilderEnd.append("-");
                 stringBuilderEnd.append(day);
                 stringBuilderEnd.append("T");
-                stringBuilderEnd.append("00:00:000Z");
+                stringBuilderEnd.append("00:00:00.000Z");
                 endDate = stringBuilderEnd.toString();
                 Log.i(TAG,"Дата окончания: " + endDate);
                 break;

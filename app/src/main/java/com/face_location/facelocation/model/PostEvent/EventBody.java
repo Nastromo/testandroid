@@ -26,6 +26,18 @@ public class EventBody {
         this.locations = locations;
     }
 
+    public EventBody(String title, String text, String start, String end, boolean isPrivate, int seats, int frequency, int type, List<Locations> locations) {
+        this.title = title;
+        this.text = text;
+        this.start = start;
+        this.end = end;
+        this.isPrivate = isPrivate;
+        this.seats = seats;
+        this.frequency = frequency;
+        this.type = type;
+        this.locations = locations;
+    }
+
     public String getTitle() {
         return title;
     }

@@ -1,17 +1,19 @@
 package com.face_location.facelocation.model.PostEvent;
 
-/**
- * Created by admin on 20.12.17.
- */
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 public class Timetable {
-    String title;
-    Time time;
 
-    public Timetable(String title, Time time) {
-        this.title = title;
-        this.time = time;
-    }
+    @SerializedName("title")
+    @Expose
+    private String title;
+    @SerializedName("_id")
+    @Expose
+    private String id;
+    @SerializedName("created_at")
+    @Expose
+    private String createdAt;
 
     public String getTitle() {
         return title;
@@ -21,11 +23,20 @@ public class Timetable {
         this.title = title;
     }
 
-    public Time getTime() {
-        return time;
+    public String getId() {
+        return id;
     }
 
-    public void setTime(Time time) {
-        this.time = time;
+    public void setId(String id) {
+        this.id = id;
     }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
 }

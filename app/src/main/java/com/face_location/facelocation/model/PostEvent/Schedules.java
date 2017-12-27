@@ -8,11 +8,11 @@ import java.util.List;
 
 public class Schedules {
     String day;
-    List<Timetable> timetable;
+    List<ScheduleTimetable> scheduleTimetable;
 
-    public Schedules(String day, List<Timetable> timetable) {
+    public Schedules(String day, List<ScheduleTimetable> scheduleTimetable) {
         this.day = day;
-        this.timetable = timetable;
+        this.scheduleTimetable = scheduleTimetable;
     }
 
     public String getDay() {
@@ -23,11 +23,11 @@ public class Schedules {
         this.day = day;
     }
 
-    public List<Timetable> getTimetable() {
-        return timetable;
+    public List<ScheduleTimetable> getScheduleTimetable() {
+        return scheduleTimetable;
     }
 
-    public void setTimetable(List<Timetable> timetable) {
-        this.timetable = timetable;
+    public void setScheduleTimetable(List<ScheduleTimetable> scheduleTimetable) {
+        this.scheduleTimetable = scheduleTimetable;
     }
 }
