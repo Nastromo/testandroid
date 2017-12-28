@@ -28,4 +28,12 @@ public class ScheduleTimetable {
     public void setScheduleTime(ScheduleTime scheduleTime) {
         this.scheduleTime = scheduleTime;
     }
+
+    @Override
+    public String toString() {
+        return "ScheduleTimetable{" +
+                "title='" + title + '\'' +
+                ", scheduleTime=" + scheduleTime +
+                '}';
+    }
 }

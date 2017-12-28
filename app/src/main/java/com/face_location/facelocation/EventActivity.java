@@ -177,8 +177,12 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
                 }
 
                 List<Location> eventLocations = response.body().getLocations();
-                Location eventLocation = eventLocations.get(0);
-                String eventLocationTitle = eventLocation.getTitle();
+                Location eventLocation;
+                String eventLocationTitle = "Заголовок події";
+                if (eventLocations.size() > 0){
+                    eventLocation = eventLocations.get(0);
+                    eventLocationTitle = eventLocation.getTitle();
+                }
 
                 String eventCoverURL = response.body().getCover().getLocationMob();
 

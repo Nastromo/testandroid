@@ -7,27 +7,35 @@ import java.util.List;
  */
 
 public class Schedules {
-    String day;
-    List<ScheduleTimetable> scheduleTimetable;
+    int day;
+    List<ScheduleTimetable> timetable;
 
-    public Schedules(String day, List<ScheduleTimetable> scheduleTimetable) {
+    public Schedules(int day, List<ScheduleTimetable> timetable) {
         this.day = day;
-        this.scheduleTimetable = scheduleTimetable;
+        this.timetable = timetable;
     }
 
-    public String getDay() {
+    public int getDay() {
         return day;
     }
 
-    public void setDay(String day) {
+    public void setDay(int day) {
         this.day = day;
     }
 
-    public List<ScheduleTimetable> getScheduleTimetable() {
-        return scheduleTimetable;
+    public List<ScheduleTimetable> getTimetable() {
+        return timetable;
     }
 
-    public void setScheduleTimetable(List<ScheduleTimetable> scheduleTimetable) {
-        this.scheduleTimetable = scheduleTimetable;
+    public void setTimetable(List<ScheduleTimetable> timetable) {
+        this.timetable = timetable;
+    }
+
+    @Override
+    public String toString() {
+        return "Schedules{" +
+                "day=" + day +
+                ", timetable=" + timetable +
+                '}';
     }
 }

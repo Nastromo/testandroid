@@ -23,6 +23,11 @@ public class Time {
     @Expose
     private Integer frequency;
 
+    public Time(String start, String end) {
+        this.start = start;
+        this.end = end;
+    }
+
     public String getStart() {
         return start;
     }
