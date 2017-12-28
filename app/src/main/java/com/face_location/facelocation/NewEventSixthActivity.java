@@ -18,8 +18,6 @@ import com.face_location.facelocation.model.PostEvent.EventResponse;
 import com.face_location.facelocation.model.PostEvent.Locations;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,11 +35,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class NewEventSixthActivity extends AppCompatActivity implements View.OnClickListener{
 
     Button buttonChoseSchedule;
-
-    //To check on server sent info
-//    TextView textView2;
-//    ImageView imageView2;
-
     String title, about, startDate, endDate, url, locationID, token, realPAth, eventID;
     int type, frequency, places;
     boolean isPublic;
@@ -103,37 +96,9 @@ public class NewEventSixthActivity extends AppCompatActivity implements View.OnC
         }
     }
 
-    // delete after tests
-    private static byte[] readBytesFromFile(String filePath) {
-
-        FileInputStream fileInputStream = null;
-        byte[] bytesArray = null;
-
-        try {
-
-            File file = new File(filePath);
-            bytesArray = new byte[(int) file.length()];
-
-            //read file into bytes[]
-            fileInputStream = new FileInputStream(file);
-            fileInputStream.read(bytesArray);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (fileInputStream != null) {
-                try {
-                    fileInputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return bytesArray;
-    }
 
     private void createEvent(){
-        //Extract data from shared preferences
+
         SharedPreferences sharedPref = getSharedPreferences(NewEventFirstActivity.FILE_EVENT_DETAILS, Context.MODE_PRIVATE);
 
         title = sharedPref.getString(NewEventFirstActivity.EVENT_TITLE, "No key like " + NewEventFirstActivity.EVENT_TITLE);
@@ -145,6 +110,7 @@ public class NewEventSixthActivity extends AppCompatActivity implements View.OnC
         startDate = sharedPref.getString(NewEventFifthActivity.EVENT_START_DATE, "No key like " + NewEventFifthActivity.EVENT_START_DATE);
         endDate = sharedPref.getString(NewEventFifthActivity.EVENT_END_DATE, "No key like " + NewEventFifthActivity.EVENT_END_DATE);
         locationID = sharedPref.getString(NewEventFirstActivity.EVENT_LOCATION_ID, "No key like " + NewEventFirstActivity.EVENT_LOCATION_ID);
+        realPAth = sharedPref.getString(NewEventThirdActivity.COVER_REALPATH, "No key like " + NewEventThirdActivity.COVER_REALPATH);
 
         Log.i(TAG, "РЕЗУЛЬТАТ: " + title + "\n" +
                 type + "\n" +
@@ -160,12 +126,8 @@ public class NewEventSixthActivity extends AppCompatActivity implements View.OnC
         List<Locations> locationsIDs = new ArrayList<>();
         locationsIDs.add(loc);
         eventBody = new EventBody(title, about, startDate, endDate, isPublic, places, frequency, type, locationsIDs);
-        createNewEvent();
-        uploadEventCoverOnServer();
 
-    }
 
-    private void createNewEvent(){
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(url)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -189,12 +151,6 @@ public class NewEventSixthActivity extends AppCompatActivity implements View.OnC
                 eventID = response.body().getId();
                 Log.i(TAG, "ID НОВОСОЗДАННОГО ИВЕНТА: " + eventID);
 
-                //Save Event publicity to shared preferences file
-                SharedPreferences sharedPref = getSharedPreferences(NewEventFirstActivity.FILE_EVENT_DETAILS, Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putString(NEW_EVENT_ID, eventID);
-                editor.commit();
-
                 String eventTitle = response.body().getTitle();
                 Log.i(TAG, "ЗАГОЛОВОК ИВЕНТА: " + eventTitle);
 
@@ -204,6 +160,8 @@ public class NewEventSixthActivity extends AppCompatActivity implements View.OnC
 
                 int type = response.body().getType();
                 Log.i(TAG, "НОМЕР ТИПА ИВЕНТА: " + type);
+
+                uploadEventCoverOnServer(eventID);
             }
 
             @Override
@@ -213,17 +171,13 @@ public class NewEventSixthActivity extends AppCompatActivity implements View.OnC
         });
     }
 
-    private void uploadEventCoverOnServer(){
-        SharedPreferences sharedPref = getSharedPreferences(NewEventFirstActivity.FILE_EVENT_DETAILS, Context.MODE_PRIVATE);
-        realPAth = sharedPref.getString(NewEventThirdActivity.COVER_REALPATH, "No key like " + NewEventThirdActivity.COVER_REALPATH);
-        String newEventID = sharedPref.getString(NEW_EVENT_ID, "No key like " + NEW_EVENT_ID);
-        Log.i(TAG, "СОХРАНЕННЫЙ ID ИВЕНТА: " + newEventID);
 
-        if (realPAth != null) {
+    private void uploadEventCoverOnServer(String eventID){
+
             image = new File(realPAth);
 
             RequestBody filePart = RequestBody.create(MediaType.parse("image/*"), image);
-            Log.i(TAG, "uploadAvatarOnServer: ИМЯ ФАЙЛА - " + image.getName());
+            Log.i(TAG, "ИМЯ ЗАГРУЖАЕМОГО ФАЙЛА - " + image.getName());
             MultipartBody.Part file = MultipartBody.Part.createFormData("file", image.getName(), filePart);
 
             Retrofit retrofit = new Retrofit.Builder()
@@ -237,7 +191,7 @@ public class NewEventSixthActivity extends AppCompatActivity implements View.OnC
             HashMap<String, String> header = new HashMap<String, String>();
             header.put("X-Auth", token);
 
-            Call<ResponseBody> call = api.uploadEventCover(header, newEventID, file);
+            Call<ResponseBody> call = api.uploadEventCover(header, eventID, file);
             call.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -250,6 +204,5 @@ public class NewEventSixthActivity extends AppCompatActivity implements View.OnC
 
                 }
             });
-        }
     }
 }
