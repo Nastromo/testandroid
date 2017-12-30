@@ -126,6 +126,7 @@
     <string name="event_desc">Опис події</string>
     <string name="localiz">локалізуватись</string>
     <string name="going">Збираються відвідати</string>
+    <string name="you_email_address">Ваша електронна адреса</string>
 
 
     <!--Event category names-->
@@ -170,5 +171,12 @@
     <string name="no_such_location">Такої локації не існує</string>
     <string name="def_avatar">https://face-location.com/assets/img/icons/avatar.svg</string>
     <string name="def_avatar_second">/assets/img/icons/avatar.svg</string>
+    <string name="on_air">Зараз відбувається</string>
+    <string name="off_air">Вже закінчилась</string>
+    <string name="will_be">Розпочнеться у майбутньому</string>
+    <string name="semelar_events">СХОЖІ ПОДІЇ</string>
+    <string name="view_event">переглянути</string>
+    <string name="save_changes">Зберегти зміни</string>
+    <string name="edit_text">РЕДАГУВАТИ</string>
 
 </resources>

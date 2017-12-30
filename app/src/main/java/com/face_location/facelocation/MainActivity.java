@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity
         userArrayData = applicationDB.retrieveFirstLoginValues();
 
         if (userArrayData != null){
-            userAvatar = userArrayData[7];
+            userAvatar = userArrayData[10];
             if (userAvatar != null){
                 if (userAvatar.equals(getString(R.string.def_avatar)) || userAvatar.equals(getString(R.string.def_avatar_second))){
                     //go further
@@ -178,12 +178,130 @@ public class MainActivity extends AppCompatActivity
     public void onPause() {
         super.onPause();
 
+        if (userArrayData != null){
+            userAvatar = userArrayData[10];
+            if (userAvatar != null){
+                if (userAvatar.equals(getString(R.string.def_avatar)) || userAvatar.equals(getString(R.string.def_avatar_second))){
+                    //go further
+                } else {
+                    myProfileImageView.setBackground(null);
+                    Glide
+                            .with(MainActivity.this)
+                            .load(userAvatar)
+                            .thumbnail(0.1f) //shows mini image which weight 0.1 from real image while real image is downloading
+                            .apply(RequestOptions
+                                    .circleCropTransform())
+//                            .placeholder(R.drawable.oval)) //shows drawable while real/mini image is downloading
+                            .into(myProfileImageView);
+                }
+            }
+
+            userName = userArrayData[6];
+            if (userName != null){
+                userNameTextView.setText(userName);
+            } else {
+                userNameTextView.setText(getString(R.string.your_name_menu));
+            }
+        }
+
         //stop location updates when Activity is no longer active
         //if (mGoogleApiClient != null) {
         //    LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         //}
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (userArrayData != null){
+            userAvatar = userArrayData[10];
+            if (userAvatar != null){
+                if (userAvatar.equals(getString(R.string.def_avatar)) || userAvatar.equals(getString(R.string.def_avatar_second))){
+                    //go further
+                } else {
+                    myProfileImageView.setBackground(null);
+                    Glide
+                            .with(MainActivity.this)
+                            .load(userAvatar)
+                            .thumbnail(0.1f) //shows mini image which weight 0.1 from real image while real image is downloading
+                            .apply(RequestOptions
+                                    .circleCropTransform())
+//                            .placeholder(R.drawable.oval)) //shows drawable while real/mini image is downloading
+                            .into(myProfileImageView);
+                }
+            }
+
+            userName = userArrayData[6];
+            if (userName != null){
+                userNameTextView.setText(userName);
+            } else {
+                userNameTextView.setText(getString(R.string.your_name_menu));
+            }
+        }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
+        if (userArrayData != null){
+            userAvatar = userArrayData[10];
+            if (userAvatar != null){
+                if (userAvatar.equals(getString(R.string.def_avatar)) || userAvatar.equals(getString(R.string.def_avatar_second))){
+                    //go further
+                } else {
+                    myProfileImageView.setBackground(null);
+                    Glide
+                            .with(MainActivity.this)
+                            .load(userAvatar)
+                            .thumbnail(0.1f) //shows mini image which weight 0.1 from real image while real image is downloading
+                            .apply(RequestOptions
+                                    .circleCropTransform())
+//                            .placeholder(R.drawable.oval)) //shows drawable while real/mini image is downloading
+                            .into(myProfileImageView);
+                }
+            }
+
+            userName = userArrayData[6];
+            if (userName != null){
+                userNameTextView.setText(userName);
+            } else {
+                userNameTextView.setText(getString(R.string.your_name_menu));
+            }
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if (userArrayData != null){
+            userAvatar = userArrayData[10];
+            if (userAvatar != null){
+                if (userAvatar.equals(getString(R.string.def_avatar)) || userAvatar.equals(getString(R.string.def_avatar_second))){
+                    //go further
+                } else {
+                    myProfileImageView.setBackground(null);
+                    Glide
+                            .with(MainActivity.this)
+                            .load(userAvatar)
+                            .thumbnail(0.1f) //shows mini image which weight 0.1 from real image while real image is downloading
+                            .apply(RequestOptions
+                                    .circleCropTransform())
+//                            .placeholder(R.drawable.oval)) //shows drawable while real/mini image is downloading
+                            .into(myProfileImageView);
+                }
+            }
+
+            userName = userArrayData[6];
+            if (userName != null){
+                userNameTextView.setText(userName);
+            } else {
+                userNameTextView.setText(getString(R.string.your_name_menu));
+            }
+        }
+    }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -194,11 +312,11 @@ public class MainActivity extends AppCompatActivity
             if (ContextCompat.checkSelfPermission(this,
                     Manifest.permission.ACCESS_FINE_LOCATION)
                     == PackageManager.PERMISSION_GRANTED) {
-                //Location Permission already granted
+                //LocationForAdapter Permission already granted
                 buildGoogleApiClient();
                 mMap.setMyLocationEnabled(true);
             } else {
-                //Request Location Permission
+                //Request LocationForAdapter Permission
                 checkLocationPermission();
             }
         }
@@ -479,7 +597,7 @@ public class MainActivity extends AppCompatActivity
                 Place place = PlaceAutocomplete.getPlace(this, data);
 
                 //TODO Delete this block off code
-                // Uncomment this if you need Location Title and details
+                // Uncomment this if you need LocationForAdapter Title and details
 //                placeNameString = place.getName().toString();
 //                placeAddressString =  place.getAddress().toString();
 //

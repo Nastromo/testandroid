@@ -3,30 +3,23 @@ package com.face_location.facelocation.model.Location;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-/**
- * Created by admin on 01.12.17.
- */
-
 public class LocationResponse {
 
-    @SerializedName("_id")
+    @SerializedName("__v")
     @Expose
-    private String id;
+    private Integer v;
     @SerializedName("title")
     @Expose
     private String title;
     @SerializedName("text")
     @Expose
     private String text;
-    @SerializedName("contact")
-    @Expose
-    private String contact;
     @SerializedName("user")
     @Expose
-    private User user;
-    @SerializedName("__v")
+    private String user;
+    @SerializedName("_id")
     @Expose
-    private Integer v;
+    private String id;
     @SerializedName("created_at")
     @Expose
     private String createdAt;
@@ -43,12 +36,12 @@ public class LocationResponse {
     @Expose
     private Address address;
 
-    public String getId() {
-        return id;
+    public Integer getV() {
+        return v;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setV(Integer v) {
+        this.v = v;
     }
 
     public String getTitle() {
@@ -67,28 +60,20 @@ public class LocationResponse {
         this.text = text;
     }
 
-    public String getContact() {
-        return contact;
-    }
-
-    public void setContact(String contact) {
-        this.contact = contact;
-    }
-
-    public User getUser() {
+    public String getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(String user) {
         this.user = user;
     }
 
-    public Integer getV() {
-        return v;
+    public String getId() {
+        return id;
     }
 
-    public void setV(Integer v) {
-        this.v = v;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getCreatedAt() {
@@ -130,4 +115,5 @@ public class LocationResponse {
     public void setAddress(Address address) {
         this.address = address;
     }
+
 }

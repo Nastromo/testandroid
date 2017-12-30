@@ -1,5 +1,6 @@
 package com.face_location.facelocation;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -14,19 +15,30 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.face_location.facelocation.model.DataBase.DataBaseHelper;
+import com.face_location.facelocation.model.FacelocationAPI;
+import com.face_location.facelocation.model.Issue.IssueBody;
+import com.face_location.facelocation.model.MyProfile.ProfileBody;
+import com.face_location.facelocation.model.MyProfile.ProfileResponse;
 
 import java.util.HashMap;
 
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class SupportActivity extends AppCompatActivity implements View.OnClickListener{
 
-    EditText newLocationTitle, problemTextEdit;
+    EditText newLocationTitle, problemTextEdit, myEmail;
     TextView buttonBackView;
     Button sendIssue;
-    String url, title, problem;
-    private static final String ISSUE = "/api/issue";
-    private static final String ISSUE_TITLE = "title";
-    private static final String ISSUE_PROBLEM = "problem";
-    private static final String TAG = "newIssue";
+    String url, title, token, text;
+    private static final String TAG = "SupportActivity";
+
+    DataBaseHelper applicationDB;
+    String[] userArrayData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +57,18 @@ public class SupportActivity extends AppCompatActivity implements View.OnClickLi
         sendIssue = (Button) findViewById(R.id.sendIssue);
         sendIssue.setOnClickListener(this);
 
-        url = getResources().getString(R.string.base_url);
+        myEmail = (EditText) findViewById(R.id.myEmail);
+
+        url = getString(R.string.base_url);
+
+        applicationDB = DataBaseHelper.getInstance(this);
+        userArrayData = applicationDB.retrieveFirstLoginValues();
+
+        if (userArrayData != null) {
+            token = userArrayData[5];
+        }
+
+        myEmail.setText(userArrayData[2]);
     }
 
     @Override
@@ -61,36 +84,41 @@ public class SupportActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    public void sendIssue(){
-        title = newLocationTitle.getText().toString().trim();
-        problem = problemTextEdit.getText().toString().trim();
+    private void sendIssue(){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(url)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url + ISSUE, new Response.Listener<String>() {
+        title = newLocationTitle.getText().toString();
+        text = problemTextEdit.getText().toString();
+
+        FacelocationAPI api = retrofit.create(FacelocationAPI.class);
+        IssueBody issue = new IssueBody(title, text);
+
+
+        HashMap<String, String> headers = new HashMap<String, String>();
+        headers.put("Content-Type", "application/json");
+        headers.put("X-Auth", token);
+
+
+        Call<ResponseBody> call = api.sendIssue(headers, issue);
+        call.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(String response) {
-                Toast.makeText(getApplicationContext(), "Все прошло хорошо!", Toast.LENGTH_SHORT).show();
+            public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+                Log.i(TAG, "ОТВЕТ СЕРВЕРА: " + response.toString());
+                Toast.makeText(SupportActivity.this, "Запит надіслано", Toast.LENGTH_SHORT).show();
+                Intent mainActivity = new Intent(SupportActivity.this, MainActivity.class);
+                startActivity(mainActivity);
+
             }
-        }, new Response.ErrorListener() {
+
             @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
-                Log.i(TAG, error.toString());
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.i(TAG, "ОШИБКА: " + t.toString());
             }
-        }){
-            @Override
-            protected java.util.Map<String, String> getParams() throws AuthFailureError {
-                java.util.Map<String, String> params = new HashMap<String, String>();
-
-                Log.i(TAG, "Тема вопроса: " + title);
-                Log.i(TAG, "Текст проблемы: " + problem);
-
-                params.put(ISSUE_TITLE, title);
-                params.put(ISSUE_PROBLEM, problem);
-
-                return params;
-            }
-        };
-        MySingleton.getInstance(this).addToRequestQueue(stringRequest);
+        });
     }
 }
+
 

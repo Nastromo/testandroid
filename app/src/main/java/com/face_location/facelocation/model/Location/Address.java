@@ -7,29 +7,18 @@ import java.util.List;
 
 public class Address {
 
-    @SerializedName("title")
-    @Expose
-    private String title;
     @SerializedName("position")
     @Expose
-    private List<Double> position = null;
+    private List<Float> position = null;
     @SerializedName("marker")
     @Expose
     private Marker marker;
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public List<Double> getPosition() {
+    public List<Float> getPosition() {
         return position;
     }
 
-    public void setPosition(List<Double> position) {
+    public void setPosition(List<Float> position) {
         this.position = position;
     }
 

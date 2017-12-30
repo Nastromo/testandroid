@@ -15,7 +15,6 @@ public class NewEventSecondActivity extends AppCompatActivity implements View.On
     TextView btnBackView, forwardButtonView;
     EditText somethingAbout;
 
-    //TODO попросить Диму, чтобы изменил название поля про этот ивент с text на about_event
     //TODO проверить чтобы все ключи в файле FILE_EVENT_DETAILS и FILE_LOCATION_DETAILS были уникальными
     public static final String EVENT_ABOUT = "about_event";
     public static final String TAG = "newEvent";

@@ -1,14 +1,18 @@
 package com.face_location.facelocation;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -16,10 +20,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import com.face_location.facelocation.model.DataBase.DataBaseHelper;
+
+import java.io.File;
 import java.io.IOException;
 
 public class NewEventThirdActivity extends AppCompatActivity implements View.OnClickListener{
@@ -29,16 +34,25 @@ public class NewEventThirdActivity extends AppCompatActivity implements View.OnC
     public static final int PICK_IMAGE = 1;
     public static final String TAG = "newEvent";
     public static final String EVENT_PUBLICITY = "private";
+    public static final String COVER_REALPATH = "cover_realpath";
     static String imgFileName;
     static String imgFilePath;
     static byte[] imgBytes;
     Bitmap eventImageBitmap;
     Button buttonChosePhoto;
+    Uri returnUri;
+    String realPAth, url, token;
+    File image;
+    DataBaseHelper applicationDB;
+    String[] userArrayData;
+    Intent getIntent, chooserIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_event_third);
+
+        url = getString(R.string.base_url);
 
         buttonBackView = (TextView) findViewById(R.id.buttonBackView);
         buttonBackView.setOnClickListener(this);
@@ -48,6 +62,13 @@ public class NewEventThirdActivity extends AppCompatActivity implements View.OnC
 
         buttonChosePhoto = (Button) findViewById(R.id.buttonChosePhoto);
         buttonChosePhoto.setOnClickListener(this);
+
+        applicationDB = DataBaseHelper.getInstance(this);
+        userArrayData = applicationDB.retrieveFirstLoginValues();
+
+        if (userArrayData != null) {
+            token = userArrayData[5];
+        }
 
         spinnerEventPublicity = (Spinner) findViewById(R.id.spinnerEventPublicity);
         ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(this,
@@ -67,18 +88,19 @@ public class NewEventThirdActivity extends AppCompatActivity implements View.OnC
 
             case R.id.forwardButtonTextView:
                 String publicityEvent = spinnerEventPublicity.getSelectedItem().toString();
+                boolean isPublic = false;
                 Log.i(TAG, "Тип публичности: " + publicityEvent);
                 if (publicityEvent.equals("Відкритий")){
-                    publicityEvent = "true";
+                    isPublic = false;
                 } else {
-                publicityEvent = "false";
+                    isPublic = true;
                 }
-                Log.i(TAG, "Тип публичности логический: " + publicityEvent);
+                Log.i(TAG, "Тип публичности логический: " + isPublic);
 
                 //Save Event publicity to shared preferences file
                 SharedPreferences sharedPref = getSharedPreferences(NewEventFirstActivity.FILE_EVENT_DETAILS, Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putString(EVENT_PUBLICITY, publicityEvent);
+                editor.putBoolean(EVENT_PUBLICITY, isPublic);
                 editor.commit();
 
                 Intent newEventFourthActivity = new Intent(this, NewEventFourthActivity.class);
@@ -86,17 +108,21 @@ public class NewEventThirdActivity extends AppCompatActivity implements View.OnC
                 break;
 
             case R.id.buttonChosePhoto:
-                Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                getIntent.setType("image/*");
-                Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
-                startActivityForResult(chooserIntent, PICK_IMAGE);
+                ActivityCompat.requestPermissions(NewEventThirdActivity.this,
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},1);
+
+
+//                Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+//                getIntent.setType("image/*");
+//                Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
+//                startActivityForResult(chooserIntent, PICK_IMAGE);
         }
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (requestCode == PICK_IMAGE && resultCode == RESULT_OK && data != null){
-            Uri returnUri = data.getData();
+            returnUri = data.getData();
             Cursor returnCursor =
                     getContentResolver().query(returnUri, null, null, null, null);
 
@@ -114,53 +140,71 @@ public class NewEventThirdActivity extends AppCompatActivity implements View.OnC
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            saveImgToInternalStorage();
-            getImageFilePath();
+            saveCoverRealPath();
             returnCursor.close();
         }
     }
 
-    //Convert image to String
-//    private String imgToString (Bitmap bitmap){
-//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//        bitmap.compress(Bitmap.CompressFormat.JPEG,100, baos);
-//
-//        imgByteszz = baos.toByteArray();
-//        encodedImage = Base64.encodeToString(imgByteszz, Base64.DEFAULT);
-//        return encodedImage;
-//    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-    private void saveImgToInternalStorage(){
-        FileOutputStream fos = null;
+                    // permission granted and now can proceed
+                    getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                    getIntent.setType("image/*");
+                    chooserIntent = Intent.createChooser(getIntent, "Select Image");
+                    startActivityForResult(chooserIntent, PICK_IMAGE);
 
-        //Get byte array from photo
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        eventImageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        imgBytes = baos.toByteArray();
+                } else {
 
-        //Write to Internal Storage
-        try {
-            fos = openFileOutput(imgFileName, Context.MODE_PRIVATE);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            fos.write(imgBytes);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }finally {
-            if (fos != null) {
-                try {
-                    fos.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(NewEventThirdActivity.this, "Доступ не надано", Toast.LENGTH_SHORT).show();
                 }
+                return;
             }
+            // add other cases for more permissions
         }
     }
 
-    private String getImageFilePath(){
-        return imgFilePath = this.getFilesDir() + "/" + imgFileName;
+    private void saveCoverRealPath(){
+        if (returnUri != null){
+            realPAth = getRealPathFromURI(NewEventThirdActivity.this, returnUri);
+        }
+
+        //Save Event publicity to shared preferences file
+        SharedPreferences sharedPref = getSharedPreferences(NewEventFirstActivity.FILE_EVENT_DETAILS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(COVER_REALPATH, realPAth);
+        editor.commit();
+
+    }
+
+    public static String getRealPathFromURI(Context context, Uri uri){
+        String filePath = "";
+        String wholeID = DocumentsContract.getDocumentId(uri);
+
+        // Split at colon, use second item in the array
+        String id = wholeID.split(":")[1];
+
+        String[] column = { MediaStore.Images.Media.DATA };
+
+        // where id is equal to
+        String sel = MediaStore.Images.Media._ID + "=?";
+
+        Cursor cursor = context.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                column, sel, new String[]{ id }, null);
+
+        int columnIndex = cursor.getColumnIndex(column[0]);
+
+        if (cursor.moveToFirst()) {
+            filePath = cursor.getString(columnIndex);
+        }
+        cursor.close();
+        return filePath;
     }
 }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -35,11 +36,16 @@ public class AddLocationSecondActivity extends AppCompatActivity implements View
     private GoogleMap mMap;
     public static final String LOCATION_LATITUDE = "latitude";
     public static final String LOCATION_LONGITUDE = "longitude";
+    String locationID;
+    private static final String TAG = "AddLocationSecond";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_location_second);
+
+        locationID = getIntent().getStringExtra("id");
+        Log.i(TAG, "ID ВЫБРАННОЙ ЛОКАЦИИ: " + locationID);
 
         markerNo = (Button) findViewById(R.id.markerNo);
         markerNo.setOnClickListener(this);
@@ -79,6 +85,7 @@ public class AddLocationSecondActivity extends AppCompatActivity implements View
             case R.id.markerYes:
                 // TODO need to add logic for cheking if there are marker coordinates
                 Intent thirdStep = new Intent(this, AddLocationThirdActivity.class);
+                thirdStep.putExtra("id", locationID);
                 startActivity(thirdStep);
                 break;
 
@@ -120,14 +127,20 @@ public class AddLocationSecondActivity extends AppCompatActivity implements View
                 markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker));
                 Marker marker = mMap.addMarker(markerOptions);
 
-                double lat = toLatLng.latitude;
-                double lng = toLatLng.longitude;
+                double lattt = toLatLng.latitude;
+                double longg = toLatLng.longitude;
 
-                //Save Location LatLong to shared preferences file
+                String latttt = String.valueOf(lattt);
+                String lngggg = String.valueOf(longg);
+
+                float lat = Float.parseFloat(latttt);
+                float lng = Float.parseFloat(lngggg);
+
+                //Save LocationForAdapter LatLong to shared preferences file
                 SharedPreferences sharedPref = getSharedPreferences(AddLocationFirstActivity.FILE_LOCATION_DETAILS, Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putString(LOCATION_LATITUDE, String.valueOf(lat));
-                editor.putString(LOCATION_LONGITUDE, String.valueOf(lng));
+                editor.putFloat(LOCATION_LATITUDE, lat);
+                editor.putFloat(LOCATION_LONGITUDE, lng);
                 editor.commit();
 
 

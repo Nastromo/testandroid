@@ -134,6 +134,7 @@ public class DataBaseHelper extends SQLiteOpenHelper{
         Log.i(TAG, "ЕСТЬ ЛИ СТРОКИ В ВЫБОРКЕ? - " + cursor.moveToFirst());
 
         if(cursor != null && cursor.getCount() > 0){
+            Log.i(TAG, "Сколько строк?: " + cursor.getCount());
             cursor.moveToFirst();
             userArrayData = new String[]{
                     cursor.getString(cursor.getColumnIndex(USER_ID)),           //0
@@ -143,10 +144,14 @@ public class DataBaseHelper extends SQLiteOpenHelper{
                     cursor.getString(cursor.getColumnIndex(USER_STATUS)),       //4
                     cursor.getString(cursor.getColumnIndex(USER_TOKEN)),        //5
                     cursor.getString(cursor.getColumnIndex(USER_NAME)),         //6
-                    cursor.getString(cursor.getColumnIndex(USER_AVATAR_URL))    //7
+                    cursor.getString(cursor.getColumnIndex(USER_LASTNAME)),     //7
+                    cursor.getString(cursor.getColumnIndex(USER_PHONE)),        //8
+                    cursor.getString(cursor.getColumnIndex(USER_JOB)),          //9
+                    cursor.getString(cursor.getColumnIndex(USER_AVATAR_URL))    //10
             };
             cursor.close();
         }
+        cursor.close();
         db.close();
         return userArrayData;
     }
@@ -168,7 +173,7 @@ public class DataBaseHelper extends SQLiteOpenHelper{
             db.close();
             return true;
         } else {
-            Log.i(TAG, "isUser: БОЛЬШЕ 1-Й ЗАПИСИ В БД" + cursor.getCount());
+            Log.i(TAG, "isUser: НЕ РАВНО 1: " + cursor.getCount());
             cursor.close();
             db.close();
             return false;
@@ -187,15 +192,17 @@ public class DataBaseHelper extends SQLiteOpenHelper{
         long result = db.update(USER_DATA_TABLE, contentValues,USER_ID + " = ?", new String[] {currentUserID});
 
         if (result == -1){
+            db.close();
             return false;
         } else {
+            db.close();
             return true;
         }
     }
 
 
 
-    public boolean addMyProfileData(String userEmail, String userName, String userLastname, String userPhone, String userJob)
+    public boolean updateMyProfileData(String currentUserID, String userEmail, String userName, String userLastname, String userPhone, String userAvatar, String userJob)
     {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -205,14 +212,16 @@ public class DataBaseHelper extends SQLiteOpenHelper{
         contentValues.put(USER_NAME, userName);
         contentValues.put(USER_LASTNAME, userLastname);
         contentValues.put(USER_PHONE, userPhone);
+        contentValues.put(USER_AVATAR_URL, userAvatar);
         contentValues.put(USER_JOB, userJob);
 
-        long result = db.insert(USER_DATA_TABLE, null, contentValues);
-        db.close();
+        long result = db.update(USER_DATA_TABLE, contentValues,USER_ID + " = ?", new String[] {currentUserID});
 
         if (result == -1){
+            db.close();
             return false;
         } else {
+            db.close();
             return true;
         }
     }

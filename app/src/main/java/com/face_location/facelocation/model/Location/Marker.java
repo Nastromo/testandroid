@@ -7,24 +7,24 @@ public class Marker {
 
     @SerializedName("latitude")
     @Expose
-    private Double latitude;
+    private float latitude;
     @SerializedName("longitude")
     @Expose
-    private Double longitude;
+    private float longitude;
 
-    public Double getLatitude() {
+    public float getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(Double latitude) {
+    public void setLatitude(Integer latitude) {
         this.latitude = latitude;
     }
 
-    public Double getLongitude() {
+    public float getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(Double longitude) {
+    public void setLongitude(Integer longitude) {
         this.longitude = longitude;
     }
 

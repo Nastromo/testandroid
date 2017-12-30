@@ -57,17 +57,18 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
     String userEmail, userName, userSoname, userNumber, userJob, userAvatar, url, imgFileName, token;
     Uri returnUri;
 
-    int requestCodeGlobal, resultCodeGlobal;
-    Intent dataGlobal;
+    String realPAth;
+    File image;
 
     DataBaseHelper applicationDB;
+    String[] userArrayData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_profile);
 
-        url = getResources().getString(R.string.base_url);
+        url = getString(R.string.base_url);
 
         buttonBackView = (TextView) findViewById(R.id.buttonBackView);
         buttonBackView.setOnClickListener(this);
@@ -76,47 +77,22 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
         addPhotoText.setOnClickListener(this);
 
         editEmail = (EditText) findViewById(R.id.editEmail);
+        editName = (EditText) findViewById(R.id.editName);
+        editSoname = (EditText) findViewById(R.id.editSoname);
+        editNumber = (EditText) findViewById(R.id.editNumber);
+        editJob = (EditText) findViewById(R.id.editJob);
 
         avatar = (ImageView) findViewById(R.id.avatar);
         avatar.setOnClickListener(this);
 
         applicationDB = DataBaseHelper.getInstance(this);
-        String[] userArrayData = applicationDB.retrieveFirstLoginValues();
+        userArrayData = applicationDB.retrieveFirstLoginValues();
 
-        if (userArrayData != null){
+        if (userArrayData != null) {
             token = userArrayData[5];
-
-            userAvatar = userArrayData[7];
-            if (userAvatar.equals(getString(R.string.def_avatar)) || userAvatar.equals(getString(R.string.def_avatar_second))){
-                //go further
-            } else {
-                avatar.setBackground(null);
-                Glide
-                        .with(MyProfileActivity.this)
-                        .load(userAvatar)
-                        .thumbnail(0.1f) //shows mini image which weight 0.1 from real image while real image is downloading
-                        .apply(RequestOptions
-                                .circleCropTransform())
-//                            .placeholder(R.drawable.oval)) //shows drawable while real/mini image is downloading
-                        .into(avatar);
-            }
-
-
-            userEmail = userArrayData[2];
-            if (userEmail != null){
-                editEmail.setText(userEmail);
-            }
-
-            userName = userArrayData[6];
-            if (userName != null){
-                editName.setText(userName);
-            }
         }
 
-        editName = (EditText) findViewById(R.id.editName);
-        editSoname = (EditText) findViewById(R.id.editSoname);
-        editNumber = (EditText) findViewById(R.id.editNumber);
-        editJob = (EditText) findViewById(R.id.editJob);
+        getUserProfile();
 
         saveButton = (Button) findViewById(R.id.saveButton);
         saveButton.setOnClickListener(this);
@@ -149,12 +125,6 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
                 userNumber = editNumber.getText().toString();
                 userJob = editJob.getText().toString();
 
-                //TODO разобраться с этим условием (оно кажется не работает)
-                if (requestCodeGlobal == PICK_IMAGE
-                        && resultCodeGlobal == RESULT_OK
-                        && dataGlobal != null){
-                    uploadAvatarOnServer();
-                }
                 uploadAvatarOnServer();
                 updateMyProfile();
         }
@@ -188,48 +158,42 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void uploadAvatarOnServer(){
+        if (returnUri != null){
+            realPAth = getRealPathFromURI(MyProfileActivity.this, returnUri);
+        }
 
-        String realPAth = getRealPathFromURI(MyProfileActivity.this, returnUri);
-        Log.i(TAG, "СТАРТ ЗАГРУЗКИ \n");
-        File image = new File(realPAth);
+        if (realPAth != null) {
+            image = new File(realPAth);
 
-        RequestBody filePart = RequestBody.create(MediaType.parse("image/*"), image);
-        MultipartBody.Part avatar = MultipartBody.Part.createFormData("file", image.getName(), filePart);
+            RequestBody filePart = RequestBody.create(MediaType.parse("image/*"), image);
+            Log.i(TAG, "uploadAvatarOnServer: ИМЯ ФАЙЛА - " + image.getName());
+            MultipartBody.Part file = MultipartBody.Part.createFormData("file", image.getName(), filePart);
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(url)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(url)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
 
-        FacelocationAPI api = retrofit.create(FacelocationAPI.class);
-        Log.i(TAG, "ТОКЕН: \n" + token);
+            FacelocationAPI api = retrofit.create(FacelocationAPI.class);
+            Log.i(TAG, "ТОКЕН: \n" + token);
 
-        HashMap<String, String> headers = new HashMap<String, String>();
-        headers.put("Content-Type", "multipart/form-data");
-        headers.put("X-Auth", token);
+            HashMap<String, String> header = new HashMap<String, String>();
+            header.put("X-Auth", token);
 
-        Call<ResponseBody> call = api.uploadAvatar(headers, avatar);
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                Toast.makeText(MyProfileActivity.this, "Все прошло хорошо", Toast.LENGTH_LONG).show();
-                Log.i(TAG, "onResponse: " + response.toString());
+            Call<ResponseBody> call = api.uploadAvatar(header, file);
+            call.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    Log.i(TAG, "ОТВЕТ СЕРВЕРА НА ЗАГРУЗКУ ФАЙЛА: " + response.toString());
+                }
 
-                //TODO save user avatar URL to SQLite DB
-//                String userAvatarURL = response.body().toString();
-//
-//                SharedPreferences.Editor editor = sharedPref.edit();
-//                editor.putString(getString(R.string.USER_AVATAR_URL), userAvatarURL);
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    Log.i(TAG, "onFailure: " + t.toString());
 
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Toast.makeText(MyProfileActivity.this, "ОШИБКА", Toast.LENGTH_LONG).show();
-                Log.i(TAG, "onFailure: " + t.toString());
-
-            }
-        });
+                }
+            });
+        }
     }
 
     @Override
@@ -305,20 +269,32 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
             Log.i(TAG, "onResponse: " + response.toString());
 
             if (response.code() == 200) {
+                String userIDResponse = response.body().getId();
                 String userEmailResponse = response.body().getEmail();
                 String userNameResponse = response.body().getUsername();
                 String userSonameResponse = response.body().getLastname();
                 String userPhoneResponse = response.body().getPhone();
+                String userAvatarResponse = response.body().getAvatar();
                 String userJobResponse = response.body().getJob();
 
                 Log.i(TAG, "onResponse: \n" +
+                        userIDResponse + "\n" +
                         userEmailResponse + "\n" +
                         userNameResponse + "\n" +
                         userSonameResponse + "\n" +
                         userPhoneResponse + "\n" +
+                        userAvatarResponse + "\n" +
                         userJobResponse);
 
-                boolean result = applicationDB.addMyProfileData(userEmailResponse, userNameResponse, userSonameResponse, userPhoneResponse, userJobResponse);
+                boolean result = applicationDB.updateMyProfileData(
+                        userIDResponse,
+                        userEmailResponse,
+                        userNameResponse,
+                        userSonameResponse,
+                        userPhoneResponse,
+                        userAvatarResponse,
+                        userJobResponse);
+
                 if (result == true){
                     Log.i(TAG, "Запись в БД: УСПЕШНО");
 
@@ -334,6 +310,119 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
 
         @Override
         public void onFailure(Call<ProfileResponse> call, Throwable t) {
+                Log.i(TAG, "onFailure: " + t.toString());
+            }
+        });
+    }
+
+    public void getUserProfile(){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(url)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+
+        FacelocationAPI api = retrofit.create(FacelocationAPI.class);
+
+        HashMap<String, String> headers = new HashMap<String, String>();
+        headers.put("Content-Type", "application/json");
+        headers.put("X-Auth", token);
+
+        Call<ProfileResponse> call = api.getMyProfile(headers);
+        call.enqueue(new Callback<ProfileResponse>() {
+            @Override
+            public void onResponse(Call<ProfileResponse> call, Response<ProfileResponse> response) {
+                Log.i(TAG, "onResponse: " + response.toString());
+
+                if (response.code() == 200) {
+                    String userIDResponse = response.body().getId();
+                    String userEmailResponse = response.body().getEmail();
+                    String userNameResponse = response.body().getUsername();
+                    String userSonameResponse = response.body().getLastname();
+                    String userPhoneResponse = response.body().getPhone();
+                    String userAvatarResponse = response.body().getAvatar();
+                    String userJobResponse = response.body().getJob();
+
+                    Log.i(TAG, "onResponse: \n" +
+                            userIDResponse + "\n" +
+                            userEmailResponse + "\n" +
+                            userNameResponse + "\n" +
+                            userSonameResponse + "\n" +
+                            userPhoneResponse + "\n" +
+                            userAvatarResponse + "\n" +
+                            userJobResponse);
+
+                    boolean result = applicationDB.updateMyProfileData(
+                            userIDResponse,
+                            userEmailResponse,
+                            userNameResponse,
+                            userSonameResponse,
+                            userPhoneResponse,
+                            userAvatarResponse,
+                            userJobResponse);
+
+                    if (result == true) {
+                        Log.i(TAG, "Запись в БД: УСПЕШНО");
+
+                        userArrayData = applicationDB.retrieveFirstLoginValues();
+
+                        if (userArrayData != null) {
+
+                            userAvatar = userArrayData[10];
+                            if (userAvatar != null){
+                                if (userAvatar.equals(getString(R.string.def_avatar)) || userAvatar.equals(getString(R.string.def_avatar_second))) {
+                                    //go further
+                                } else {
+                                    avatar.setBackground(null);
+                                    Glide
+                                            .with(MyProfileActivity.this)
+                                            .load(userAvatar)
+                                            .thumbnail(0.1f) //shows mini image which weight 0.1 from real image while real image is downloading
+                                            .apply(RequestOptions
+                                                    .circleCropTransform())
+                                            //      .placeholder(R.drawable.oval)) //shows drawable while real/mini image is downloading
+                                            .into(avatar);
+                                }
+                            }
+
+                            userEmail = userArrayData[2];
+                            if (userEmail != null){
+                                editEmail.setText(userEmail);
+                            }
+
+                            userName = userArrayData[6];
+                            if (userName != null){
+                                editName.setText(userName);
+                            }
+
+                            userSoname = userArrayData[7];
+                            if (userSoname != null){
+                                editSoname.setText(userSoname);
+                            }
+
+                            userNumber = userArrayData[8];
+                            if (userNumber != null){
+                                editNumber.setText(userNumber);
+                            }
+
+                            userJob = userArrayData[9];
+                            if (userJob != null){
+                                editJob.setText(userJob);
+                            }
+                        }
+
+                    } else {
+                            Log.i(TAG, "Запись в БД: НЕ ЗАПИСАНО :(");
+                        }
+
+                    } else {
+                        Log.i(TAG, "onResponse: \n" + response.code());
+                }
+            }
+
+
+            @Override
+            public void onFailure(Call<ProfileResponse> call, Throwable t) {
                 Log.i(TAG, "onFailure: " + t.toString());
             }
         });

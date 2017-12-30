@@ -5,48 +5,58 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
+import com.face_location.facelocation.model.DataBase.DataBaseHelper;
+import com.face_location.facelocation.model.FacelocationAPI;
+import com.face_location.facelocation.model.PostEvent.EventBody;
+import com.face_location.facelocation.model.PostEvent.EventResponse;
+import com.face_location.facelocation.model.PostEvent.Locations;
+import com.face_location.facelocation.model.PostEvent.Schedules;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NewEventSixthActivity extends AppCompatActivity implements View.OnClickListener{
 
     Button buttonChoseSchedule;
-
-    //To check on server sent info
-//    TextView textView2;
-//    ImageView imageView2;
-
-    String title, type, publicity, about, places, period, startDate, endDate, url;
+    String title, about, startDate, endDate, url, locationID, token, realPAth, eventID;
+    int type, frequency, places;
+    boolean isPublic;
     TextView buttonBackView, forwardButtonTextView;
     ImageView createEvent;
-    private static final String CREATE_EVENT = "/api/events";
     Intent mainActivity;
+    private static final String TAG = "NewEventSixthActivity";
+    DataBaseHelper applicationDB;
+    EventBody eventBody;
+    File image;
+    private static final String NEW_EVENT_ID = "new_event_id";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_event_sixth);
 
+        applicationDB = DataBaseHelper.getInstance(this);
+
         buttonChoseSchedule = (Button) findViewById(R.id.buttonChoseSchedule);
         buttonChoseSchedule.setOnClickListener(this);
-
-        //To check on server sent info
-//        imageView2 = (ImageView) findViewById(R.id.imageView2);
-//        textView2 = (TextView) findViewById(R.id.textView2);
 
         buttonBackView = (TextView) findViewById(R.id.buttonBackView);
         buttonBackView.setOnClickListener(this);
@@ -87,92 +97,130 @@ public class NewEventSixthActivity extends AppCompatActivity implements View.OnC
         }
     }
 
-    // delete after tests
-    private static byte[] readBytesFromFile(String filePath) {
-
-        FileInputStream fileInputStream = null;
-        byte[] bytesArray = null;
-
-        try {
-
-            File file = new File(filePath);
-            bytesArray = new byte[(int) file.length()];
-
-            //read file into bytes[]
-            fileInputStream = new FileInputStream(file);
-            fileInputStream.read(bytesArray);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (fileInputStream != null) {
-                try {
-                    fileInputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return bytesArray;
-    }
 
     private void createEvent(){
-        //Extract data from shared preferences
+
         SharedPreferences sharedPref = getSharedPreferences(NewEventFirstActivity.FILE_EVENT_DETAILS, Context.MODE_PRIVATE);
 
         title = sharedPref.getString(NewEventFirstActivity.EVENT_TITLE, "No key like " + NewEventFirstActivity.EVENT_TITLE);
-        type = sharedPref.getString(NewEventFirstActivity.EVENT_TYPE, "No key like " + NewEventFirstActivity.EVENT_TYPE);
+        type = sharedPref.getInt(NewEventFirstActivity.EVENT_TYPE, -1);
         about = sharedPref.getString(NewEventSecondActivity.EVENT_ABOUT, "No key like " + NewEventSecondActivity.EVENT_ABOUT);
-        publicity = sharedPref.getString(NewEventThirdActivity.EVENT_PUBLICITY, "No key like " + NewEventSecondActivity.EVENT_ABOUT);
-        places = sharedPref.getString(NewEventFourthActivity.EVENT_PLACES, "No key like " + NewEventFourthActivity.EVENT_PLACES);
-        period = sharedPref.getString(NewEventFourthActivity.EVENT_PERIOD, "No key like " + NewEventFourthActivity.EVENT_PERIOD);
+        isPublic = sharedPref.getBoolean(NewEventThirdActivity.EVENT_PUBLICITY, true);
+        places = sharedPref.getInt(NewEventFourthActivity.EVENT_PLACES, -1);
+        frequency = sharedPref.getInt(NewEventFourthActivity.EVENT_PERIOD, -1);
         startDate = sharedPref.getString(NewEventFifthActivity.EVENT_START_DATE, "No key like " + NewEventFifthActivity.EVENT_START_DATE);
         endDate = sharedPref.getString(NewEventFifthActivity.EVENT_END_DATE, "No key like " + NewEventFifthActivity.EVENT_END_DATE);
+        locationID = sharedPref.getString(NewEventFirstActivity.EVENT_LOCATION_ID, "No key like " + NewEventFirstActivity.EVENT_LOCATION_ID);
+        realPAth = sharedPref.getString(NewEventThirdActivity.COVER_REALPATH, "No key like " + NewEventThirdActivity.COVER_REALPATH);
 
-        //Converts bytes to Bitmap
-//        byte[] bytesArray = readBytesFromFile(NewEventThirdActivity.imgFilePath);
-//        Bitmap decodedByte = BitmapFactory.decodeByteArray(bytesArray, 0, bytesArray.length);
+        Log.i(TAG, "РЕЗУЛЬТАТ: " + title + "\n" +
+                type + "\n" +
+                about + "\n" +
+                isPublic + "\n" +
+                places + "\n" +
+                frequency + "\n" +
+                startDate + "\n" +
+                endDate + "\n" +
+                locationID);
 
-        //Display the Bitmap as an ImageView
-//        imageView2.setImageBitmap(decodedByte);
-//        imageView2.setVisibility(View.VISIBLE);
+        Locations loc = new Locations(locationID);
+        List<Locations> locationsIDs = new ArrayList<>();
+        locationsIDs.add(loc);
+        eventBody = new EventBody(title, about, startDate, endDate, isPublic, places, frequency, type, locationsIDs);
 
-        //Test data which has to be sent on server
-//        textView2.setText(title + "\n" +
-//                type + "\n" +
-//                about + "\n" +
-//                publicity + "\n" +
-//                places + "\n" +
-//                period + "\n" +
-//                startDate + "\n" +
-//                endDate);
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url + CREATE_EVENT, new Response.Listener<String>() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(url)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+
+        String[] userInfo = applicationDB.retrieveFirstLoginValues();
+        token = userInfo[5];
+
+        FacelocationAPI api = retrofit.create(FacelocationAPI.class);
+
+        HashMap<String, String> headers = new HashMap<String, String>();
+        headers.put("Content-Type", "application/json");
+        headers.put("X-Auth", token);
+
+        Call<EventResponse> call = api.createEvent(headers, eventBody);
+        call.enqueue(new Callback<EventResponse>() {
             @Override
-            public void onResponse(String response) {
-                Toast.makeText(getApplicationContext(), "Все прошло хорошо!", Toast.LENGTH_SHORT).show();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
-            }
-        }){
-            @Override
-            protected java.util.Map<String, String> getParams() throws AuthFailureError {
-                java.util.Map<String, String> params = new HashMap<String, String>();
+            public void onResponse(Call<EventResponse> call, Response<EventResponse> response) {
 
-                params.put(NewEventFirstActivity.EVENT_TITLE, title);
-                params.put(NewEventFirstActivity.EVENT_TYPE, type);
-                params.put(NewEventSecondActivity.EVENT_ABOUT, about);
-                params.put(NewEventThirdActivity.EVENT_PUBLICITY, publicity);
-                params.put(NewEventFourthActivity.EVENT_PLACES, places);
-                params.put(NewEventFourthActivity.EVENT_PERIOD, period);
-                params.put(NewEventFifthActivity.EVENT_START_DATE, startDate);
-                params.put(NewEventFifthActivity.EVENT_END_DATE, endDate);
-                return params;
+                Log.i(TAG, "ОТВЕТ СЕРВЕРА: " + response.toString());
+
+                if (response.code() == 200){
+                    eventID = response.body().getId();
+                    Log.i(TAG, "ID НОВОСОЗДАННОГО ИВЕНТА: " + eventID);
+
+                    String eventTitle = response.body().getTitle();
+                    Log.i(TAG, "ЗАГОЛОВОК ИВЕНТА: " + eventTitle);
+
+                    List<String> locations = response.body().getLocations();
+                    String locationID = locations.get(0);
+                    Log.i(TAG, "ID ПЕРВОЙ ЛОКАЦИИ: " + locationID);
+
+                    int type = response.body().getType();
+                    Log.i(TAG, "НОМЕР ТИПА ИВЕНТА: " + type);
+
+                    boolean isPrivate = response.body().getIsPrivate();
+                    Log.i(TAG, "СТАТУС ПРИВАТНОСТИ: " + isPrivate);
+
+                    uploadEventCoverOnServer(eventID);
+
+//                    if (SchedulesStorage.schedules.size() > 0){
+//                        for (int i = 0; i <SchedulesStorage.schedules.size() ; i++) {
+//
+//                            Schedules ttb =  SchedulesStorage.schedules.get(i);
+//
+//                            Log.i(TAG, "ЧТО СОХРАНИЛ В СТОРЕДЖЕ: " + i + "\n" + ttb.toString());
+//                        }
+//                    }
+
+                }
             }
-        };
-        MySingleton.getInstance(this).addToRequestQueue(stringRequest);
+
+            @Override
+            public void onFailure(Call<EventResponse> call, Throwable t) {
+                Log.i(TAG, "onFailure: " + t.toString());
+            }
+        });
+    }
+
+
+    private void uploadEventCoverOnServer(String eventID){
+
+            image = new File(realPAth);
+
+            RequestBody filePart = RequestBody.create(MediaType.parse("image/*"), image);
+            Log.i(TAG, "ИМЯ ЗАГРУЖАЕМОГО ФАЙЛА - " + image.getName());
+            MultipartBody.Part file = MultipartBody.Part.createFormData("file", image.getName(), filePart);
+
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(url)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+            FacelocationAPI api = retrofit.create(FacelocationAPI.class);
+            Log.i(TAG, "ТОКЕН: \n" + token);
+
+            HashMap<String, String> header = new HashMap<String, String>();
+            header.put("X-Auth", token);
+
+            Call<ResponseBody> call = api.uploadEventCover(header, eventID, file);
+            call.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    Log.i(TAG, "ОТВЕТ СЕРВЕРА НА ЗАГРУЗКУ ФАЙЛА: " + response.toString());
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    Log.i(TAG, "onFailure: " + t.toString());
+
+                }
+            });
     }
 }

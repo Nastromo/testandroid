@@ -39,10 +39,14 @@
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@+id/markerImage"
                 android:gravity="center_vertical"
-                android:text="ололо"
                 android:textColor="@color/colorBlack"
                 android:textSize="14sp"
                 android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/locationID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
         </RelativeLayout>
 

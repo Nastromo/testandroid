@@ -12,6 +12,9 @@ import android.widget.CalendarView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.Calendar;
+import java.util.Date;
+
 public class NewEventFifthActivity extends AppCompatActivity implements View.OnClickListener, CalendarView.OnDateChangeListener{
 
     TextView buttonBackView, forwardButtonTextView;
@@ -36,10 +39,26 @@ public class NewEventFifthActivity extends AppCompatActivity implements View.OnC
         cancel = (ImageView) findViewById(R.id.cancel);
         cancel.setOnClickListener(this);
 
+        Calendar c = Calendar.getInstance();
+
         calendarStart = (CalendarView) findViewById(R.id.calendarStart);
+        long startDateLong = calendarStart.getDate();
+
+
+        c.setTimeInMillis(startDateLong);
+        int startYear = c.get(Calendar.YEAR);
+        int startMonth = c.get(Calendar.MONTH);
+        int startDay = c.get(Calendar.DAY_OF_MONTH);
+        Log.i(TAG, "ДАТА: " + startYear + " " + startMonth + " " + startDay);
+        startDate = createStartDate(startYear, startMonth, startDay);
         calendarStart.setOnDateChangeListener(this);
 
         calendarEnd = (CalendarView) findViewById(R.id.calendarEnd);
+        int endYear = c.get(Calendar.YEAR);
+        int endMonth = c.get(Calendar.MONTH);
+        int endDay = c.get(Calendar.DAY_OF_MONTH);
+        Log.i(TAG, "ДАТА: " + endYear + " " + endMonth + " " + endDay);
+        endDate = createEndDate(endYear, endMonth, endDay);
         calendarEnd.setOnDateChangeListener(this);
     }
 
@@ -54,7 +73,7 @@ public class NewEventFifthActivity extends AppCompatActivity implements View.OnC
                 stringBuilderStart.append("-");
                 stringBuilderStart.append(day);
                 stringBuilderStart.append("T");
-                stringBuilderStart.append("00:00:000Z");
+                stringBuilderStart.append("00:00:00.000Z");
                 startDate = stringBuilderStart.toString();
                 Log.i(TAG,"Дата старта: " + startDate);
                 break;
@@ -66,7 +85,7 @@ public class NewEventFifthActivity extends AppCompatActivity implements View.OnC
                 stringBuilderEnd.append("-");
                 stringBuilderEnd.append(day);
                 stringBuilderEnd.append("T");
-                stringBuilderEnd.append("00:00:000Z");
+                stringBuilderEnd.append("00:00:00.000Z");
                 endDate = stringBuilderEnd.toString();
                 Log.i(TAG,"Дата окончания: " + endDate);
                 break;
@@ -98,5 +117,35 @@ public class NewEventFifthActivity extends AppCompatActivity implements View.OnC
                 startActivity(mainActivity);
                 break;
         }
+    }
+
+    private static String createStartDate(int year, int month, int day){
+
+        StringBuilder stringBuilderStart = new StringBuilder();
+        stringBuilderStart.append(year);
+        stringBuilderStart.append("-");
+        stringBuilderStart.append(month);
+        stringBuilderStart.append("-");
+        stringBuilderStart.append(day);
+        stringBuilderStart.append("T");
+        stringBuilderStart.append("00:00:00.000Z");
+        String startDate = stringBuilderStart.toString();
+        Log.i(TAG,"Дата старта: " + startDate);
+        return startDate;
+    }
+
+    private static String createEndDate(int year, int month, int day){
+
+        StringBuilder stringBuilderEnd = new StringBuilder();
+        stringBuilderEnd.append(year);
+        stringBuilderEnd.append("-");
+        stringBuilderEnd.append(month);
+        stringBuilderEnd.append("-");
+        stringBuilderEnd.append(day);
+        stringBuilderEnd.append("T");
+        stringBuilderEnd.append("00:00:00.000Z");
+        String endDate = stringBuilderEnd.toString();
+        Log.i(TAG,"Дата окончания: " + endDate);
+        return endDate;
     }
 }
