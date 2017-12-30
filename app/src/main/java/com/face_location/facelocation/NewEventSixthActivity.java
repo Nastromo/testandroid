@@ -148,20 +148,25 @@ public class NewEventSixthActivity extends AppCompatActivity implements View.OnC
             @Override
             public void onResponse(Call<EventResponse> call, Response<EventResponse> response) {
 
-                eventID = response.body().getId();
-                Log.i(TAG, "ID НОВОСОЗДАННОГО ИВЕНТА: " + eventID);
+                Log.i(TAG, "ОТВЕТ СЕРВЕРА: " + response.toString());
 
-                String eventTitle = response.body().getTitle();
-                Log.i(TAG, "ЗАГОЛОВОК ИВЕНТА: " + eventTitle);
+                if (response.code() == 200){
+                    eventID = response.body().getId();
+                    Log.i(TAG, "ID НОВОСОЗДАННОГО ИВЕНТА: " + eventID);
 
-                List<String> locations = response.body().getLocations();
-                String locationID = locations.get(0);
-                Log.i(TAG, "ID ПЕРВОЙ ЛОКАЦИИ: " + locationID);
+                    String eventTitle = response.body().getTitle();
+                    Log.i(TAG, "ЗАГОЛОВОК ИВЕНТА: " + eventTitle);
 
-                int type = response.body().getType();
-                Log.i(TAG, "НОМЕР ТИПА ИВЕНТА: " + type);
+                    List<String> locations = response.body().getLocations();
+                    String locationID = locations.get(0);
+                    Log.i(TAG, "ID ПЕРВОЙ ЛОКАЦИИ: " + locationID);
 
-                uploadEventCoverOnServer(eventID);
+                    int type = response.body().getType();
+                    Log.i(TAG, "НОМЕР ТИПА ИВЕНТА: " + type);
+
+                    uploadEventCoverOnServer(eventID);
+                }
+
             }
 
             @Override
