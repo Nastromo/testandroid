@@ -10,5 +10,6 @@ import java.util.List;
  */
 
 public class TimetableStorage {
-    public static List<ScheduleTimetable> timetables = new ArrayList<>();
+    public static List<ScheduleTimetable> timetablesList = new ArrayList<>();
+    public static List<List<ScheduleTimetable>> timetables = new ArrayList<>();
 }

@@ -16,6 +16,7 @@ import com.face_location.facelocation.model.PostEvent.ScheduleTime;
 import com.face_location.facelocation.model.PostEvent.ScheduleTimetable;
 import com.face_location.facelocation.model.PostEvent.Schedules;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class NewEventSeventhActivity extends AppCompatActivity implements View.OnClickListener{
@@ -70,7 +71,9 @@ public class NewEventSeventhActivity extends AppCompatActivity implements View.O
 
             case R.id.addParagraf:
                 DayCounter.dayCount = 1;
-                createTimetable();
+
+//                createTimetable();
+
                 Intent newEventEighthActivity = new Intent(this, NewEventEighthActivity.class);
                 startActivity(newEventEighthActivity);
                 break;
@@ -78,8 +81,10 @@ public class NewEventSeventhActivity extends AppCompatActivity implements View.O
             case R.id.addDay:
                 DayCounter.dayCount = 1;
                 day = Integer.parseInt(dayCount.getText().toString());
-                createTimetable();
-                createSchedules(day, TimetableStorage.timetables);
+
+//                createTimetable();
+//                createSchedules(day, TimetableStorage.timetables.get(day - 1));
+
                 DayCounter.addDay();
                 Intent тewEventNinthActivity = new Intent(this, NewEventNinthActivity.class);
                 startActivity(тewEventNinthActivity);
@@ -87,8 +92,10 @@ public class NewEventSeventhActivity extends AppCompatActivity implements View.O
 
             case R.id.eventReady:
                 day = Integer.parseInt(dayCount.getText().toString());
-                createTimetable();
-                createSchedules(day, TimetableStorage.timetables);
+
+//                createTimetable();
+
+                createSchedules(day, TimetableStorage.timetables.get(day - 1));
                 Log.i(TAG, "ЧТО СОХРАНИЛ: " + SchedulesStorage.schedules.get(0).toString());
                 Intent newEventSixthActivity = new Intent(this, NewEventSixthActivity.class);
                 startActivity(newEventSixthActivity);
@@ -111,8 +118,9 @@ public class NewEventSeventhActivity extends AppCompatActivity implements View.O
 
         ScheduleTime time = new ScheduleTime(times[0], times[1]);
         ScheduleTimetable timetable = new ScheduleTimetable(title, time);
+        TimetableStorage.timetablesList.add(timetable);
 
-        TimetableStorage.timetables.add(timetable);
+        TimetableStorage.timetables.add(TimetableStorage.timetablesList);
     }
 
     public void createSchedules(int day, List<ScheduleTimetable> timetables){
@@ -121,10 +129,10 @@ public class NewEventSeventhActivity extends AppCompatActivity implements View.O
     }
 
     public String[] formatTime(int hourStart, int minuteStart, int hourEnd, int minuteEnd){
-        String hourStartStr = null;
-        String minuteStartStr = null;
-        String hourEndStr = null;
-        String minuteEndStr = null;
+        String hourStartStr = String.valueOf(hourStart);
+        String minuteStartStr = String.valueOf(minuteStart);
+        String hourEndStr = String.valueOf(hourEnd);
+        String minuteEndStr = String.valueOf(minuteEnd);
 
         if (hourStart <= 9){
             hourStartStr = "0" + String.valueOf(hourStart);

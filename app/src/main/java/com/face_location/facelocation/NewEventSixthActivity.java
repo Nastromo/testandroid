@@ -16,6 +16,7 @@ import com.face_location.facelocation.model.FacelocationAPI;
 import com.face_location.facelocation.model.PostEvent.EventBody;
 import com.face_location.facelocation.model.PostEvent.EventResponse;
 import com.face_location.facelocation.model.PostEvent.Locations;
+import com.face_location.facelocation.model.PostEvent.Schedules;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -165,8 +166,17 @@ public class NewEventSixthActivity extends AppCompatActivity implements View.OnC
                     Log.i(TAG, "НОМЕР ТИПА ИВЕНТА: " + type);
 
                     uploadEventCoverOnServer(eventID);
-                }
 
+//                    if (SchedulesStorage.schedules.size() > 0){
+//                        for (int i = 0; i <SchedulesStorage.schedules.size() ; i++) {
+//
+//                            Schedules ttb =  SchedulesStorage.schedules.get(i);
+//
+//                            Log.i(TAG, "ЧТО СОХРАНИЛ В СТОРЕДЖЕ: " + i + "\n" + ttb.toString());
+//                        }
+//                    }
+
+                }
             }
 
             @Override

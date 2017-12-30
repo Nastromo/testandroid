@@ -6,11 +6,11 @@ package com.face_location.facelocation.model.PostEvent;
 
 public class ScheduleTimetable {
     String title;
-    ScheduleTime scheduleTime;
+    ScheduleTime time;
 
     public ScheduleTimetable(String title, ScheduleTime scheduleTime) {
         this.title = title;
-        this.scheduleTime = scheduleTime;
+        this.time = scheduleTime;
     }
 
     public String getTitle() {
@@ -22,18 +22,17 @@ public class ScheduleTimetable {
     }
 
     public ScheduleTime getScheduleTime() {
-        return scheduleTime;
+        return time;
     }
 
     public void setScheduleTime(ScheduleTime scheduleTime) {
-        this.scheduleTime = scheduleTime;
+        this.time = scheduleTime;
     }
 
     @Override
     public String toString() {
-        return "ScheduleTimetable{" +
-                "title='" + title + '\'' +
-                ", scheduleTime=" + scheduleTime +
-                '}';
+        return "\nScheduleTimetable{\n" +
+                "title=" + title  + ",\n" +
+                "time=" + time + "}";
     }
 }

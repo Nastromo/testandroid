@@ -33,9 +33,8 @@ public class Schedules {
 
     @Override
     public String toString() {
-        return "Schedules{" +
-                "day=" + day +
-                ", timetable=" + timetable +
-                '}';
+        return "Schedules{" + "\n" +
+                "day=" + day + ",\n" +
+                "timetable=" + timetable + "}";
     }
 }

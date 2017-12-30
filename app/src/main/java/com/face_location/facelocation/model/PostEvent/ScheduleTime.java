@@ -30,9 +30,8 @@ public class ScheduleTime {
 
     @Override
     public String toString() {
-        return "ScheduleTime{" +
-                "start='" + start + '\'' +
-                ", end='" + end + '\'' +
-                '}';
+        return "ScheduleTime{" + "\n" +
+                "start=" + start + ",\n" +
+                "end=" + end + "}";
     }
 }
