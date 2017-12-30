@@ -88,12 +88,12 @@ public class NewEventThirdActivity extends AppCompatActivity implements View.OnC
 
             case R.id.forwardButtonTextView:
                 String publicityEvent = spinnerEventPublicity.getSelectedItem().toString();
-                boolean isPublic = true;
+                boolean isPublic = false;
                 Log.i(TAG, "Тип публичности: " + publicityEvent);
                 if (publicityEvent.equals("Відкритий")){
-                    isPublic = true;
-                } else {
                     isPublic = false;
+                } else {
+                    isPublic = true;
                 }
                 Log.i(TAG, "Тип публичности логический: " + isPublic);
 

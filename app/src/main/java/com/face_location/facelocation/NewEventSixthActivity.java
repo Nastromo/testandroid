@@ -165,6 +165,9 @@ public class NewEventSixthActivity extends AppCompatActivity implements View.OnC
                     int type = response.body().getType();
                     Log.i(TAG, "НОМЕР ТИПА ИВЕНТА: " + type);
 
+                    boolean isPrivate = response.body().getIsPrivate();
+                    Log.i(TAG, "СТАТУС ПРИВАТНОСТИ: " + isPrivate);
+
                     uploadEventCoverOnServer(eventID);
 
 //                    if (SchedulesStorage.schedules.size() > 0){
