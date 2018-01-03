@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/Facelocation.iml" filepath="$PROJECT_DIR$/Facelocation.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/testandroid.iml" filepath="$PROJECT_DIR$/testandroid.iml" />
       <module fileurl="file://$PROJECT_DIR$/testretrofit/testretrofit.iml" filepath="$PROJECT_DIR$/testretrofit/testretrofit.iml" />
     </modules>
   </component>

@@ -16,7 +16,6 @@ import com.face_location.facelocation.model.FacelocationAPI;
 import com.face_location.facelocation.model.PostEvent.EventBody;
 import com.face_location.facelocation.model.PostEvent.EventResponse;
 import com.face_location.facelocation.model.PostEvent.Locations;
-import com.face_location.facelocation.model.PostEvent.Schedules;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -47,6 +46,7 @@ public class NewEventSixthActivity extends AppCompatActivity implements View.OnC
     EventBody eventBody;
     File image;
     private static final String NEW_EVENT_ID = "new_event_id";
+    boolean published = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,12 +121,13 @@ public class NewEventSixthActivity extends AppCompatActivity implements View.OnC
                 frequency + "\n" +
                 startDate + "\n" +
                 endDate + "\n" +
+                published + "\n" +
                 locationID);
 
         Locations loc = new Locations(locationID);
         List<Locations> locationsIDs = new ArrayList<>();
         locationsIDs.add(loc);
-        eventBody = new EventBody(title, about, startDate, endDate, isPublic, places, frequency, type, locationsIDs);
+        eventBody = new EventBody(title, about, startDate, endDate, isPublic, places, frequency, type, locationsIDs, published);
 
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -167,6 +168,9 @@ public class NewEventSixthActivity extends AppCompatActivity implements View.OnC
 
                     boolean isPrivate = response.body().getIsPrivate();
                     Log.i(TAG, "СТАТУС ПРИВАТНОСТИ: " + isPrivate);
+
+                    boolean published = response.body().getPublished();
+                    Log.i(TAG, "СТАТУС ОПУБЛИКОВАННОСТИ ИВЕНТА: " + published);
 
                     uploadEventCoverOnServer(eventID);
 

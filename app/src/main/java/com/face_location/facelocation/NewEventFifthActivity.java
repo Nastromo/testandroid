@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.Calendar;
-import java.util.Date;
 
 public class NewEventFifthActivity extends AppCompatActivity implements View.OnClickListener, CalendarView.OnDateChangeListener{
 
@@ -69,9 +68,27 @@ public class NewEventFifthActivity extends AppCompatActivity implements View.OnC
                 StringBuilder stringBuilderStart = new StringBuilder();
                 stringBuilderStart.append(year);
                 stringBuilderStart.append("-");
-                stringBuilderStart.append(month);
+
+                if (month <= 9){
+                    Log.i(TAG, "ПРОШЛО ПОЛОЖИТЕЛЬНОЕ START MONTH: " + month);
+                    int realMonth = month + 1;
+                    stringBuilderStart.append("0" + realMonth);
+                }else {
+                    Log.i(TAG, "ПРОШЛО ОТРИЦАТЕЛЬНОЕ START MONTH: " + month);
+                    int realMonth = month + 1;
+                    stringBuilderStart.append("0" + realMonth);
+                }
+
                 stringBuilderStart.append("-");
-                stringBuilderStart.append(day);
+
+                if (day <= 9){
+                    Log.i(TAG, "ПРОШЛО ПОЛОЖИТЕЛЬНОЕ START DAY: " + day);
+                    stringBuilderStart.append("0" + day);
+                }else {
+                    Log.i(TAG, "ПРОШЛО ОТРИЦАТЕЛЬНОЕ START DAY: " + day);
+                    stringBuilderStart.append(day);
+                }
+
                 stringBuilderStart.append("T");
                 stringBuilderStart.append("00:00:00.000Z");
                 startDate = stringBuilderStart.toString();
@@ -81,9 +98,26 @@ public class NewEventFifthActivity extends AppCompatActivity implements View.OnC
                 StringBuilder stringBuilderEnd = new StringBuilder();
                 stringBuilderEnd.append(year);
                 stringBuilderEnd.append("-");
-                stringBuilderEnd.append(month);
+
+                if (month <= 9){
+                    Log.i(TAG, "ПРОШЛО ПОЛОЖИТЕЛЬНОЕ END MONTH: " + month);
+                    int realMonth = month + 1;
+                    stringBuilderEnd.append("0" + realMonth);
+                }else {
+                    Log.i(TAG, "ПРОШЛО ОТРИЦАТЕЛЬНОЕ END MONTH: " + month);
+                    int realMonth = month + 1;
+                    stringBuilderEnd.append("0" + realMonth);
+                }
+
                 stringBuilderEnd.append("-");
-                stringBuilderEnd.append(day);
+
+                if (day <= 9){
+                    Log.i(TAG, "ПРОШЛО ПОЛОЖИТЕЛЬНОЕ END DAY: " + day);
+                    stringBuilderEnd.append("0" + day);
+                }else {
+                    Log.i(TAG, "ПРОШЛО ОТРИЦАТЕЛЬНОЕ END DAY: " + day);
+                    stringBuilderEnd.append(day);
+                }
                 stringBuilderEnd.append("T");
                 stringBuilderEnd.append("00:00:00.000Z");
                 endDate = stringBuilderEnd.toString();
@@ -124,9 +158,27 @@ public class NewEventFifthActivity extends AppCompatActivity implements View.OnC
         StringBuilder stringBuilderStart = new StringBuilder();
         stringBuilderStart.append(year);
         stringBuilderStart.append("-");
-        stringBuilderStart.append(month);
+
+        if (month <= 9){
+            Log.i(TAG, "ПРОШЛО ПОЛОЖИТЕЛЬНОЕ START MONTH: " + month);
+            int realMonth = month + 1;
+            stringBuilderStart.append("0" + realMonth);
+        }else {
+            Log.i(TAG, "ПРОШЛО ОТРИЦАТЕЛЬНОЕ START MONTH: " + month);
+            int realMonth = month + 1;
+            stringBuilderStart.append("0" + realMonth);
+        }
+
         stringBuilderStart.append("-");
-        stringBuilderStart.append(day);
+
+        if (day <= 9){
+            Log.i(TAG, "ПРОШЛО ПОЛОЖИТЕЛЬНОЕ START DAY: " + day);
+            stringBuilderStart.append("0" + day);
+        }else {
+            Log.i(TAG, "ПРОШЛО ОТРИЦАТЕЛЬНОЕ START DAY: " + day);
+            stringBuilderStart.append(day);
+        }
+
         stringBuilderStart.append("T");
         stringBuilderStart.append("00:00:00.000Z");
         String startDate = stringBuilderStart.toString();
@@ -139,9 +191,26 @@ public class NewEventFifthActivity extends AppCompatActivity implements View.OnC
         StringBuilder stringBuilderEnd = new StringBuilder();
         stringBuilderEnd.append(year);
         stringBuilderEnd.append("-");
-        stringBuilderEnd.append(month);
+
+        if (month <= 9){
+            Log.i(TAG, "ПРОШЛО ПОЛОЖИТЕЛЬНОЕ END MONTH: " + month);
+            int realMonth = month + 1;
+            stringBuilderEnd.append("0" + realMonth);
+        }else {
+            Log.i(TAG, "ПРОШЛО ОТРИЦАТЕЛЬНОЕ END MONTH: " + month);
+            int realMonth = month + 1;
+            stringBuilderEnd.append("0" + realMonth);
+        }
+
         stringBuilderEnd.append("-");
-        stringBuilderEnd.append(day);
+
+        if (day <= 9){
+            Log.i(TAG, "ПРОШЛО ПОЛОЖИТЕЛЬНОЕ END DAY: " + day);
+            stringBuilderEnd.append("0" + day);
+        }else {
+            Log.i(TAG, "ПРОШЛО ОТРИЦАТЕЛЬНОЕ END DAY: " + day);
+            stringBuilderEnd.append(day);
+        }
         stringBuilderEnd.append("T");
         stringBuilderEnd.append("00:00:00.000Z");
         String endDate = stringBuilderEnd.toString();

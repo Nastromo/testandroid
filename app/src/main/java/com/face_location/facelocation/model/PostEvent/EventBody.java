@@ -12,6 +12,21 @@ public class EventBody {
     int seats, frequency, type;
     List<Schedules> schedules;
     List<Locations> locations;
+    boolean published;
+
+    public EventBody(String title, String text, String start, String end, boolean isPrivate, int seats, int frequency, int type, List<Schedules> schedules, List<Locations> locations, boolean published) {
+        this.title = title;
+        this.text = text;
+        this.start = start;
+        this.end = end;
+        this.isPrivate = isPrivate;
+        this.seats = seats;
+        this.frequency = frequency;
+        this.type = type;
+        this.schedules = schedules;
+        this.locations = locations;
+        this.published = published;
+    }
 
     public EventBody(String title, String text, String start, String end, boolean isPrivate, int seats, int frequency, int type, List<Schedules> schedules, List<Locations> locations) {
         this.title = title;
@@ -26,7 +41,7 @@ public class EventBody {
         this.locations = locations;
     }
 
-    public EventBody(String title, String text, String start, String end, boolean isPrivate, int seats, int frequency, int type, List<Locations> locations) {
+    public EventBody(String title, String text, String start, String end, boolean isPrivate, int seats, int frequency, int type, List<Locations> locations, boolean published) {
         this.title = title;
         this.text = text;
         this.start = start;
@@ -36,6 +51,7 @@ public class EventBody {
         this.frequency = frequency;
         this.type = type;
         this.locations = locations;
+        this.published = published;
     }
 
     public String getTitle() {
@@ -116,5 +132,13 @@ public class EventBody {
 
     public void setLocations(List<Locations> locations) {
         this.locations = locations;
+    }
+
+    public boolean isPublished() {
+        return published;
+    }
+
+    public void setPublished(boolean published) {
+        this.published = published;
     }
 }
