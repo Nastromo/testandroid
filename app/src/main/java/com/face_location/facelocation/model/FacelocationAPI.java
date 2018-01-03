@@ -2,6 +2,7 @@ package com.face_location.facelocation.model;
 
 import com.face_location.facelocation.model.Events.MyEventResponse;
 import com.face_location.facelocation.model.GetEvent.EventResponse;
+import com.face_location.facelocation.model.GetNearestEvents.NearestEventResponse;
 import com.face_location.facelocation.model.Issue.IssueBody;
 import com.face_location.facelocation.model.Location.LocationBody;
 import com.face_location.facelocation.model.Location.LocationGetResponse;
@@ -151,5 +152,14 @@ public interface FacelocationAPI {
     Call<ResponseBody> sendIssue(
             @HeaderMap Map<String, String> headers,
             @Body IssueBody body
+    );
+
+    //Get events coordinates
+    @GET("api/events/")
+    Call <List<NearestEventResponse>> getNearestEvents(
+            @HeaderMap Map<String, String> headers,
+            @Query("latitude") double latitude,
+            @Query("longitude") double longitude,
+            @Query("published") boolean published
     );
 }

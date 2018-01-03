@@ -67,7 +67,7 @@ public class NewEventSixthActivity extends AppCompatActivity implements View.OnC
         createEvent = (ImageView) findViewById(R.id.createEvent);
         createEvent.setOnClickListener(this);
 
-        url = getResources().getString(R.string.base_url);
+        url = getString(R.string.base_url);
     }
 
     @Override

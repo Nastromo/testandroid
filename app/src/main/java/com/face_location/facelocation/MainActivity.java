@@ -29,6 +29,9 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.face_location.facelocation.model.DataBase.DataBaseHelper;
+import com.face_location.facelocation.model.FacelocationAPI;
+import com.face_location.facelocation.model.GetEvent.Address;
+import com.face_location.facelocation.model.GetNearestEvents.NearestEventResponse;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -48,6 +51,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.HashMap;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
@@ -83,6 +94,9 @@ public class MainActivity extends AppCompatActivity
     DataBaseHelper applicationDB;
     String[] userArrayData;
 
+    String url, token;
+    double latitude, longitude;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +107,8 @@ public class MainActivity extends AppCompatActivity
 //        LogInActivity.pDialog.hide();
 
         applicationDB = DataBaseHelper.getInstance(this);
+
+        url = getString(R.string.base_url);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         // mapView = mapFragment.getView();  //Padding the My location button
@@ -112,7 +128,6 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
 
-                //TODO Delete add location fragments before realece if needed
                 Intent newLocation = new Intent(getApplicationContext(), AddLocationFirstActivity.class);
                 startActivity(newLocation);
             }
@@ -145,10 +160,10 @@ public class MainActivity extends AppCompatActivity
 
         userArrayData = applicationDB.retrieveFirstLoginValues();
 
-        if (userArrayData != null){
+        if (userArrayData != null) {
             userAvatar = userArrayData[10];
-            if (userAvatar != null){
-                if (userAvatar.equals(getString(R.string.def_avatar)) || userAvatar.equals(getString(R.string.def_avatar_second))){
+            if (userAvatar != null) {
+                if (userAvatar.equals(getString(R.string.def_avatar)) || userAvatar.equals(getString(R.string.def_avatar_second))) {
                     //go further
                 } else {
                     myProfileImageView.setBackground(null);
@@ -164,13 +179,86 @@ public class MainActivity extends AppCompatActivity
             }
 
             userName = userArrayData[6];
-            if (userName != null){
+            if (userName != null) {
                 userNameTextView.setText(userName);
             } else {
                 userNameTextView.setText(getString(R.string.your_name_menu));
             }
         }
 
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                return false;
+            }
+        });
+    }
+
+    public void showNearestEvents(final double latitude, double longitude) {
+        boolean published = true;
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(url)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        String[] userInfo = applicationDB.retrieveFirstLoginValues();
+        token = userInfo[5];
+
+        FacelocationAPI api = retrofit.create(FacelocationAPI.class);
+
+        HashMap<String, String> headers = new HashMap<String, String>();
+        headers.put("Content-Type", "application/json");
+        headers.put("X-Auth", token);
+
+        Log.i(TAG, "ОБЪЕКТ: " + latitude + " " + longitude + " " + published);
+
+        Call<List<NearestEventResponse>> call = api.getNearestEvents(headers, latitude, longitude, published);
+        call.enqueue(new Callback<List<NearestEventResponse>>() {
+            @Override
+            public void onResponse(Call<List<NearestEventResponse>> call, Response<List<NearestEventResponse>> response) {
+                Log.i(TAG, "ОТВЕТ СЕРВЕРА: " + response.toString());
+
+                List<NearestEventResponse> nearestEvents = response.body();
+                if (nearestEvents.isEmpty()){
+                    Log.i(TAG, "ПОБЛИЗОСТИ НЕТ ИНВЕНТОВ");
+                }else {
+                    for (int i = 0; i < nearestEvents.size(); i++) {
+                        NearestEventResponse event = nearestEvents.get(i);
+                        List<com.face_location.facelocation.model.GetEvent.Location> locations = event.getLocations();
+                        if (locations.isEmpty()){
+                            Log.i(TAG, "НЕТ!!! ЛОКАЦИЙ В ИВЕНТЕ");
+                        }else {
+                            for (int j = 0; j < locations.size(); j++) {
+                                com.face_location.facelocation.model.GetEvent.Location location = locations.get(j);
+                                Address address = location.getAddress();
+                                List<Double> latlongList = address.getPosition();
+                                if (latlongList.isEmpty()){
+                                    Log.i(TAG, "В ЛОКАЦИИ НЕТ КООРДИНАТ");
+                                } else {
+                                    for (int k = 0; k < latlongList.size(); k++) {
+                                        double lat = latlongList.get(0);
+                                        double lon = latlongList.get(1);
+
+                                        LatLng latlng = new LatLng(lat, lon);
+                                        MarkerOptions markerOptions = new MarkerOptions();
+                                        markerOptions.position(latlng);
+                                        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.event_marker));
+                                        mMap.addMarker(markerOptions);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+
+            @Override
+            public void onFailure(Call<List<NearestEventResponse>> call, Throwable t) {
+                Log.i(TAG, "onFailure: ++++++++" + t.toString());
+            }
+        });
 
     }
 
@@ -373,9 +461,16 @@ public class MainActivity extends AppCompatActivity
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (mLastLocation != null) {
             LatLng lastLatLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+            latitude = mLastLocation.getLatitude();
+            longitude = mLastLocation.getLongitude();
 
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lastLatLng, DEFAULT_ZOOM));
+        }else {
+            latitude = 49.84;
+            longitude = 24.03;
         }
+
+        showNearestEvents(latitude, longitude);
     }
 
     @Override
@@ -399,6 +494,8 @@ public class MainActivity extends AppCompatActivity
         markerOptions.title(getString(R.string.my_location));
         markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker));
         mCurrLocationMarker = mMap.addMarker(markerOptions);
+
+        showNearestEvents(location.getLatitude(), location.getLongitude());
 
         //move map camera
         //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_ZOOM));
@@ -471,6 +568,8 @@ public class MainActivity extends AppCompatActivity
                             .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
 
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
+
+                    showNearestEvents(49.84, 24.03);
                 }
                 return;
             }
@@ -510,9 +609,10 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.geo_search) {
             //Getting autocomplete overlay for geo search
+            mMap.clear();
             try {
                 Intent intent =
-                        new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN) //TODO remove this comment before Release: don't change MODE_FULLSCREEN on MODE_OVERLAY
+                        new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
                                 .build(this);
                 startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
             } catch (GooglePlayServicesRepairableException e) {
@@ -605,8 +705,9 @@ public class MainActivity extends AppCompatActivity
 //                placeAddress.setText(placeAddressString);
 
                 LatLng toLatLng = place.getLatLng();
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(toLatLng, DEFAULT_ZOOM));
 
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(toLatLng, DEFAULT_ZOOM));
+                showNearestEvents(toLatLng.latitude, toLatLng.longitude);
 
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
                 Status status = PlaceAutocomplete.getStatus(this, data);
