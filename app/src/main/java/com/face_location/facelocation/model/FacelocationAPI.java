@@ -2,6 +2,7 @@ package com.face_location.facelocation.model;
 
 import com.face_location.facelocation.model.Events.MyEventResponse;
 import com.face_location.facelocation.model.GetEvent.EventResponse;
+import com.face_location.facelocation.model.GetNearestEvents.NearestEventResponse;
 import com.face_location.facelocation.model.Issue.IssueBody;
 import com.face_location.facelocation.model.Location.LocationBody;
 import com.face_location.facelocation.model.Location.LocationGetResponse;
@@ -10,6 +11,8 @@ import com.face_location.facelocation.model.Location.LocationResponse;
 import com.face_location.facelocation.model.MyProfile.ProfileBody;
 import com.face_location.facelocation.model.MyProfile.ProfileResponse;
 import com.face_location.facelocation.model.PostEvent.EventBody;
+import com.face_location.facelocation.model.PostLocalization.LocalizationBody;
+import com.face_location.facelocation.model.PostLocalization.LocalizationResponse;
 import com.face_location.facelocation.model.Registration.RegistrationBody;
 import com.face_location.facelocation.model.Registration.RegistrationResponse;
 
@@ -151,5 +154,22 @@ public interface FacelocationAPI {
     Call<ResponseBody> sendIssue(
             @HeaderMap Map<String, String> headers,
             @Body IssueBody body
+    );
+
+    //Get events coordinates
+    @GET("api/events/")
+    Call <List<NearestEventResponse>> getNearestEvents(
+            @HeaderMap Map<String, String> headers,
+            @Query("latitude") double latitude,
+            @Query("longitude") double longitude,
+            @Query("published") boolean published
+    );
+
+    //Localize User on Event
+    @POST("api/events/{eventID}/activate")
+    Call<LocalizationResponse> localizUser(
+            @HeaderMap Map<String, String> headers,
+            @Path("eventID") String eventID,
+            @Body LocalizationBody body
     );
 }

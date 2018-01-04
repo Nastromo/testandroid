@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -19,6 +20,8 @@ import com.face_location.facelocation.model.FacelocationAPI;
 import com.face_location.facelocation.model.GetEvent.EventResponse;
 import com.face_location.facelocation.model.GetEvent.Location;
 import com.face_location.facelocation.model.GetEvent.Subscriber;
+import com.face_location.facelocation.model.PostLocalization.LocalizationBody;
+import com.face_location.facelocation.model.PostLocalization.LocalizationResponse;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,7 +45,7 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
     List<SimilarEvent> similarEventList;
     private TextView eventTitleView, eventDateView, eventLocationView, passTypeView, eventTimeView, eventDescriptionView, userQuantity, userQuantitySecond, userQuantityThird;
     ImageView eventPhoto, userAvatar, userAvatarSecond, userAvatarThird;
-    String eventDate;
+    String eventDate, eventIDfromMap;
     LinearLayout linearLayout2;
     static int eventPassTypeInt;
 
@@ -108,10 +111,56 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
                 break;
 
             case R.id.localizButton:
-                Intent localizedActivity = new Intent(this, LocalizedActivity.class);
-                startActivity(localizedActivity);
+
+                double latitude = getIntent().getDoubleExtra("latitude", 0.0);
+                double longitude = getIntent().getDoubleExtra("longitude", 0.0);
+
+                localizUser(latitude, longitude);
                 break;
         }
+    }
+
+    private void localizUser(double latitude, double longitude){
+        Log.i(TAG, "МОИ КООРДИНАТЫ ДОЛГОТА: " + latitude);
+        Log.i(TAG, "МОИ КООРДИНАТЫ ШИРОТА: " + longitude);
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(url)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+
+        FacelocationAPI api = retrofit.create(FacelocationAPI.class);
+
+        HashMap<String, String> headers = new HashMap<String, String>();
+        headers.put("Content-Type", "application/json");
+        headers.put("X-Auth", token);
+
+        LocalizationBody localizationBody = new LocalizationBody(latitude, longitude);
+
+        Call<LocalizationResponse> call = api.localizUser(headers, eventID, localizationBody);
+        call.enqueue(new Callback<LocalizationResponse>() {
+            @Override
+            public void onResponse(Call<LocalizationResponse> call, Response<LocalizationResponse> response) {
+                Log.i(TAG, "ОТВЕТ СЕРВЕРА НА ЛОКАЛИЗАЦИЮ: " + response.toString());
+
+                if (response.code() == 200){
+                    int success = response.body().getSuccess();
+                    if (success == 1){
+                        Intent localizedActivity = new Intent(EventActivity.this, LocalizedActivity.class);
+                        localizedActivity.putExtra("id", eventID);
+                        startActivity(localizedActivity);
+                    }
+                }else {
+                    Toast.makeText(EventActivity.this, "Треба бути у зоні івенту, щоб локалізуватись!", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LocalizationResponse> call, Throwable t) {
+                Log.i(TAG, "onFailure: " + t.toString());
+            }
+        });
     }
 
     public void getEvent(String eventID){

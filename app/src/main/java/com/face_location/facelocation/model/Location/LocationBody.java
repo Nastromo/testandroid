@@ -4,7 +4,7 @@ public class LocationBody {
 
     String title, text, contact;
     float longitude, latitude;
-    boolean publised;
+    boolean published;
 
     public LocationBody(String title, String text, String contact, float longitude, float latitude, boolean publised) {
         this.title = title;
@@ -12,7 +12,7 @@ public class LocationBody {
         this.contact = contact;
         this.longitude = longitude;
         this.latitude = latitude;
-        this.publised = publised;
+        this.published = publised;
     }
 
     public String getTitle() {
@@ -56,10 +56,10 @@ public class LocationBody {
     }
 
     public boolean isPublised() {
-        return publised;
+        return published;
     }
 
     public void setPublised(boolean publised) {
-        this.publised = publised;
+        this.published = publised;
     }
 }
