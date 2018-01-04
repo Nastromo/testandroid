@@ -94,8 +94,9 @@ public class MainActivity extends AppCompatActivity
     DataBaseHelper applicationDB;
     String[] userArrayData;
 
-    String url, token;
+    String url, token, eventID;
     double latitude, longitude;
+    int counter = 0;
 
 
     @Override
@@ -185,13 +186,6 @@ public class MainActivity extends AppCompatActivity
                 userNameTextView.setText(getString(R.string.your_name_menu));
             }
         }
-
-        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker) {
-                return false;
-            }
-        });
     }
 
     public void showNearestEvents(final double latitude, double longitude) {
@@ -225,6 +219,8 @@ public class MainActivity extends AppCompatActivity
                 }else {
                     for (int i = 0; i < nearestEvents.size(); i++) {
                         NearestEventResponse event = nearestEvents.get(i);
+                        eventID = event.getId();
+                        Log.i(TAG, "ID ИВЕНТА ПОБЛИЗОСТИ: " + eventID);
                         List<com.face_location.facelocation.model.GetEvent.Location> locations = event.getLocations();
                         if (locations.isEmpty()){
                             Log.i(TAG, "НЕТ!!! ЛОКАЦИЙ В ИВЕНТЕ");
@@ -243,6 +239,7 @@ public class MainActivity extends AppCompatActivity
                                         LatLng latlng = new LatLng(lat, lon);
                                         MarkerOptions markerOptions = new MarkerOptions();
                                         markerOptions.position(latlng);
+                                        markerOptions.snippet(eventID);
                                         markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.event_marker));
                                         mMap.addMarker(markerOptions);
                                     }
@@ -403,6 +400,7 @@ public class MainActivity extends AppCompatActivity
                 //LocationForAdapter Permission already granted
                 buildGoogleApiClient();
                 mMap.setMyLocationEnabled(true);
+
             } else {
                 //Request LocationForAdapter Permission
                 checkLocationPermission();
@@ -413,26 +411,34 @@ public class MainActivity extends AppCompatActivity
             mMap.setMyLocationEnabled(true);
         }
 
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+
+                if (ContextCompat.checkSelfPermission(getApplicationContext(),
+                        Manifest.permission.ACCESS_FINE_LOCATION)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    String eventID = marker.getSnippet();
+                    Intent eventActivity = new Intent(MainActivity.this, EventActivity.class);
+                    Log.i(TAG, "onMarkerClick EVENTID: " + eventID);
+                    eventActivity.putExtra("id", eventID);
+                    eventActivity.putExtra("latitude", latitude);
+                    eventActivity.putExtra("longitude", longitude);
+                    startActivity(eventActivity);
+                    return true;
+                } else {
+                    //Request LocationForAdapter Permission
+                    checkLocationPermission();
+                }
+                return true;
+            }
+        });
+
         //turn off google maps toolbar for native google maps app launch
         mMap.getUiSettings().setMapToolbarEnabled(false);
 
         //turn off google maps My location button
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
-
-        //Padding the My location button
-//        if (mapView != null &&
-//                mapView.findViewById(Integer.parseInt("1")) != null) {
-//            // Get the button view
-//            View locationButton = ((View) mapView.findViewById(Integer.parseInt("1")).getParent()).findViewById(Integer.parseInt("2"));
-//            // and next place it, on bottom right (as Google Maps app)
-//            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)
-//                    locationButton.getLayoutParams();
-//            // position on right bottom
-//            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
-//            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-//            layoutParams.setMargins(0, 0, 30, 180);
-//            mMap.setPadding(0, 0, 44, 180);
-//       }
 
     }
 
@@ -447,6 +453,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onConnected(Bundle bundle) {
+
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(1000);
         mLocationRequest.setFastestInterval(1000);
@@ -470,7 +477,7 @@ public class MainActivity extends AppCompatActivity
             longitude = 24.03;
         }
 
-        showNearestEvents(latitude, longitude);
+            showNearestEvents(latitude, longitude);
     }
 
     @Override
@@ -480,8 +487,10 @@ public class MainActivity extends AppCompatActivity
     public void onConnectionFailed(ConnectionResult connectionResult) {}
 
     @Override
-    public void onLocationChanged(Location location)
-    {
+    public void onLocationChanged(Location location) {
+
+        counter++;
+        Log.i(TAG, "ВЫЗВАЛСЯ onLocationChanged: " + counter);
         mLastLocation = location;
         if (mCurrLocationMarker != null) {
             mCurrLocationMarker.remove();
@@ -495,7 +504,9 @@ public class MainActivity extends AppCompatActivity
         markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker));
         mCurrLocationMarker = mMap.addMarker(markerOptions);
 
-        showNearestEvents(location.getLatitude(), location.getLongitude());
+        if (counter == 1){
+            showNearestEvents(location.getLatitude(), location.getLongitude());
+        }
 
         //move map camera
         //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_ZOOM));

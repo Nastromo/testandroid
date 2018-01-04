@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.face_location.facelocation.model.DataBase.DataBaseHelper;
 import com.face_location.facelocation.model.FacelocationAPI;
@@ -48,7 +49,11 @@ public class FilesFragment extends Fragment {
 
         filezzz = new ArrayList<>();
         listView = (ListView) rootView.findViewById(R.id.filesListView);
-        getEvent("5a3b8a7a0da8446ca86fca31");
+
+        Bundle bundle = getArguments();
+        String eventID = bundle.getString("eventID");
+
+        getEvent(eventID);
 
         return rootView;
     }
@@ -73,24 +78,29 @@ public class FilesFragment extends Fragment {
                 Log.i(TAG, "ОТВЕТ СЕРВЕРА: " + response.toString());
 
                 List<File> files = response.body().getFiles();
-                File file;
-                String fileName;
-                String fileURL;
+                if (files.isEmpty()){
+                    Toast.makeText(getContext(), "Немає файлів", Toast.LENGTH_LONG).show();
+                } else {
+                    File file;
+                    String fileName;
+                    String fileURL;
 
-                for (int i = 0; i < files.size(); i++) {
-                    file = files.get(i);
-                    fileName = file.getFilename();
-                    fileURL = file.getLocation();
+                    for (int i = 0; i < files.size(); i++) {
+                        file = files.get(i);
+                        fileName = file.getFilename();
+                        fileURL = file.getLocation();
 
-                    Log.i(TAG, "ДАННЫЕ ФАЙЛА: " + fileName + "\n"
-                            + fileURL);
+                        Log.i(TAG, "ДАННЫЕ ФАЙЛА: " + fileName + "\n"
+                                + fileURL);
 
 
-                    filezzz.add(new Files(fileName, fileURL));
+                        filezzz.add(new Files(fileName, fileURL));
+                    }
+
+                    FileAdapter myFileAdapter = new FileAdapter(getContext(), R.layout.file_card, filezzz);
+                    listView.setAdapter(myFileAdapter);
                 }
 
-                FileAdapter myFileAdapter = new FileAdapter(getContext(), R.layout.file_card, filezzz);
-                listView.setAdapter(myFileAdapter);
             }
 
             @Override

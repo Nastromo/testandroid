@@ -11,6 +11,8 @@ import com.face_location.facelocation.model.Location.LocationResponse;
 import com.face_location.facelocation.model.MyProfile.ProfileBody;
 import com.face_location.facelocation.model.MyProfile.ProfileResponse;
 import com.face_location.facelocation.model.PostEvent.EventBody;
+import com.face_location.facelocation.model.PostLocalization.LocalizationBody;
+import com.face_location.facelocation.model.PostLocalization.LocalizationResponse;
 import com.face_location.facelocation.model.Registration.RegistrationBody;
 import com.face_location.facelocation.model.Registration.RegistrationResponse;
 
@@ -161,5 +163,13 @@ public interface FacelocationAPI {
             @Query("latitude") double latitude,
             @Query("longitude") double longitude,
             @Query("published") boolean published
+    );
+
+    //Localize User on Event
+    @POST("api/events/{eventID}/activate")
+    Call<LocalizationResponse> localizUser(
+            @HeaderMap Map<String, String> headers,
+            @Path("eventID") String eventID,
+            @Body LocalizationBody body
     );
 }

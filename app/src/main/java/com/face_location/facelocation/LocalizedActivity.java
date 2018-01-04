@@ -23,11 +23,14 @@ public class LocalizedActivity extends AppCompatActivity {
     String TAG = "LocalizedActivity";
     DataBaseHelper applicationDB;
     String[] userArrayData;
+    String eventID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_localized);
+
+        eventID = getIntent().getStringExtra("id");
 
         TextView backTextView = (TextView) findViewById(R.id.backTextView);
         backTextView.setOnClickListener(new View.OnClickListener() {
@@ -100,10 +103,16 @@ public class LocalizedActivity extends AppCompatActivity {
 
                 case 2:
                     AttentionFragment attentionFragment = new AttentionFragment();
+                    Bundle bundleAtt = new Bundle();
+                    bundleAtt.putString("eventID", eventID);
+                    attentionFragment.setArguments(bundleAtt);
                     return attentionFragment;
 
                 case 3:
                     FilesFragment filesFragment = new FilesFragment();
+                    Bundle bundleFl = new Bundle();
+                    bundleFl.putString("eventID", eventID);
+                    filesFragment.setArguments(bundleFl);
                     return filesFragment;
 
                 default:

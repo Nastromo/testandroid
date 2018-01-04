@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.face_location.facelocation.model.DataBase.DataBaseHelper;
 import com.face_location.facelocation.model.FacelocationAPI;
@@ -34,6 +35,8 @@ public class AttentionFragment extends Fragment {
     String[] applicationData;
     private static final String TAG = "AttentionFragment";
     ArrayList<Attention> attentions;
+    String eventID;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,8 +50,11 @@ public class AttentionFragment extends Fragment {
 
         listView = (ListView) rootView.findViewById(R.id.attentionListView);
 
+        Bundle bundle = getArguments();
+        String eventID = bundle.getString("eventID");
+
         attentions = new ArrayList<>();
-        getEvent("5a3b8a7a0da8446ca86fca31");
+        getEvent(eventID);
 
         return rootView;
     }
@@ -73,33 +79,37 @@ public class AttentionFragment extends Fragment {
                 Log.i(TAG, "ОТВЕТ СЕРВЕРА: " + response.toString());
 
                 List<Announcement> announcements = response.body().getAnnouncements();
-                List<String > annTitles = new ArrayList<>();
-                Announcement announcement;
-                String annTitle = "Назва не вказана";
-                String annText;
-                String userName;
-                String annTime;
-                String userAvatar;
-                for (int i = 0; i < announcements.size(); i++) {
-                    announcement = announcements.get(i);
-                    annText = announcement.getText();
-                    userName = announcement.getUser().getUsername();
-                    annTime = announcement.getCreatedAt();
-                    userAvatar = announcement.getUser().getAvatarMob();
+                if (announcements.isEmpty()){
+                    Toast.makeText(getContext(), "Немає оголошень", Toast.LENGTH_LONG).show();
+                }else {
+                    List<String > annTitles = new ArrayList<>();
+                    Announcement announcement;
+                    String annTitle = "Назва не вказана";
+                    String annText;
+                    String userName;
+                    String annTime;
+                    String userAvatar;
+                    for (int i = 0; i < announcements.size(); i++) {
+                        announcement = announcements.get(i);
+                        annText = announcement.getText();
+                        userName = announcement.getUser().getUsername();
+                        annTime = announcement.getCreatedAt();
+                        userAvatar = announcement.getUser().getAvatarMob();
 
-                    String annTimeShort = annTime.substring(11,16);
+                        String annTimeShort = annTime.substring(11,16);
 
-                    Log.i(TAG, "ДАННЫЕ ОБЪЯВЫ: " + annTitle + "\n"
-                            + annText + "\n"
-                            + userName + "\n"
-                            + annTimeShort + "\n"
-                            + userAvatar + "\n");
+                        Log.i(TAG, "ДАННЫЕ ОБЪЯВЫ: " + annTitle + "\n"
+                                + annText + "\n"
+                                + userName + "\n"
+                                + annTimeShort + "\n"
+                                + userAvatar + "\n");
 
-                    attentions.add(new Attention(annTitle, annText, userName, annTimeShort, userAvatar));
+                        attentions.add(new Attention(annTitle, annText, userName, annTimeShort, userAvatar));
+                    }
+
+                    AttentionAdapter attentionAdapter = new AttentionAdapter(getContext(), R.layout.attention_card, attentions);
+                    listView.setAdapter(attentionAdapter);
                 }
-
-                AttentionAdapter attentionAdapter = new AttentionAdapter(getContext(), R.layout.attention_card, attentions);
-                listView.setAdapter(attentionAdapter);
             }
 
             @Override
