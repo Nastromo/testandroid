@@ -7,7 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
 
@@ -24,6 +28,8 @@ public class LocalsAdapter extends ArrayAdapter<ChatUser> {
 
     private static class ViewHolder {
         TextView userName;
+        TextView someText;
+        ImageView imageView2;
     }
 
 
@@ -39,6 +45,9 @@ public class LocalsAdapter extends ArrayAdapter<ChatUser> {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         String userName = getItem(position).getName();
+        String userEmail = getItem(position).getEmail();
+        String userAvatar = getItem(position).getAvatar();
+        Log.i(TAG, "ССЫЛКА НА АВАТАР: " + userAvatar);
 
         if (userName.length() > 25){
             userName = userName.substring(0, Math.min(userName.length(), 25)).trim() + "...";
@@ -56,6 +65,8 @@ public class LocalsAdapter extends ArrayAdapter<ChatUser> {
 
                 holder= new ViewHolder();
                 holder.userName = (TextView) convertView.findViewById(R.id.userName);
+                holder.someText = (TextView) convertView.findViewById(R.id.someText);
+                holder.imageView2 = (ImageView) convertView.findViewById(R.id.imageView2);
 
                 convertView.setTag(holder);
 
@@ -65,22 +76,14 @@ public class LocalsAdapter extends ArrayAdapter<ChatUser> {
             }
 
             holder.userName.setText(userName);
-
-
-            //create the imageloader object
-//            ImageLoader imageLoader = ImageLoader.getInstance();
-//
-//            int defaultImage = mContext.getResources().getIdentifier("@drawable/image_failed",null,mContext.getPackageName());
-//
-//            //create display options
-//            DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
-//                    .cacheOnDisc(true).resetViewBeforeLoading(true)
-//                    .showImageForEmptyUri(defaultImage)
-//                    .showImageOnFail(defaultImage)
-//                    .showImageOnLoading(defaultImage).build();
-//
-//            //download and display image from url
-//            imageLoader.displayImage(imgUrl, holder.image, options);
+            holder.someText.setText(userEmail);
+            Glide
+                    .with(mContext)
+                    .load(userAvatar)
+                    .thumbnail(0.1f) //shows mini image which weight 0.1 from real image while real image is downloading
+                    .apply(RequestOptions
+                            .circleCropTransform())
+                    .into(holder.imageView2);
 
             return convertView;
 
@@ -94,20 +97,4 @@ public class LocalsAdapter extends ArrayAdapter<ChatUser> {
     /**
      * Required for setting up the Universal Image loader Library
      */
-//    private void setupImageLoader(){
-//        // UNIVERSAL IMAGE LOADER SETUP
-//        DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
-//                .cacheOnDisc(true).cacheInMemory(true)
-//                .imageScaleType(ImageScaleType.EXACTLY)
-//                .displayer(new FadeInBitmapDisplayer(300)).build();
-//
-//        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
-//                mContext)
-//                .defaultDisplayImageOptions(defaultOptions)
-//                .memoryCache(new WeakMemoryCache())
-//                .discCacheSize(100 * 1024 * 1024).build();
-//
-//        ImageLoader.getInstance().init(config);
-//        // END - UNIVERSAL IMAGE LOADER SETUP
-//    }
 }

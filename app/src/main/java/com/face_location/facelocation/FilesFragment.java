@@ -1,13 +1,15 @@
 package com.face_location.facelocation;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.face_location.facelocation.model.DataBase.DataBaseHelper;
 import com.face_location.facelocation.model.FacelocationAPI;
@@ -31,7 +33,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class FilesFragment extends Fragment {
 
     ListView listView;
-    String url, token;
+    String url, token, fileURL;
     private static final String TAG = "FilesFragment";
     ArrayList<Files> filezzz;
     String[] applicationData;
@@ -79,11 +81,10 @@ public class FilesFragment extends Fragment {
 
                 List<File> files = response.body().getFiles();
                 if (files.isEmpty()){
-                    Toast.makeText(getContext(), "Немає файлів", Toast.LENGTH_LONG).show();
+
                 } else {
                     File file;
                     String fileName;
-                    String fileURL;
 
                     for (int i = 0; i < files.size(); i++) {
                         file = files.get(i);
@@ -99,6 +100,14 @@ public class FilesFragment extends Fragment {
 
                     FileAdapter myFileAdapter = new FileAdapter(getContext(), R.layout.file_card, filezzz);
                     listView.setAdapter(myFileAdapter);
+
+                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(fileURL));
+                            startActivity(browserIntent);
+                        }
+                    });
                 }
 
             }

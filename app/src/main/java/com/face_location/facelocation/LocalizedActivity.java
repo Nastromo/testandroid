@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,6 +16,9 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.face_location.facelocation.model.DataBase.DataBaseHelper;
+import com.face_location.facelocation.model.GetEvent.User;
+
+import java.util.ArrayList;
 
 public class LocalizedActivity extends AppCompatActivity {
 
@@ -23,7 +27,9 @@ public class LocalizedActivity extends AppCompatActivity {
     String TAG = "LocalizedActivity";
     DataBaseHelper applicationDB;
     String[] userArrayData;
-    String eventID;
+    String eventID, eventNameFromIntent, usersQuantityFromIntent;
+    ArrayList<User> parcelables;
+    TextView eventName, usersQuantity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +37,18 @@ public class LocalizedActivity extends AppCompatActivity {
         setContentView(R.layout.activity_localized);
 
         eventID = getIntent().getStringExtra("id");
+        eventNameFromIntent = getIntent().getStringExtra("event_name");
+        usersQuantityFromIntent = getIntent().getStringExtra("users_quantity");
+
+        eventName = (TextView) findViewById(R.id.eventName);
+        eventName.setText(eventNameFromIntent);
+
+        usersQuantity = (TextView) findViewById(R.id.usersQuantity);
+        usersQuantity.setText(usersQuantityFromIntent);
+
+        parcelables = getIntent().getParcelableArrayListExtra("data");
+        Log.i(TAG, "РАЗМЕР ЛИСТА ДЛЯ ПАРСА НА СЛЕД ЄКРАНЕ: " + parcelables.size());
+        Log.i(TAG, "АВАТР НА СТАРНИЦЕ ЛОКАЛАЙЗЕД АКТИВИТИ: " + parcelables.get(0).getAvatarMob());
 
         TextView backTextView = (TextView) findViewById(R.id.backTextView);
         backTextView.setOnClickListener(new View.OnClickListener() {

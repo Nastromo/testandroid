@@ -167,7 +167,7 @@ public interface FacelocationAPI {
 
     //Localize User on Event
     @POST("api/events/{eventID}/activate")
-    Call<LocalizationResponse> localizUser(
+    Call <List<LocalizationResponse>> localizUser(
             @HeaderMap Map<String, String> headers,
             @Path("eventID") String eventID,
             @Body LocalizationBody body

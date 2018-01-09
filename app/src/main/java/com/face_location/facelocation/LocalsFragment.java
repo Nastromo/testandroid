@@ -1,11 +1,14 @@
 package com.face_location.facelocation;
 
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+
+import com.face_location.facelocation.model.GetEvent.User;
 
 import java.util.ArrayList;
 
@@ -17,6 +20,7 @@ public class LocalsFragment extends Fragment{
 
 
     ListView groupList, localsList;
+    private static final String TAG = "LocalsFragment";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -26,13 +30,18 @@ public class LocalsFragment extends Fragment{
         ArrayList<ChatUser> users = new ArrayList<>();
         ArrayList<Group> groups = new ArrayList<>();
 
+        ArrayList<User> localizedUser = getActivity().getIntent().getParcelableArrayListExtra("data");
+        Log.i(TAG, "РАЗМЕР СПИСКА ВО ФРАГМЕНТЕ: " + localizedUser.size());
 
         for (int k = 0; k < 1; k++) {
             groups.add(new Group("Название группового чата", "Афанасий Петрович, Анна Лаврова"));
         }
 
-        for (int i = 0; i < 15; i++) {
-            users.add(new ChatUser("Имя Фамилия " + i));
+        for (int i = 0; i < localizedUser.size(); i++) {
+            users.add(new ChatUser(
+                    localizedUser.get(i).getUsername(),
+                    localizedUser.get(i).getEmail(),
+                    localizedUser.get(i).getAvatarMob()));
         }
 
 

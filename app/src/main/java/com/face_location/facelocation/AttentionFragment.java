@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.face_location.facelocation.model.DataBase.DataBaseHelper;
 import com.face_location.facelocation.model.FacelocationAPI;
@@ -80,7 +79,7 @@ public class AttentionFragment extends Fragment {
 
                 List<Announcement> announcements = response.body().getAnnouncements();
                 if (announcements.isEmpty()){
-                    Toast.makeText(getContext(), "Немає оголошень", Toast.LENGTH_LONG).show();
+
                 }else {
                     List<String > annTitles = new ArrayList<>();
                     Announcement announcement;

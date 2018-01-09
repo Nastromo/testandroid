@@ -20,6 +20,7 @@ import com.face_location.facelocation.model.FacelocationAPI;
 import com.face_location.facelocation.model.GetEvent.EventResponse;
 import com.face_location.facelocation.model.GetEvent.Location;
 import com.face_location.facelocation.model.GetEvent.Subscriber;
+import com.face_location.facelocation.model.GetEvent.User;
 import com.face_location.facelocation.model.PostLocalization.LocalizationBody;
 import com.face_location.facelocation.model.PostLocalization.LocalizationResponse;
 
@@ -48,6 +49,8 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
     String eventDate, eventIDfromMap;
     LinearLayout linearLayout2;
     static int eventPassTypeInt;
+    ArrayList<User> localizedUserList;
+    String eventLocationTitle, eventTitle;
 
 
     @Override
@@ -138,27 +141,49 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
 
         LocalizationBody localizationBody = new LocalizationBody(latitude, longitude);
 
-        Call<LocalizationResponse> call = api.localizUser(headers, eventID, localizationBody);
-        call.enqueue(new Callback<LocalizationResponse>() {
+        Call<List<LocalizationResponse>> call = api.localizUser(headers, eventID, localizationBody);
+        call.enqueue(new Callback<List<LocalizationResponse>>() {
             @Override
-            public void onResponse(Call<LocalizationResponse> call, Response<LocalizationResponse> response) {
+            public void onResponse(Call<List<LocalizationResponse>> call, Response<List<LocalizationResponse>> response) {
                 Log.i(TAG, "ОТВЕТ СЕРВЕРА НА ЛОКАЛИЗАЦИЮ: " + response.toString());
 
-                if (response.code() == 200){
-                    int success = response.body().getSuccess();
-                    if (success == 1){
+                List<LocalizationResponse> usersList = new ArrayList<>();
+                localizedUserList = new ArrayList<>();
+
+                if (response.code() == 200 && usersList != null){
+                    usersList = response.body();
+
+                    for (int i = 0; i < usersList.size() ; i++) {
+                        LocalizationResponse localizedUser = usersList.get(i);
+
+                        Log.i(TAG, "ЗАШЕЛ В ЦИКЛ - парсим список юзеров");
+
+                        String localizedUserName = localizedUser.getUser().getUsername();
+                        String localizedUserEmail = localizedUser.getUser().getEmail();
+                        String localizedUserAvatar = localizedUser.getUser().getAvatarMob();
+                        Log.i(TAG, "АААААВАТАР: " + localizedUserAvatar);
+
+                        User user = new User(localizedUserName, localizedUserEmail, localizedUserAvatar);
+                        localizedUserList.add(user);
+
+                        Log.i(TAG, "РАЗМЕР СПИСКА ЛОКАЛИЗОВАНЫХ ЮЗЕРОВ - " + localizedUserList.size());
+                    }
+
                         Intent localizedActivity = new Intent(EventActivity.this, LocalizedActivity.class);
                         localizedActivity.putExtra("id", eventID);
+                        localizedActivity.putExtra("users_quantity", String.valueOf(localizedUserList.size()));
+                        localizedActivity.putExtra("event_name", eventTitle);
+                        localizedActivity.putParcelableArrayListExtra("data", localizedUserList);
                         startActivity(localizedActivity);
-                    }
+
                 }else {
                     Toast.makeText(EventActivity.this, "Треба бути у зоні івенту, щоб локалізуватись!", Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<LocalizationResponse> call, Throwable t) {
-                Log.i(TAG, "onFailure: " + t.toString());
+            public void onFailure(Call<List<LocalizationResponse>> call, Throwable t) {
+                Log.i(TAG, "onFailure ЛОКАЛИЗАЦИЯ: " + t.toString());
             }
         });
     }
@@ -182,7 +207,7 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
             public void onResponse(Call<EventResponse> call, Response<EventResponse> response) {
                 Log.i(TAG, "ОТВЕТ СЕРВЕРА: " + response.toString());
 
-                String eventTitle = response.body().getTitle();
+                eventTitle = response.body().getTitle();
                 eventDate = response.body().getTime().getStart();
 
                 eventPassTypeInt = 57;
@@ -227,7 +252,7 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
 
                 List<Location> eventLocations = response.body().getLocations();
                 Location eventLocation;
-                String eventLocationTitle = "Заголовок події";
+                eventLocationTitle = "Заголовок події";
                 if (eventLocations.size() > 0){
                     eventLocation = eventLocations.get(0);
                     eventLocationTitle = eventLocation.getTitle();
