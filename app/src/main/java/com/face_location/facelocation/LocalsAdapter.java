@@ -24,6 +24,7 @@ public class LocalsAdapter extends ArrayAdapter<ChatUser> {
     private static final String TAG = "LocalsAdapter";
     private Context mContext;
     private int mResource;
+    String[] applicationData;
 
 
     private static class ViewHolder {
@@ -48,6 +49,10 @@ public class LocalsAdapter extends ArrayAdapter<ChatUser> {
         String userEmail = getItem(position).getEmail();
         String userAvatar = getItem(position).getAvatar();
         Log.i(TAG, "ССЫЛКА НА АВАТАР: " + userAvatar);
+
+        if (userName == null){
+            userName = "Ім'я не вказано";
+        }
 
         if (userName.length() > 25){
             userName = userName.substring(0, Math.min(userName.length(), 25)).trim() + "...";
@@ -93,8 +98,4 @@ public class LocalsAdapter extends ArrayAdapter<ChatUser> {
         }
 
     }
-
-    /**
-     * Required for setting up the Universal Image loader Library
-     */
 }
