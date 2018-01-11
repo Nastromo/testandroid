@@ -172,4 +172,13 @@ public interface FacelocationAPI {
             @Path("eventID") String eventID,
             @Body LocalizationBody body
     );
+
+    //Ban user on event
+    @GET("api/events/{eventID}/ban/{userID}")
+    Call <ResponseBody> userBan(
+            @HeaderMap Map<String, String> headers,
+            @Path("eventID") String eventID,
+            @Path("userID") String userID
+    );
+
 }

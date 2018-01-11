@@ -46,7 +46,7 @@ public class MyEventActivity extends AppCompatActivity implements View.OnClickLi
     List<SimilarEvent> similarEventList;
     private TextView eventTitleView, eventDateView, eventLocationView, passTypeView, eventTimeView, eventDescriptionView, userQuantity, userQuantitySecond, userQuantityThird;
     ImageView eventPhoto, userAvatar, userAvatarSecond, userAvatarThird;
-    String eventDate, eventIDfromMap;
+    String eventDate, userID;
     LinearLayout linearLayout2;
     static int eventPassTypeInt;
     ArrayList<User> localizedUserList;
@@ -139,7 +139,7 @@ public class MyEventActivity extends AppCompatActivity implements View.OnClickLi
         headers.put("Content-Type", "application/json");
         headers.put("X-Auth", token);
 
-        LocalizationBody localizationBody = new LocalizationBody(latitude, longitude);
+        final LocalizationBody localizationBody = new LocalizationBody(latitude, longitude);
 
         Call<List<LocalizationResponse>> call = api.localizUser(headers, eventID, localizationBody);
         call.enqueue(new Callback<List<LocalizationResponse>>() {
@@ -150,29 +150,28 @@ public class MyEventActivity extends AppCompatActivity implements View.OnClickLi
                 List<LocalizationResponse> usersList = new ArrayList<>();
                 localizedUserList = new ArrayList<>();
 
-                if (response.code() == 200 && usersList != null){
+                if (response.code() == 200){
                     usersList = response.body();
 
                     for (int i = 0; i < usersList.size() ; i++) {
                         LocalizationResponse localizedUser = usersList.get(i);
 
-                        Log.i(TAG, "ЗАШЕЛ В ЦИКЛ - парсим список юзеров");
-
                         String localizedUserName = localizedUser.getUser().getUsername();
                         String localizedUserEmail = localizedUser.getUser().getEmail();
                         String localizedUserAvatar = localizedUser.getUser().getAvatarMob();
-                        Log.i(TAG, "АААААВАТАР: " + localizedUserAvatar);
+                        String idEvent = eventID;
 
-                        User user = new User(localizedUserName, localizedUserEmail, localizedUserAvatar);
+                        User user = new User(localizedUserName, localizedUserEmail, localizedUserAvatar, idEvent);
                         localizedUserList.add(user);
-
-                        Log.i(TAG, "РАЗМЕР СПИСКА ЛОКАЛИЗОВАНЫХ ЮЗЕРОВ - " + localizedUserList.size());
                     }
+
+                    Log.i(TAG, "РАЗМЕР СПИСКА ЛОКАЛИЗОВАНЫХ ЮЗЕРОВ - " + localizedUserList.size());
 
                     Intent localizedActivity = new Intent(MyEventActivity.this, LocalizedActivity.class);
                     localizedActivity.putExtra("id", eventID);
                     localizedActivity.putExtra("users_quantity", String.valueOf(localizedUserList.size()));
                     localizedActivity.putExtra("event_name", eventTitle);
+                    localizedActivity.putExtra("isMyEvent", true);
                     localizedActivity.putParcelableArrayListExtra("data", localizedUserList);
                     startActivity(localizedActivity);
 

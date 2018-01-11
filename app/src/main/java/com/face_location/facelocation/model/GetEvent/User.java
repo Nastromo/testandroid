@@ -8,6 +8,8 @@ import com.google.gson.annotations.SerializedName;
 
 public class User implements Parcelable {
 
+    private String eventID;
+
     @SerializedName("_id")
     @Expose
     private String id;
@@ -39,10 +41,18 @@ public class User implements Parcelable {
         this.avatarMob = avatarMob;
     }
 
+    public User(String username, String email, String avatarMob, String eventID) {
+        this.username = username;
+        this.email = email;
+        this.avatarMob = avatarMob;
+        this.eventID = eventID;
+    }
+
     public User(Parcel in) {
         username = in.readString();
         email = in.readString();
         avatarMob = in.readString();
+        eventID = in.readString();
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {
@@ -56,6 +66,14 @@ public class User implements Parcelable {
             return new User[size];
         }
     };
+
+    public String getEventID() {
+        return eventID;
+    }
+
+    public void setEventID(String eventID) {
+        this.eventID = eventID;
+    }
 
     public String getUsername() {
         return username;
@@ -131,6 +149,7 @@ public class User implements Parcelable {
         parcel.writeString(username);
         parcel.writeString(email);
         parcel.writeString(avatarMob);
+        parcel.writeString(eventID);
     }
 }
 

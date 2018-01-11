@@ -20,6 +20,7 @@ public class LocalsFragment extends Fragment{
 
 
     ListView groupList, localsList;
+
     private static final String TAG = "LocalsFragment";
 
     @Override
@@ -41,7 +42,8 @@ public class LocalsFragment extends Fragment{
             users.add(new ChatUser(
                     localizedUser.get(i).getUsername(),
                     localizedUser.get(i).getEmail(),
-                    localizedUser.get(i).getAvatarMob()));
+                    localizedUser.get(i).getAvatarMob(),
+                    localizedUser.get(i).getEventID()));
         }
 
 
@@ -49,8 +51,9 @@ public class LocalsFragment extends Fragment{
         GroupAdapter groupAdapter = new GroupAdapter(getContext(), R.layout.group_card, groups);
         groupList.setAdapter(groupAdapter);
 
+        boolean isMyEventActivity = getActivity().getIntent().getBooleanExtra("isMyEvent", true);
         localsList = (ListView) rootView.findViewById(R.id.localsListView);
-        LocalsAdapter localsAdapter = new LocalsAdapter(getContext(), R.layout.locals_card, users);
+        LocalsAdapter localsAdapter = new LocalsAdapter(getContext(), R.layout.locals_card, users, isMyEventActivity);
         localsList.setAdapter(localsAdapter);
 
         return rootView;

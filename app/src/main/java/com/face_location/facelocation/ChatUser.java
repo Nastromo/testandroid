@@ -8,11 +8,13 @@ public class ChatUser {
     String name;
     String email;
     String avatar;
+    String eventID;
 
-    public ChatUser(String name, String email, String avatar) {
+    public ChatUser(String name, String email, String avatar, String eventID) {
         this.name = name;
         this.email = email;
         this.avatar = avatar;
+        this.eventID = eventID;
     }
 
     public String getName() {
@@ -37,6 +39,14 @@ public class ChatUser {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public String getEventID() {
+        return eventID;
+    }
+
+    public void setEventID(String eventID) {
+        this.eventID = eventID;
     }
 }
 

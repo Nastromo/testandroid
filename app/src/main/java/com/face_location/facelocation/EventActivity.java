@@ -145,23 +145,19 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
                     for (int i = 0; i < usersList.size() ; i++) {
                         LocalizationResponse localizedUser = usersList.get(i);
 
-                        Log.i(TAG, "ЗАШЕЛ В ЦИКЛ - парсим список юзеров");
-
                         String localizedUserName = localizedUser.getUser().getUsername();
                         String localizedUserEmail = localizedUser.getUser().getEmail();
                         String localizedUserAvatar = localizedUser.getUser().getAvatarMob();
-                        Log.i(TAG, "АААААВАТАР: " + localizedUserAvatar);
 
                         User user = new User(localizedUserName, localizedUserEmail, localizedUserAvatar);
                         localizedUserList.add(user);
-
-                        Log.i(TAG, "РАЗМЕР СПИСКА ЛОКАЛИЗОВАНЫХ ЮЗЕРОВ - " + localizedUserList.size());
                     }
 
                         Intent localizedActivity = new Intent(EventActivity.this, LocalizedActivity.class);
                         localizedActivity.putExtra("id", eventID);
                         localizedActivity.putExtra("users_quantity", String.valueOf(localizedUserList.size()));
                         localizedActivity.putExtra("event_name", eventTitle);
+                        localizedActivity.putExtra("isMyEvent", false);
                         localizedActivity.putParcelableArrayListExtra("data", localizedUserList);
                         startActivity(localizedActivity);
 

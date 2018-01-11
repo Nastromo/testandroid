@@ -30,6 +30,7 @@ public class LocalizedActivity extends AppCompatActivity {
     String eventID, eventNameFromIntent, usersQuantityFromIntent;
     ArrayList<User> parcelables;
     TextView eventName, usersQuantity;
+    boolean isMyEvent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +100,8 @@ public class LocalizedActivity extends AppCompatActivity {
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
+
+        isMyEvent = getIntent().getBooleanExtra("isMyEvent", true);
     }
 
     //Makes tabs spin
@@ -112,8 +115,8 @@ public class LocalizedActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    LocalsFragment locals = new LocalsFragment();
-                    return locals;
+                    LocalsFragment localsFragment = new LocalsFragment();
+                    return localsFragment;
 
                 case 1:
                     ChatFragment chatFragment = new ChatFragment();
