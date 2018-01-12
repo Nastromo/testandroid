@@ -48,4 +48,7 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.2.0'
 
     compile 'joda-time:joda-time:2.9.9'
+
+    compile 'com.github.nkzawa:socket.io-client:0.3.0'
+
 }
