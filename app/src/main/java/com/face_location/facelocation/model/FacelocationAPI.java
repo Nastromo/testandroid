@@ -2,6 +2,7 @@ package com.face_location.facelocation.model;
 
 import com.face_location.facelocation.model.Events.MyEventResponse;
 import com.face_location.facelocation.model.GetEvent.EventResponse;
+import com.face_location.facelocation.model.GetMainChat.MainChatResponse;
 import com.face_location.facelocation.model.GetNearestEvents.NearestEventResponse;
 import com.face_location.facelocation.model.Issue.IssueBody;
 import com.face_location.facelocation.model.Location.LocationBody;
@@ -179,6 +180,13 @@ public interface FacelocationAPI {
             @HeaderMap Map<String, String> headers,
             @Path("eventID") String eventID,
             @Path("userID") String userID
+    );
+
+    //Get Main Event Chat
+    @GET("api/chat/")
+    Call <List<MainChatResponse>> getMainChat(
+            @HeaderMap Map<String, String> headers,
+            @Query("event") String eventID
     );
 
 }

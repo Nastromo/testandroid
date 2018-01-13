@@ -120,6 +120,9 @@ public class LocalizedActivity extends AppCompatActivity {
 
                 case 1:
                     ChatFragment chatFragment = new ChatFragment();
+                    Bundle bundleChat = new Bundle();
+                    bundleChat.putString("eventID", eventID);
+                    chatFragment.setArguments(bundleChat);
                     return chatFragment;
 
                 case 2:

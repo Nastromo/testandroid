@@ -490,7 +490,6 @@ public class MainActivity extends AppCompatActivity
     public void onLocationChanged(Location location) {
 
         counter++;
-        Log.i(TAG, "ВЫЗВАЛСЯ onLocationChanged: " + counter);
         mLastLocation = location;
         if (mCurrLocationMarker != null) {
             mCurrLocationMarker.remove();

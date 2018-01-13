@@ -11,10 +11,20 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.face_location.facelocation.Utils.ChatAdapter;
+import com.face_location.facelocation.model.DataBase.DataBaseHelper;
+import com.face_location.facelocation.model.FacelocationAPI;
+import com.face_location.facelocation.model.GetMainChat.MainChatResponse;
+import com.face_location.facelocation.model.GetMainChat.Message;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by admin on 30.11.17.
@@ -24,11 +34,14 @@ public class ChatFragment extends Fragment {
 
     private static final String TAG = "ChatFragment";
 
+    View rootView;
     RecyclerView recyclerView;
     RecyclerView.Adapter adapter;
     RecyclerView.LayoutManager manager;
     EditText messageEditText;
     Button sendBtn;
+    String url, token, eventID, myID;
+    String[] applicationData;
 
     com.github.nkzawa.socketio.client.Socket socket;
 
@@ -39,35 +52,23 @@ public class ChatFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.chat_fragment, container, false);
+        rootView = inflater.inflate(R.layout.chat_fragment, container, false);
 
-        chatMessages.add("В Черновицкой области коли");
-        chatMessages.add("ет государственное учреждение Черновицкий областной лаб");
-        chatMessages.add("По состоянию на 12 января в Черновицкой области зарегистрировано 468 случаев кори. Среди заболевших 372 детей (79%)");
-        chatMessages.add("По данным центра");
-        chatMessages.add("Также в столице временно приостановлена работа цирка Кобзов из-за выявленного случая");
+        url = getString(R.string.base_url);
+        DataBaseHelper applicationDB = DataBaseHelper.getInstance(getContext());
+        applicationData = applicationDB.retrieveFirstLoginValues();
+        token = applicationData[5];
+        myID = applicationData[0];
 
-        senders.add("Никита");
-        senders.add("Валентин");
-        senders.add("Маша");
-        senders.add("Вероника");
-        senders.add("Наташа");
+        Bundle bundle = getArguments();
+        eventID = bundle.getString("eventID");
+        Log.i(TAG, "Какой ивент проверяем: " + eventID);
 
-        avatars.add("https://smhttp-ssl-33667.nexcesscdn.net/manual/wp-content/uploads/2017/01/triangle-face-shape-beard-2.jpg");
-        avatars.add("http://v.img.com.ua/b/1100x999999/8/05/65b315f1f62d9a4ace47fb3bf8a92058.jpg");
-        avatars.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTktdpqq93bqVmiIuozLHHj2sEpFEtz0HdKaqaPw1TgMZuh06tGKA");
-        avatars.add("https://www.bolde.com/wp-content/uploads/2015/08/iStock_000061900384_Small-400x400.jpg");
-        avatars.add("http://www.sostav.ru/app/public/images/news/2017/05/10/compressed/lico01.jpeg");
-
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.mainChat);
-        adapter = new ChatAdapter(chatMessages, senders, avatars);
-        recyclerView.setAdapter(adapter);
-
-        manager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(manager);
-
-
-
+        chatMessages.clear();
+        senders.clear();
+        avatars.clear();
+        getChatData();
+        
         messageEditText = (EditText) rootView.findViewById(R.id.messageEditText);
         sendBtn = (Button) rootView.findViewById(R.id.sendBtn);
         sendBtn.setOnClickListener(new View.OnClickListener() {
@@ -100,15 +101,17 @@ public class ChatFragment extends Fragment {
     private void sendMessage(){
         String message = messageEditText.getText().toString().trim();
         messageEditText.setText("");
-        addMessage(message, "me");
+        addMessage(message, myID);
 //        socket.emit("message", message);
     }
 
-    private void addMessage(String message, String senderName) {
+    private void addMessage(String message, String senderID) {
         chatMessages.add(message);
-        senders.add(senderName);
+        senders.add(senderID);
 
         adapter.notifyItemInserted(chatMessages.size() - 1);
+        adapter.notifyItemInserted(senders.size() - 1);
+
         recyclerView.smoothScrollToPosition(chatMessages.size() - 1);
     }
 
@@ -116,5 +119,73 @@ public class ChatFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
 //        socket.disconnect();
+    }
+
+    private void getChatData(){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(url)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+
+        FacelocationAPI api = retrofit.create(FacelocationAPI.class);
+
+        HashMap<String, String> headers = new HashMap<String, String>();
+        headers.put("Content-Type", "application/json");
+        headers.put("X-Auth", token);
+
+        Log.i(TAG, "Какой ивент проверяем: " + eventID);
+
+        Call <List<MainChatResponse>> call = api.getMainChat(headers, eventID);
+        call.enqueue(new Callback<List<MainChatResponse>>() {
+            @Override
+            public void onResponse(Call<List<MainChatResponse>> call, Response<List<MainChatResponse>> response) {
+                Log.i(TAG, "ОТВЕТ СЕРВЕРА - ПОЛУЧИТЬ ЧАТ: " + response.toString());
+
+                List<MainChatResponse> chatResponse = response.body();
+                for (int i = 0; i < chatResponse.size(); i++) {
+                    MainChatResponse mainChat = chatResponse.get(i);
+
+                    if (mainChat.getType() == 0){
+                        List<Message> messages = mainChat.getMessages();
+
+                        String userID;
+                        String userMessage;
+                        String userAvatar;
+                        Log.i(TAG, "РАЗМЕР messages: " + messages.size());
+                        for (int j = 0; j < messages.size(); j++) {
+                            Message message = messages.get(j);
+
+                            userID = message.getUser().getId();
+                            Log.i(TAG, "ID ЮЕЗАРА В ЧАТЕ: " + userID);
+                            senders.add(userID);
+
+                            userMessage = message.getText();
+                            Log.i(TAG, "СООБЩЕНИЕ ЮЕЗАРА В ЧАТЕ: " + userMessage);
+                            chatMessages.add(userMessage);
+
+                            userAvatar = message.getUser().getAvatarMob();
+                            Log.i(TAG, "АВАТАР ЮЕЗАРА В ЧАТЕ: " + userAvatar);
+                            avatars.add(userAvatar);
+
+                        }
+
+                        recyclerView = (RecyclerView) rootView.findViewById(R.id.mainChat);
+                        adapter = new ChatAdapter(chatMessages, senders, avatars, myID);
+                        recyclerView.setAdapter(adapter);
+
+                        manager = new LinearLayoutManager(getContext());
+                        recyclerView.setLayoutManager(manager);
+                        recyclerView.scrollToPosition(chatMessages.size() - 1);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<MainChatResponse>> call, Throwable t) {
+                Log.i(TAG, "ОШИБКА НА ПОЛУЧЕНИЕ ЧАТА: " + t.toString());
+
+            }
+        });
     }
 }

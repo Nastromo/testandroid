@@ -1,4 +1,4 @@
-package com.face_location.facelocation.Utils;
+package com.face_location.facelocation;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.face_location.facelocation.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,11 +24,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
     List<String> chatData = new ArrayList<>();
     List<String> sender = new ArrayList<>();
     List<String> avatars = new ArrayList<>();
+    String myID;
 
-    public ChatAdapter(List<String> messageData, List<String> sender, List<String> avatars) {
+    public ChatAdapter(List<String> messageData, List<String> sender, List<String> avatars, String myID) {
         this.chatData = messageData;
         this.sender = sender;
         this.avatars = avatars;
+        this.myID = myID;
     }
 
     @Override
@@ -41,7 +42,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        if (sender.get(position) == "me"){
+        if (sender.get(position).equals(myID)){
             holder.getUserMessage().setText(chatData.get(position));
             holder.getUserMessage().setBackground(holder.itemView.getResources().getDrawable(R.drawable.my_message_rec));
             holder.getUserMessage().setTextColor(holder.itemView.getResources().getColor(R.color.colorBlack));
