@@ -15,7 +15,10 @@ import com.face_location.facelocation.model.DataBase.DataBaseHelper;
 import com.face_location.facelocation.model.FacelocationAPI;
 import com.face_location.facelocation.model.GetMainChat.MainChatResponse;
 import com.face_location.facelocation.model.GetMainChat.Message;
+import com.github.nkzawa.emitter.Emitter;
+import com.github.nkzawa.socketio.client.IO;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -79,30 +82,30 @@ public class ChatFragment extends Fragment {
             }
         });
 
-//        try{
-//            socket = IO.socket("https://face-location.com:80");
-//        } catch (URISyntaxException e){
-//            Log.i(TAG, "ОШИБКА СОКЕТА: ");
-//        }
-//
-//        socket.connect();
-//        socket.on("message", handling);
+        try{
+            socket = IO.socket("https://face-location.com:80");
+        } catch (URISyntaxException e){
+            Log.i(TAG, "ОШИБКА СОКЕТА: ");
+        }
+
+        socket.connect();
+        socket.on("message", handling);
 
         return rootView;
     }
 
-//    private Emitter.Listener handling = new Emitter.Listener() {
-//        @Override
-//        public void call(Object... args) {
-//            addMessage(args[0].toString(), null);
-//        }
-//    };
+    private Emitter.Listener handling = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            addMessage(args[0].toString(), myID);
+        }
+    };
 
     private void sendMessage(){
         String message = messageEditText.getText().toString().trim();
         messageEditText.setText("");
         addMessage(message, myID);
-//        socket.emit("message", message);
+        socket.emit("message", message);
     }
 
     private void addMessage(String message, String senderID) {
@@ -118,7 +121,7 @@ public class ChatFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-//        socket.disconnect();
+        socket.disconnect();
     }
 
     private void getChatData(){
