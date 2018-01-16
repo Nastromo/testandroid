@@ -18,6 +18,9 @@ import com.face_location.facelocation.model.GetMainChat.Message;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,7 +46,7 @@ public class ChatFragment extends Fragment {
     RecyclerView.LayoutManager manager;
     EditText messageEditText;
     Button sendBtn;
-    String url, token, eventID, myID;
+    String url, token, eventID, myID, chatID;
     String[] applicationData;
 
     com.github.nkzawa.socketio.client.Socket socket;
@@ -78,34 +81,88 @@ public class ChatFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Log.i(TAG, "ОТПРАВИТЬ СООБЩЕНИЕ: ");
-                sendMessage();
+                try {
+                    sendMessage();
+                } catch (JSONException e) {
+                    Log.i(TAG, "onClick: " + e.toString());;
+                }
             }
         });
 
         try{
-            socket = IO.socket("https://face-location.com:80");
+            socket = IO.socket("https://face-location.com:443?token=" + token);
         } catch (URISyntaxException e){
             Log.i(TAG, "ОШИБКА СОКЕТА: ");
         }
 
         socket.connect();
-        socket.on("message", handling);
+
+        JSONObject chatRoom = new JSONObject();
+        try {
+            chatRoom.put("chat", chatID);
+            chatRoom.put("user", myID);
+        } catch (JSONException e) {
+            Log.i(TAG, "ОШИБКА ВОЙТИ В РУМУ: " + e.toString());
+        }
+
+        socket.emit("join", chatRoom);
+        socket.on("new-message", handling);
+
+
+
 
         return rootView;
     }
 
     private Emitter.Listener handling = new Emitter.Listener() {
         @Override
-        public void call(Object... args) {
-            addMessage(args[0].toString(), myID);
+        public void call(final Object... args) {
+            Log.i(TAG, "ХЕНДЛЕР: " + args[0].toString());
+
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    JSONObject data = (JSONObject) args[0];
+                    String chat;
+                    String senderID;
+                    String message;
+                    try {
+                        chat = data.getString("chat");
+//                        senderID = data.getString("userID");
+                        senderID = "заглушка";
+                        message = data.getJSONObject("message").getString("text");
+
+                        Log.i(TAG, "СООБЩЕНИЕ ОТ ЛЕВЫХ ПОЛЬЗОВАТЕЛЕЙ: " + chat + " " + senderID + " " + message);
+                    } catch (JSONException e) {
+                        Log.i(TAG, "run: " + e.toString());
+                        return;
+                    }
+
+                    // add the message to view
+                    addMessage(message, senderID);
+                }
+            });
         }
     };
 
-    private void sendMessage(){
-        String message = messageEditText.getText().toString().trim();
+
+    private void sendMessage() throws JSONException {
+        String messageText = messageEditText.getText().toString().trim();
         messageEditText.setText("");
-        addMessage(message, myID);
-        socket.emit("message", message);
+        addMessage(messageText, myID);
+
+        JSONObject messageData = new JSONObject();
+        messageData.put("chat", chatID);
+
+        JSONObject message = new JSONObject();
+        message.put("user", myID);
+        message.put("text", messageText);
+
+        messageData.put("message", message);
+        messageData.put("user", myID);
+
+        Log.i(TAG, "sendMessage JSON: " + messageData);
+        socket.emit("save-message", messageData);
     }
 
     private void addMessage(String message, String senderID) {
@@ -122,6 +179,7 @@ public class ChatFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         socket.disconnect();
+        socket.off("new-message", handling);
     }
 
     private void getChatData(){
@@ -137,8 +195,6 @@ public class ChatFragment extends Fragment {
         headers.put("Content-Type", "application/json");
         headers.put("X-Auth", token);
 
-        Log.i(TAG, "Какой ивент проверяем: " + eventID);
-
         Call <List<MainChatResponse>> call = api.getMainChat(headers, eventID);
         call.enqueue(new Callback<List<MainChatResponse>>() {
             @Override
@@ -150,6 +206,7 @@ public class ChatFragment extends Fragment {
                     MainChatResponse mainChat = chatResponse.get(i);
 
                     if (mainChat.getType() == 0){
+                        chatID = mainChat.getId();
                         List<Message> messages = mainChat.getMessages();
 
                         String userID;
