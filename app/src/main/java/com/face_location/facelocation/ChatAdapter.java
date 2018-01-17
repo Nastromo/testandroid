@@ -9,6 +9,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,12 +56,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
             holder.getMessageLayout().setGravity(Gravity.RIGHT);
         } else {
             holder.getUserMessage().setText(chatData.get(position));
-//            Glide
-//                    .with(holder.itemView)
-//                    .load(avatars.get(position))
-//                    .thumbnail(0.1f)
-//                    .apply(RequestOptions.circleCropTransform())
-//                    .into(holder.getUserAvatar());
+            Glide
+                    .with(holder.itemView)
+                    .load(avatars.get(position))
+                    .thumbnail(0.1f)
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(holder.getUserAvatar());
         }
     }
 

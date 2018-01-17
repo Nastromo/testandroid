@@ -73,6 +73,13 @@ public class ChatFragment extends Fragment {
         chatMessages.clear();
         senders.clear();
         avatars.clear();
+
+        try{
+            socket = IO.socket("https://face-location.com:443?token=" + token);
+        } catch (URISyntaxException e){
+            Log.i(TAG, "ОШИБКА СОКЕТА: ");
+        }
+
         getChatData();
         
         messageEditText = (EditText) rootView.findViewById(R.id.messageEditText);
@@ -89,24 +96,7 @@ public class ChatFragment extends Fragment {
             }
         });
 
-        try{
-            socket = IO.socket("https://face-location.com:443?token=" + token);
-        } catch (URISyntaxException e){
-            Log.i(TAG, "ОШИБКА СОКЕТА: ");
-        }
-
-        socket.connect();
-
-        JSONObject chatRoom = new JSONObject();
-        try {
-            chatRoom.put("chat", chatID);
-            chatRoom.put("user", myID);
-        } catch (JSONException e) {
-            Log.i(TAG, "ОШИБКА ВОЙТИ В РУМУ: " + e.toString());
-        }
-
-        socket.emit("join", chatRoom);
-        socket.on("new-message", handling);
+        socket.on("new-message-mob", handling);
 
 
 
@@ -123,23 +113,23 @@ public class ChatFragment extends Fragment {
                 @Override
                 public void run() {
                     JSONObject data = (JSONObject) args[0];
-                    String chat;
                     String senderID;
+                    String avatar;
                     String message;
                     try {
-                        chat = data.getString("chat");
-//                        senderID = data.getString("userID");
-                        senderID = "заглушка";
+                        senderID = data.getJSONObject("message").getString("user");
+                        avatar = data.getJSONObject("message").getString("avatar_mob");
                         message = data.getJSONObject("message").getString("text");
 
-                        Log.i(TAG, "СООБЩЕНИЕ ОТ ЛЕВЫХ ПОЛЬЗОВАТЕЛЕЙ: " + chat + " " + senderID + " " + message);
+                        Log.i(TAG, "STRING: " + message);
+
                     } catch (JSONException e) {
                         Log.i(TAG, "run: " + e.toString());
                         return;
                     }
 
                     // add the message to view
-                    addMessage(message, senderID);
+                    addMessage(message, senderID, avatar);
                 }
             });
         }
@@ -149,7 +139,7 @@ public class ChatFragment extends Fragment {
     private void sendMessage() throws JSONException {
         String messageText = messageEditText.getText().toString().trim();
         messageEditText.setText("");
-        addMessage(messageText, myID);
+        addMessage(messageText, myID, "ignored_avatar_url");
 
         JSONObject messageData = new JSONObject();
         messageData.put("chat", chatID);
@@ -163,6 +153,18 @@ public class ChatFragment extends Fragment {
 
         Log.i(TAG, "sendMessage JSON: " + messageData);
         socket.emit("save-message", messageData);
+    }
+
+    private void addMessage(String message, String senderID, String avatar) {
+        chatMessages.add(message);
+        senders.add(senderID);
+        avatars.add(avatar);
+
+        adapter.notifyItemInserted(chatMessages.size() - 1);
+        adapter.notifyItemInserted(senders.size() - 1);
+        adapter.notifyItemInserted(avatars.size() - 1);
+
+        recyclerView.smoothScrollToPosition(chatMessages.size() - 1);
     }
 
     private void addMessage(String message, String senderID) {
@@ -179,7 +181,7 @@ public class ChatFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         socket.disconnect();
-        socket.off("new-message", handling);
+        socket.off("new-message-mob", handling);
     }
 
     private void getChatData(){
@@ -207,6 +209,17 @@ public class ChatFragment extends Fragment {
 
                     if (mainChat.getType() == 0){
                         chatID = mainChat.getId();
+
+                        socket.connect();
+                        JSONObject chatRoom = new JSONObject();
+                        try {
+                            chatRoom.put("chat", chatID);
+                            chatRoom.put("user", myID);
+                        } catch (JSONException e) {
+                            Log.i(TAG, "ОШИБКА ВОЙТИ В РУМУ: " + e.toString());
+                        }
+                        socket.emit("join", chatRoom);
+
                         List<Message> messages = mainChat.getMessages();
 
                         String userID;
