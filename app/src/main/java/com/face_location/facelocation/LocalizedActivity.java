@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -48,8 +47,6 @@ public class LocalizedActivity extends AppCompatActivity {
         usersQuantity.setText(usersQuantityFromIntent);
 
         parcelables = getIntent().getParcelableArrayListExtra("data");
-        Log.i(TAG, "РАЗМЕР ЛИСТА ДЛЯ ПАРСА НА СЛЕД ЄКРАНЕ: " + parcelables.size());
-        Log.i(TAG, "АВАТР НА СТАРНИЦЕ ЛОКАЛАЙЗЕД АКТИВИТИ: " + parcelables.get(0).getAvatarMob());
 
         TextView backTextView = (TextView) findViewById(R.id.backTextView);
         backTextView.setOnClickListener(new View.OnClickListener() {
@@ -116,6 +113,9 @@ public class LocalizedActivity extends AppCompatActivity {
             switch (position) {
                 case 0:
                     LocalsFragment localsFragment = new LocalsFragment();
+                    Bundle locals = new Bundle();
+                    locals.putParcelableArrayList("data", parcelables);
+                    localsFragment.setArguments(locals);
                     return localsFragment;
 
                 case 1:

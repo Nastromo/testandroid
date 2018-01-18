@@ -142,15 +142,19 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
                 if (response.code() == 200 && usersList != null){
                     usersList = response.body();
 
+
                     for (int i = 0; i < usersList.size() ; i++) {
                         LocalizationResponse localizedUser = usersList.get(i);
 
                         String localizedUserName = localizedUser.getUser().getUsername();
                         String localizedUserEmail = localizedUser.getUser().getEmail();
                         String localizedUserAvatar = localizedUser.getUser().getAvatarMob();
+                        int status = localizedUser.getUser().getStatus();
 
-                        User user = new User(localizedUserName, localizedUserEmail, localizedUserAvatar);
-                        localizedUserList.add(user);
+                        if (status != 1){
+                            User user = new User(localizedUserName, localizedUserEmail, localizedUserAvatar);
+                            localizedUserList.add(user);
+                        }
                     }
 
                         Intent localizedActivity = new Intent(EventActivity.this, LocalizedActivity.class);

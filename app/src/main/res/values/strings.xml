@@ -179,5 +179,9 @@
     <string name="save_changes">Зберегти зміни</string>
     <string name="edit_text">РЕДАГУВАТИ</string>
     <string name="mess_hint">Ваше повідомлення...</string>
+    <string name="new_group_chat">ВКАЖІТЬ НАЗВУ ЧАТУ</string>
+    <string name="chat_name">назва групового чату...</string>
+    <string name="create_chat">СТВОРИТИ</string>
+    <string name="chose_partisipent">ВИБЕРІТЬ УЧАСНИКІВ</string>
 
 </resources>

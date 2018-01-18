@@ -55,8 +55,8 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait"
             android:label="@string/title_activity_main"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <!-- Return this block if fragments need for swiping, else delete before release -->
@@ -68,59 +68,79 @@
            android:theme="@style/AppThemeScroll" />
         -->
         <!-- TODO android:windowSoftInputMode="adjustResize" - makes content jump under keyboard -->
-        <activity android:name=".AddLocationFirstActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".AddLocationSecondActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".AddLocationThirdActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".AddLocationFourthActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".LogInActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".RegistrationFirstActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".RegistrationSecondActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".NewEventFirstActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".NewEventSecondActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".NewEventThirdActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".NewEventFourthActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".NewEventFifthActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".NewEventSixthActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".NewEventSeventhActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".NewEventEighthActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".NewEventNinthActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".SearchLocationActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".SupportActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".AddLocationFirstActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AddLocationSecondActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AddLocationThirdActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AddLocationFourthActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".LogInActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RegistrationFirstActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RegistrationSecondActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".NewEventFirstActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".NewEventSecondActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".NewEventThirdActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".NewEventFourthActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".NewEventFifthActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".NewEventSixthActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".NewEventSeventhActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".NewEventEighthActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".NewEventNinthActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SearchLocationActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SupportActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".MyProfileActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".MyAppActionsActivity"
-            android:screenOrientation="portrait"
             android:label="@string/title_activity_my_app_actions"
             android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-        <activity android:name=".LocalizedActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".LocalizedActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".EventActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".MyEventActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
+        <activity android:name=".GroupChatUserChose"></activity>
     </application>
 
 </manifest>
