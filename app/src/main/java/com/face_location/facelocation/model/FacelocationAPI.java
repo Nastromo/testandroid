@@ -11,6 +11,8 @@ import com.face_location.facelocation.model.Location.LocationPutResponse;
 import com.face_location.facelocation.model.Location.LocationResponse;
 import com.face_location.facelocation.model.MyProfile.ProfileBody;
 import com.face_location.facelocation.model.MyProfile.ProfileResponse;
+import com.face_location.facelocation.model.PostChat.ChatBody;
+import com.face_location.facelocation.model.PostChat.ChatResponse;
 import com.face_location.facelocation.model.PostEvent.EventBody;
 import com.face_location.facelocation.model.PostLocalization.LocalizationBody;
 import com.face_location.facelocation.model.PostLocalization.LocalizationResponse;
@@ -189,4 +191,10 @@ public interface FacelocationAPI {
             @Query("event") String eventID
     );
 
+    //Create chat
+    @POST("api/chat")
+    Call<ChatResponse> createChat(
+            @HeaderMap Map<String, String> headers,
+            @Body ChatBody body
+    );
 }

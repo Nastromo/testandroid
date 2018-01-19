@@ -225,7 +225,7 @@ public class ChatFragment extends Fragment {
                         String userID;
                         String userMessage;
                         String userAvatar;
-                        Log.i(TAG, "РАЗМЕР messages: " + messages.size());
+
                         for (int j = 0; j < messages.size(); j++) {
                             Message message = messages.get(j);
 

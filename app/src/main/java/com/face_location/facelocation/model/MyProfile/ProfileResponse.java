@@ -21,6 +21,11 @@ public class ProfileResponse {
     @SerializedName("lastname")
     @Expose
     private String lastname;
+
+    @SerializedName("avatar_mob")
+    @Expose
+    private String avatarMob;
+
     @SerializedName("avatar")
     @Expose
     private String avatar;
@@ -107,5 +112,13 @@ public class ProfileResponse {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public String getAvatarMob() {
+        return avatarMob;
+    }
+
+    public void setAvatarMob(String avatarMob) {
+        this.avatarMob = avatarMob;
     }
 }

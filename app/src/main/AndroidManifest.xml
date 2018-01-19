@@ -140,7 +140,8 @@
         <activity
             android:name=".MyEventActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".GroupChatUserChose"></activity>
+        <activity android:name=".GroupChatUserChose" />
+        <activity android:name=".ChatActivity"></activity>
     </application>
 
 </manifest>

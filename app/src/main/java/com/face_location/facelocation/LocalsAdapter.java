@@ -108,7 +108,6 @@ public class LocalsAdapter extends ArrayAdapter<ChatUser> {
             Glide
                     .with(mContext)
                     .load(userAvatar)
-                    .thumbnail(0.1f) //shows mini image which weight 0.1 from real image while real image is downloading
                     .apply(RequestOptions
                             .circleCropTransform())
                     .into(holder.imageView2);

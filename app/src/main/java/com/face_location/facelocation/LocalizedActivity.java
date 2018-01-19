@@ -115,6 +115,7 @@ public class LocalizedActivity extends AppCompatActivity {
                     LocalsFragment localsFragment = new LocalsFragment();
                     Bundle locals = new Bundle();
                     locals.putParcelableArrayList("data", parcelables);
+                    locals.putString("eventID", eventID);
                     localsFragment.setArguments(locals);
                     return localsFragment;
 

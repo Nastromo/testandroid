@@ -26,6 +26,7 @@ public class LocalsFragment extends Fragment{
 
     ListView groupList, localsList;
     ArrayList<User> parcelables;
+    String eventID;
 
     private static final String TAG = "LocalsFragment";
 
@@ -36,6 +37,7 @@ public class LocalsFragment extends Fragment{
 
         Bundle bundle = getArguments();
         parcelables = bundle.getParcelableArrayList("data");
+        eventID = bundle.getString("eventID");
 
         FloatingActionButton createGroupChatFab = (FloatingActionButton) rootView.findViewById(R.id.createGroupChatFab);
         createGroupChatFab.setOnClickListener(new View.OnClickListener() {
@@ -63,6 +65,7 @@ public class LocalsFragment extends Fragment{
                         if (!groupChatTitle.getText().toString().isEmpty()){
                             Intent groupChatUserChose = new Intent(getContext(), GroupChatUserChose.class);
                             groupChatUserChose.putExtra("chat_name", groupChatTitle.getText().toString().trim());
+                            groupChatUserChose.putExtra("eventID", eventID);
                             groupChatUserChose.putParcelableArrayListExtra("data", parcelables);
                             startActivity(groupChatUserChose);
                         }else {

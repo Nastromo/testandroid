@@ -59,7 +59,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
             Glide
                     .with(holder.itemView)
                     .load(avatars.get(position))
-                    .thumbnail(0.1f)
                     .apply(RequestOptions.circleCropTransform())
                     .into(holder.getUserAvatar());
         }

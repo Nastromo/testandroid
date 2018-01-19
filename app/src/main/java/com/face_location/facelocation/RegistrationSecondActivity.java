@@ -111,7 +111,7 @@ public class RegistrationSecondActivity extends AppCompatActivity implements Vie
                     String userRole = response.body().getUser().getRole();
                     int userStatus = response.body().getUser().getStatus();
                     String userToken = response.body().getToken();
-                    String userAvatarURL = response.body().getUser().getAvatar();
+                    String userAvatarURL = response.body().getUser().getAvatarMob();
 
                     Log.i(TAG, "onResponse: \n" +
                             userID + "\n" +

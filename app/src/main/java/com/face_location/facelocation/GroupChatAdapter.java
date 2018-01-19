@@ -1,6 +1,7 @@
 package com.face_location.facelocation;
 
 import android.content.Context;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.SparseBooleanArray;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.face_location.facelocation.model.DataBase.DataBaseHelper;
 import com.face_location.facelocation.model.GetEvent.User;
 
 import java.util.ArrayList;
@@ -25,9 +27,12 @@ import java.util.HashMap;
 
 public class GroupChatAdapter extends RecyclerView.Adapter<GroupChatAdapter.ViewHolder> {
     ArrayList<User> localizedUsers;
+    ArrayList<User> cutedLocalizedUsers;
     Context mContext;
     private static final String TAG = "GroupChatAdapter";
     public static HashMap<String, Boolean> checkedUsersID;
+    String[] applicationData;
+    String myID;
 
     private SparseBooleanArray itemStateArray= new SparseBooleanArray();
 
@@ -40,6 +45,23 @@ public class GroupChatAdapter extends RecyclerView.Adapter<GroupChatAdapter.View
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.locals_group_card, parent, false);
         checkedUsersID = new HashMap<String, Boolean>();
+
+        DataBaseHelper applicationDB = DataBaseHelper.getInstance(mContext);
+        applicationData = applicationDB.retrieveFirstLoginValues();
+        myID = applicationData[0];
+
+        cutedLocalizedUsers = new ArrayList<>();
+        for (int i = 0; i < localizedUsers.size(); i++) {
+            if (localizedUsers.get(i).getId().equals(myID)){
+
+            }else {
+                cutedLocalizedUsers.add(localizedUsers.get(i));
+            }
+        }
+
+        Log.i(TAG, "Длинна старого списка: " + localizedUsers.size());
+        Log.i(TAG, "Длинна нового списка: " + cutedLocalizedUsers.size());
+
         return new GroupChatAdapter.ViewHolder(view);
     }
 
@@ -50,17 +72,16 @@ public class GroupChatAdapter extends RecyclerView.Adapter<GroupChatAdapter.View
         holder.bind(position);
         holder.setIsRecyclable(false);
 
-        if (localizedUsers.get(position).getUsername() == null){
+        if (cutedLocalizedUsers.get(position).getUsername() == null){
             holder.userName.setText("Ім'я не вказано");
         } else {
-            holder.userName.setText(localizedUsers.get(position).getUsername());
+            holder.userName.setText(cutedLocalizedUsers.get(position).getUsername());
         }
 
-        holder.someText.setText(localizedUsers.get(position).getEmail());
+        holder.someText.setText(cutedLocalizedUsers.get(position).getEmail());
         Glide
                 .with(mContext)
-                .load(localizedUsers.get(position).getAvatarMob())
-                .thumbnail(0.1f)
+                .load(cutedLocalizedUsers.get(position).getAvatarMob())
                 .apply(RequestOptions.circleCropTransform())
                 .into(holder.imageView2);
 
@@ -78,10 +99,10 @@ public class GroupChatAdapter extends RecyclerView.Adapter<GroupChatAdapter.View
                     itemStateArray.put(adapterPosition, false);
                 }
 
-                String userID = localizedUsers.get(position).getId();
+                String userID = cutedLocalizedUsers.get(position).getId();
+                checkedUsersID.put(myID, true);
                 checkedUsersID.put(userID, holder.checkBox.isChecked());
                 Log.i(TAG, "СПИСОК АЙДИ: " + checkedUsersID.toString());
-
 
             }
         });
@@ -89,16 +110,15 @@ public class GroupChatAdapter extends RecyclerView.Adapter<GroupChatAdapter.View
 
     @Override
     public int getItemCount() {
-        return localizedUsers.size();
+        return localizedUsers.size()-1;
     }
-
-
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView2;
         TextView userName, someText;
         CheckBox checkBox;
+        ConstraintLayout layout;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -106,6 +126,7 @@ public class GroupChatAdapter extends RecyclerView.Adapter<GroupChatAdapter.View
             userName = (TextView) itemView.findViewById(R.id.userName);
             someText = (TextView) itemView.findViewById(R.id.someText);
             checkBox = (CheckBox) itemView.findViewById(R.id.checkBox);
+            layout = (ConstraintLayout) itemView.findViewById(R.id.layout);
         }
 
         void bind(int position) {
