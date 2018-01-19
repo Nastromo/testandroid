@@ -149,10 +149,12 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
                         String localizedUserName = localizedUser.getUser().getUsername();
                         String localizedUserEmail = localizedUser.getUser().getEmail();
                         String localizedUserAvatar = localizedUser.getUser().getAvatarMob();
+                        String localizedUserID = localizedUser.getUser().getId();
+                        Log.i(TAG, "ID ПОЛЬЗОВАТЕЛЯ В ИВЕНТЕ: " + localizedUserID);
                         int status = localizedUser.getUser().getStatus();
 
                         if (status != 1){
-                            User user = new User(localizedUserName, localizedUserEmail, localizedUserAvatar);
+                            User user = new User(localizedUserName, localizedUserEmail, localizedUserAvatar, localizedUserID, 1);
                             localizedUserList.add(user);
                         }
                     }

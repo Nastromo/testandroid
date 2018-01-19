@@ -140,9 +140,6 @@ public class LocalsAdapter extends ArrayAdapter<ChatUser> {
     }
 
     private void banUser(final String userID, final String eventID){
-
-        Log.i(TAG, "ВЫЗВАЛСЯ banUser: ");
-
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(url)
                 .addConverterFactory(GsonConverterFactory.create())

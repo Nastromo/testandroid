@@ -183,5 +183,6 @@
     <string name="chat_name">назва групового чату...</string>
     <string name="create_chat">СТВОРИТИ</string>
     <string name="chose_partisipent">ВИБЕРІТЬ УЧАСНИКІВ</string>
+    <string name="chose_users">Виберіть учасників чату</string>
 
 </resources>

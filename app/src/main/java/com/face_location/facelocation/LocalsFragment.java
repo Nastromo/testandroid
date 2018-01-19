@@ -5,13 +5,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.face_location.facelocation.model.GetEvent.User;
 
@@ -37,7 +37,6 @@ public class LocalsFragment extends Fragment{
         Bundle bundle = getArguments();
         parcelables = bundle.getParcelableArrayList("data");
 
-
         FloatingActionButton createGroupChatFab = (FloatingActionButton) rootView.findViewById(R.id.createGroupChatFab);
         createGroupChatFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,11 +45,14 @@ public class LocalsFragment extends Fragment{
                 View mView = getLayoutInflater().inflate(R.layout.new_group_chat_title, null);
                 final EditText groupChatTitle = (EditText) mView.findViewById(R.id.groupChatTitle);
 
+                mBuilder.setView(mView);
+                final AlertDialog dialog = mBuilder.create();
+
                 Button cancelBtn = (Button) mView.findViewById(R.id.cancelBtn);
                 cancelBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        getActivity().onBackPressed();
+                        dialog.cancel();
                     }
                 });
 
@@ -58,18 +60,17 @@ public class LocalsFragment extends Fragment{
                 createBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent groupChatUserChose = new Intent(getContext(), GroupChatUserChose.class);
-                        groupChatUserChose.putExtra("chat_name", groupChatTitle.getText().toString().trim());
-                        groupChatUserChose.putParcelableArrayListExtra("data", parcelables);
-                        startActivity(groupChatUserChose);
+                        if (!groupChatTitle.getText().toString().isEmpty()){
+                            Intent groupChatUserChose = new Intent(getContext(), GroupChatUserChose.class);
+                            groupChatUserChose.putExtra("chat_name", groupChatTitle.getText().toString().trim());
+                            groupChatUserChose.putParcelableArrayListExtra("data", parcelables);
+                            startActivity(groupChatUserChose);
+                        }else {
+                            Toast.makeText(getContext(), "Вкажіть назву чату", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
-
-
-                mBuilder.setView(mView);
-                AlertDialog dialog = mBuilder.create();
                 dialog.show();
-
             }
         });
 
@@ -77,7 +78,6 @@ public class LocalsFragment extends Fragment{
         ArrayList<Group> groups = new ArrayList<>();
 
         ArrayList<User> localizedUser = getActivity().getIntent().getParcelableArrayListExtra("data");
-        Log.i(TAG, "РАЗМЕР СПИСКА ВО ФРАГМЕНТЕ: " + localizedUser.size());
 
         for (int k = 0; k < 1; k++) {
             groups.add(new Group("Название группового чата", "Афанасий Петрович, Анна Лаврова"));
@@ -90,7 +90,6 @@ public class LocalsFragment extends Fragment{
                     localizedUser.get(i).getAvatarMob(),
                     localizedUser.get(i).getEventID()));
         }
-
 
         groupList = (ListView) rootView.findViewById(R.id.groupsListView);
         GroupAdapter groupAdapter = new GroupAdapter(getContext(), R.layout.group_card, groups);
