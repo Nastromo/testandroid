@@ -48,7 +48,7 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
     String eventDate;
     static int eventPassTypeInt;
     ArrayList<User> localizedUserList;
-    String eventLocationTitle, eventTitle;
+    String eventLocationTitle, eventTitle, myID;
 
 
     @Override
@@ -62,6 +62,7 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
         DataBaseHelper applicationDB = DataBaseHelper.getInstance(this);
         applicationData = applicationDB.retrieveFirstLoginValues();
         token = applicationData[5];
+        myID = applicationData[0];
 
         eventID = getIntent().getStringExtra("id");
         Log.i(TAG, "ID ИВЕНТА НА КОТОРЫЙ НАЖАЛИ: " + eventID);
@@ -139,6 +140,8 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
                 List<LocalizationResponse> usersList = new ArrayList<>();
                 localizedUserList = new ArrayList<>();
 
+                boolean localizationPermission = false;
+
                 if (response.code() == 200 && usersList != null){
                     usersList = response.body();
 
@@ -149,22 +152,32 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
                         String localizedUserEmail = localizedUser.getUser().getEmail();
                         String localizedUserAvatar = localizedUser.getUser().getAvatarMob();
                         String localizedUserID = localizedUser.getUser().getId();
-                        Log.i(TAG, "ID ПОЛЬЗОВАТЕЛЯ В ИВЕНТЕ: " + localizedUserID);
                         int status = localizedUser.getStatus();
 
-//                        if (status != 1){
-                            User user = new User(localizedUserName, localizedUserEmail, localizedUserAvatar, eventID, localizedUserID, status);
-                            localizedUserList.add(user);
-//                        }
-                    }
+                        User user = new User(localizedUserName, localizedUserEmail, localizedUserAvatar, eventID, localizedUserID, status);
+                        localizedUserList.add(user);
 
-                        Intent localizedActivity = new Intent(EventActivity.this, LocalizedActivity.class);
-                        localizedActivity.putExtra("id", eventID);
-                        localizedActivity.putExtra("users_quantity", String.valueOf(localizedUserList.size()));
-                        localizedActivity.putExtra("event_name", eventTitle);
-                        localizedActivity.putExtra("isMyEvent", false);
-                        localizedActivity.putParcelableArrayListExtra("data", localizedUserList);
-                        startActivity(localizedActivity);
+                        if (localizedUserID.equals(myID)){
+                            if (status == 1){
+                                localizationPermission = false;
+                            }else {
+                                localizationPermission = true;
+                            }
+                        }
+                    }
+                        if (localizationPermission){
+                            Intent localizedActivity = new Intent(EventActivity.this, LocalizedActivity.class);
+                            localizedActivity.putExtra("id", eventID);
+                            localizedActivity.putExtra("users_quantity", String.valueOf(localizedUserList.size()));
+                            localizedActivity.putExtra("event_name", eventTitle);
+                            localizedActivity.putExtra("isMyEvent", false);
+                            localizedActivity.putParcelableArrayListExtra("data", localizedUserList);
+                            startActivity(localizedActivity);
+                        }else {
+                            Toast.makeText(getApplicationContext(), getString(R.string.ban_notofocation), Toast.LENGTH_SHORT).show();
+                        }
+
+
 
                 }else {
                     Toast.makeText(EventActivity.this, "Треба бути у зоні івенту, щоб локалізуватись!", Toast.LENGTH_LONG).show();

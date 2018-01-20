@@ -184,5 +184,6 @@
     <string name="create_chat">СТВОРИТИ</string>
     <string name="chose_partisipent">ВИБЕРІТЬ УЧАСНИКІВ</string>
     <string name="chose_users">Виберіть учасників чату</string>
+    <string name="ban_notofocation">Ви були заблоковані на цьому івенті</string>
 
 </resources>
