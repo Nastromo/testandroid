@@ -48,11 +48,21 @@ public class User implements Parcelable {
         this.eventID = eventID;
     }
 
-    public User(String username, String email, String avatarMob, String userID, int var) {
+    public User(String username, String email, String avatarMob, String eventID, String userID) {
         this.username = username;
         this.email = email;
         this.avatarMob = avatarMob;
         this.id = userID;
+        this.eventID = eventID;
+    }
+
+    public User(String username, String email, String avatarMob, String eventID, String userID, int status) {
+        this.username = username;
+        this.email = email;
+        this.avatarMob = avatarMob;
+        this.id = userID;
+        this.eventID = eventID;
+        this.status = status;
     }
 
     public User(Parcel in) {
@@ -61,6 +71,7 @@ public class User implements Parcelable {
         avatarMob = in.readString();
         eventID = in.readString();
         id = in.readString();
+        status = in.readInt();
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {
@@ -159,6 +170,7 @@ public class User implements Parcelable {
         parcel.writeString(avatarMob);
         parcel.writeString(eventID);
         parcel.writeString(id);
+        parcel.writeInt(status);
     }
 }
 

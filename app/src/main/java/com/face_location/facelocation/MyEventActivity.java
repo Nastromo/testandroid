@@ -160,8 +160,10 @@ public class MyEventActivity extends AppCompatActivity implements View.OnClickLi
                         String localizedUserEmail = localizedUser.getUser().getEmail();
                         String localizedUserAvatar = localizedUser.getUser().getAvatarMob();
                         String idEvent = eventID;
+                        String localizedUserID = localizedUser.getUser().getId();
+                        int status = localizedUser.getStatus();
 
-                        User user = new User(localizedUserName, localizedUserEmail, localizedUserAvatar, idEvent);
+                        User user = new User(localizedUserName, localizedUserEmail, localizedUserAvatar, idEvent, localizedUserID, status);
                         localizedUserList.add(user);
                     }
 

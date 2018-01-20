@@ -198,6 +198,7 @@ public class MainActivity extends AppCompatActivity
 
         String[] userInfo = applicationDB.retrieveFirstLoginValues();
         token = userInfo[5];
+        Log.i(TAG, "ТООООКЕН: " + token);
 
         FacelocationAPI api = retrofit.create(FacelocationAPI.class);
 

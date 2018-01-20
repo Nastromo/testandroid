@@ -38,6 +38,7 @@ public class LocalsAdapter extends ArrayAdapter<ChatUser> {
     DataBaseHelper applicationDB;
     String userID, eventID, url, token;
     boolean isMyEventActivity;
+    ArrayList<ChatUser> chatUsers;
 
 
     private static class ViewHolder {
@@ -47,11 +48,12 @@ public class LocalsAdapter extends ArrayAdapter<ChatUser> {
     }
 
 
-    public LocalsAdapter(Context context, int resource, ArrayList<ChatUser> objects, boolean isMyEventActivity) {
-        super(context, resource, objects);
+    public LocalsAdapter(Context context, int resource, ArrayList<ChatUser> chatUsers, boolean isMyEventActivity) {
+        super(context, resource, chatUsers);
         mContext = context;
         mResource = resource;
         this.isMyEventActivity = isMyEventActivity;
+        this.chatUsers = chatUsers;
     }
 
 
@@ -63,11 +65,12 @@ public class LocalsAdapter extends ArrayAdapter<ChatUser> {
         String userEmail = getItem(position).getEmail();
         String userAvatar = getItem(position).getAvatar();
         eventID = getItem(position).getEventID();
+        userID = chatUsers.get(position).getUserID();
+        Log.i(TAG, "ID В АДАПТЕРЕ: " + chatUsers.get(position).getUserID());
 
         applicationDB = DataBaseHelper.getInstance(getContext());
         applicationData = applicationDB.retrieveFirstLoginValues();
 
-        userID = applicationData[0];
         url = "https://face-location.com/";
         token = applicationData[5];
 
@@ -112,9 +115,11 @@ public class LocalsAdapter extends ArrayAdapter<ChatUser> {
                             .circleCropTransform())
                     .into(holder.imageView2);
 
+            Log.i(TAG, "ПЕРЕД КЛИКОМ: " + userID);
             holder.banUser.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Log.i(TAG, "НА КЛИКЕ: " + userID);
                     banUser(userID, eventID);
                 }
             });
@@ -139,6 +144,7 @@ public class LocalsAdapter extends ArrayAdapter<ChatUser> {
     }
 
     private void banUser(final String userID, final String eventID){
+        Log.i(TAG, "ID ВНУТРИ МЕТОДА: " + userID);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(url)
                 .addConverterFactory(GsonConverterFactory.create())

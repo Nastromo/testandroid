@@ -80,18 +80,19 @@ public class LocalsFragment extends Fragment{
         ArrayList<ChatUser> users = new ArrayList<>();
         ArrayList<Group> groups = new ArrayList<>();
 
-        ArrayList<User> localizedUser = getActivity().getIntent().getParcelableArrayListExtra("data");
-
         for (int k = 0; k < 1; k++) {
             groups.add(new Group("Название группового чата", "Афанасий Петрович, Анна Лаврова"));
         }
 
-        for (int i = 0; i < localizedUser.size(); i++) {
-            users.add(new ChatUser(
-                    localizedUser.get(i).getUsername(),
-                    localizedUser.get(i).getEmail(),
-                    localizedUser.get(i).getAvatarMob(),
-                    localizedUser.get(i).getEventID()));
+        for (int i = 0; i < parcelables.size(); i++) {
+            if (parcelables.get(i).getStatus() != null && parcelables.get(i).getStatus() != 1){
+                users.add(new ChatUser(
+                        parcelables.get(i).getUsername(),
+                        parcelables.get(i).getEmail(),
+                        parcelables.get(i).getAvatarMob(),
+                        parcelables.get(i).getEventID(),
+                        parcelables.get(i).getId()));
+            }
         }
 
         groupList = (ListView) rootView.findViewById(R.id.groupsListView);

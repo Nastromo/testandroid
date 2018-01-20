@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -114,6 +115,7 @@ public class LocalizedActivity extends AppCompatActivity {
                 case 0:
                     LocalsFragment localsFragment = new LocalsFragment();
                     Bundle locals = new Bundle();
+                    Log.i(TAG, "НА ЛОКАЛАЙЗЕД АКТИВИТИ: " + parcelables.get(0).getId());
                     locals.putParcelableArrayList("data", parcelables);
                     locals.putString("eventID", eventID);
                     localsFragment.setArguments(locals);
