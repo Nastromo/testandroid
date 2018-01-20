@@ -25,6 +25,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
     List<String> sender = new ArrayList<>();
     List<String> avatars = new ArrayList<>();
     String myID;
+    private static final String TAG = "ChatAdapter";
 
     public ChatAdapter(List<String> messageData, List<String> sender, List<String> avatars, String myID) {
         this.chatData = messageData;
@@ -41,6 +42,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+
+        holder.setIsRecyclable(false);
 
         if (sender.get(position).equals(myID)){
             holder.getUserMessage().setText(chatData.get(position));

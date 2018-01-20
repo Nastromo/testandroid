@@ -76,22 +76,6 @@ public class GroupAdapter extends ArrayAdapter<Group> {
             holder.membersRaw.setText(membersRaw);
             holder.membersQuantity.setText(String.valueOf(membersQuantity));
 
-
-            //create the imageloader object
-//            ImageLoader imageLoader = ImageLoader.getInstance();
-//
-//            int defaultImage = mContext.getResources().getIdentifier("@drawable/image_failed",null,mContext.getPackageName());
-//
-//            //create display options
-//            DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
-//                    .cacheOnDisc(true).resetViewBeforeLoading(true)
-//                    .showImageForEmptyUri(defaultImage)
-//                    .showImageOnFail(defaultImage)
-//                    .showImageOnLoading(defaultImage).build();
-//
-//            //download and display image from url
-//            imageLoader.displayImage(imgUrl, holder.image, options);
-
             return convertView;
 
         }catch (IllegalArgumentException e){
@@ -100,25 +84,5 @@ public class GroupAdapter extends ArrayAdapter<Group> {
         }
 
     }
-
-    /**
-     * Required for setting up the Universal Image loader Library
-     */
-//    private void setupImageLoader(){
-//        // UNIVERSAL IMAGE LOADER SETUP
-//        DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
-//                .cacheOnDisc(true).cacheInMemory(true)
-//                .imageScaleType(ImageScaleType.EXACTLY)
-//                .displayer(new FadeInBitmapDisplayer(300)).build();
-//
-//        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
-//                mContext)
-//                .defaultDisplayImageOptions(defaultOptions)
-//                .memoryCache(new WeakMemoryCache())
-//                .discCacheSize(100 * 1024 * 1024).build();
-//
-//        ImageLoader.getInstance().init(config);
-//        // END - UNIVERSAL IMAGE LOADER SETUP
-//    }
 
 }

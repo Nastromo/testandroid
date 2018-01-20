@@ -46,7 +46,7 @@ public class ChatFragment extends Fragment {
     RecyclerView.LayoutManager manager;
     EditText messageEditText;
     Button sendBtn;
-    String url, token, eventID, myID, chatID;
+    String url, token, eventID, myID, chatID, myAvatar;
     String[] applicationData;
 
     com.github.nkzawa.socketio.client.Socket socket;
@@ -65,6 +65,7 @@ public class ChatFragment extends Fragment {
         applicationData = applicationDB.retrieveFirstLoginValues();
         token = applicationData[5];
         myID = applicationData[0];
+        myAvatar = applicationData[10];
 
         Bundle bundle = getArguments();
         eventID = bundle.getString("eventID");
@@ -121,8 +122,6 @@ public class ChatFragment extends Fragment {
                         avatar = data.getJSONObject("message").getString("avatar_mob");
                         message = data.getJSONObject("message").getString("text");
 
-                        Log.i(TAG, "STRING: " + message);
-
                     } catch (JSONException e) {
                         Log.i(TAG, "run: " + e.toString());
                         return;
@@ -139,7 +138,6 @@ public class ChatFragment extends Fragment {
     private void sendMessage() throws JSONException {
         String messageText = messageEditText.getText().toString().trim();
         messageEditText.setText("");
-        addMessage(messageText, myID, "ignored_avatar_url");
 
         JSONObject messageData = new JSONObject();
         messageData.put("chat", chatID);
@@ -153,6 +151,7 @@ public class ChatFragment extends Fragment {
 
         Log.i(TAG, "sendMessage JSON: " + messageData);
         socket.emit("save-message", messageData);
+        addMessage(messageText, myID, myAvatar);
     }
 
     private void addMessage(String message, String senderID, String avatar) {
@@ -161,19 +160,6 @@ public class ChatFragment extends Fragment {
         avatars.add(avatar);
 
         adapter.notifyItemInserted(chatMessages.size() - 1);
-        adapter.notifyItemInserted(senders.size() - 1);
-        adapter.notifyItemInserted(avatars.size() - 1);
-
-        recyclerView.smoothScrollToPosition(chatMessages.size() - 1);
-    }
-
-    private void addMessage(String message, String senderID) {
-        chatMessages.add(message);
-        senders.add(senderID);
-
-        adapter.notifyItemInserted(chatMessages.size() - 1);
-        adapter.notifyItemInserted(senders.size() - 1);
-
         recyclerView.smoothScrollToPosition(chatMessages.size() - 1);
     }
 
@@ -216,7 +202,7 @@ public class ChatFragment extends Fragment {
                             chatRoom.put("chat", chatID);
                             chatRoom.put("user", myID);
                         } catch (JSONException e) {
-                            Log.i(TAG, "ОШИБКА ВОЙТИ В РУМУ: " + e.toString());
+                            Log.i(TAG, "ОШИБКА СОЗДАНИЯ JSON: " + e.toString());
                         }
                         socket.emit("join", chatRoom);
 
@@ -240,7 +226,6 @@ public class ChatFragment extends Fragment {
                             userAvatar = message.getUser().getAvatarMob();
                             Log.i(TAG, "АВАТАР ЮЕЗАРА В ЧАТЕ: " + userAvatar);
                             avatars.add(userAvatar);
-
                         }
 
                         recyclerView = (RecyclerView) rootView.findViewById(R.id.mainChat);

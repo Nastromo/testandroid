@@ -66,7 +66,6 @@ public class LocalsAdapter extends ArrayAdapter<ChatUser> {
         String userAvatar = getItem(position).getAvatar();
         eventID = getItem(position).getEventID();
         userID = chatUsers.get(position).getUserID();
-        Log.i(TAG, "ID В АДАПТЕРЕ: " + chatUsers.get(position).getUserID());
 
         applicationDB = DataBaseHelper.getInstance(getContext());
         applicationData = applicationDB.retrieveFirstLoginValues();
@@ -115,11 +114,9 @@ public class LocalsAdapter extends ArrayAdapter<ChatUser> {
                             .circleCropTransform())
                     .into(holder.imageView2);
 
-            Log.i(TAG, "ПЕРЕД КЛИКОМ: " + userID);
             holder.banUser.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.i(TAG, "НА КЛИКЕ: " + userID);
                     banUser(userID, eventID);
                 }
             });
