@@ -274,7 +274,7 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
                 String userNameResponse = response.body().getUsername();
                 String userSonameResponse = response.body().getLastname();
                 String userPhoneResponse = response.body().getPhone();
-                String userAvatarResponse = response.body().getAvatar();
+                String userAvatarResponse = response.body().getAvatarMob();
                 String userJobResponse = response.body().getJob();
 
                 Log.i(TAG, "onResponse: \n" +
@@ -340,7 +340,7 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
                     String userNameResponse = response.body().getUsername();
                     String userSonameResponse = response.body().getLastname();
                     String userPhoneResponse = response.body().getPhone();
-                    String userAvatarResponse = response.body().getAvatar();
+                    String userAvatarResponse = response.body().getAvatarMob();
                     String userJobResponse = response.body().getJob();
 
                     Log.i(TAG, "onResponse: \n" +

@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,6 +16,9 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.face_location.facelocation.model.DataBase.DataBaseHelper;
+import com.face_location.facelocation.model.GetEvent.User;
+
+import java.util.ArrayList;
 
 public class LocalizedActivity extends AppCompatActivity {
 
@@ -23,7 +27,10 @@ public class LocalizedActivity extends AppCompatActivity {
     String TAG = "LocalizedActivity";
     DataBaseHelper applicationDB;
     String[] userArrayData;
-    String eventID;
+    String eventID, eventNameFromIntent, usersQuantityFromIntent;
+    ArrayList<User> parcelables;
+    TextView eventName, usersQuantity;
+    boolean isMyEvent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +38,16 @@ public class LocalizedActivity extends AppCompatActivity {
         setContentView(R.layout.activity_localized);
 
         eventID = getIntent().getStringExtra("id");
+        eventNameFromIntent = getIntent().getStringExtra("event_name");
+        usersQuantityFromIntent = getIntent().getStringExtra("users_quantity");
+
+        eventName = (TextView) findViewById(R.id.eventName);
+        eventName.setText(eventNameFromIntent);
+
+        usersQuantity = (TextView) findViewById(R.id.usersQuantity);
+        usersQuantity.setText(usersQuantityFromIntent);
+
+        parcelables = getIntent().getParcelableArrayListExtra("data");
 
         TextView backTextView = (TextView) findViewById(R.id.backTextView);
         backTextView.setOnClickListener(new View.OnClickListener() {
@@ -81,6 +98,8 @@ public class LocalizedActivity extends AppCompatActivity {
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
+
+        isMyEvent = getIntent().getBooleanExtra("isMyEvent", true);
     }
 
     //Makes tabs spin
@@ -94,11 +113,19 @@ public class LocalizedActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    LocalsFragment locals = new LocalsFragment();
-                    return locals;
+                    LocalsFragment localsFragment = new LocalsFragment();
+                    Bundle locals = new Bundle();
+                    Log.i(TAG, "НА ЛОКАЛАЙЗЕД АКТИВИТИ: " + parcelables.get(0).getId());
+                    locals.putParcelableArrayList("data", parcelables);
+                    locals.putString("eventID", eventID);
+                    localsFragment.setArguments(locals);
+                    return localsFragment;
 
                 case 1:
                     ChatFragment chatFragment = new ChatFragment();
+                    Bundle bundleChat = new Bundle();
+                    bundleChat.putString("eventID", eventID);
+                    chatFragment.setArguments(bundleChat);
                     return chatFragment;
 
                 case 2:

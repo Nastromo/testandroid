@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,7 +34,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class EventActivity extends AppCompatActivity implements View.OnClickListener{
+public class MyEventActivity extends AppCompatActivity implements View.OnClickListener{
 
     TextView backTextView;
     Button localizButton;
@@ -45,16 +46,17 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
     List<SimilarEvent> similarEventList;
     private TextView eventTitleView, eventDateView, eventLocationView, passTypeView, eventTimeView, eventDescriptionView, userQuantity, userQuantitySecond, userQuantityThird;
     ImageView eventPhoto, userAvatar, userAvatarSecond, userAvatarThird;
-    String eventDate;
+    String eventDate, userID;
+    LinearLayout linearLayout2;
     static int eventPassTypeInt;
     ArrayList<User> localizedUserList;
-    String eventLocationTitle, eventTitle, myID;
+    String eventLocationTitle, eventTitle;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_event_nearest);
+        setContentView(R.layout.activity_event);
 
         url = getString(R.string.base_url);
         eventPhoto = (ImageView) findViewById(R.id.eventPhoto);
@@ -62,10 +64,18 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
         DataBaseHelper applicationDB = DataBaseHelper.getInstance(this);
         applicationData = applicationDB.retrieveFirstLoginValues();
         token = applicationData[5];
-        myID = applicationData[0];
 
         eventID = getIntent().getStringExtra("id");
         Log.i(TAG, "ID ИВЕНТА НА КОТОРЫЙ НАЖАЛИ: " + eventID);
+
+        linearLayout2 = (LinearLayout) findViewById(R.id.linearLayout2);
+        linearLayout2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent editEvent = new Intent(MyEventActivity.this, SearchLocationActivity.class);
+                startActivity(editEvent);
+            }
+        });
 
         eventTitleView = (TextView) findViewById(R.id.eventTitle);
         eventDateView = (TextView) findViewById(R.id.eventDate);
@@ -129,7 +139,7 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
         headers.put("Content-Type", "application/json");
         headers.put("X-Auth", token);
 
-        LocalizationBody localizationBody = new LocalizationBody(latitude, longitude);
+        final LocalizationBody localizationBody = new LocalizationBody(latitude, longitude);
 
         Call<List<LocalizationResponse>> call = api.localizUser(headers, eventID, localizationBody);
         call.enqueue(new Callback<List<LocalizationResponse>>() {
@@ -140,9 +150,7 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
                 List<LocalizationResponse> usersList = new ArrayList<>();
                 localizedUserList = new ArrayList<>();
 
-                boolean localizationPermission = false;
-
-                if (response.code() == 200 && usersList != null){
+                if (response.code() == 200){
                     usersList = response.body();
 
                     for (int i = 0; i < usersList.size() ; i++) {
@@ -151,36 +159,26 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
                         String localizedUserName = localizedUser.getUser().getUsername();
                         String localizedUserEmail = localizedUser.getUser().getEmail();
                         String localizedUserAvatar = localizedUser.getUser().getAvatarMob();
+                        String idEvent = eventID;
                         String localizedUserID = localizedUser.getUser().getId();
                         int status = localizedUser.getStatus();
 
-                        User user = new User(localizedUserName, localizedUserEmail, localizedUserAvatar, eventID, localizedUserID, status);
+                        User user = new User(localizedUserName, localizedUserEmail, localizedUserAvatar, idEvent, localizedUserID, status);
                         localizedUserList.add(user);
-
-                        if (localizedUserID.equals(myID)){
-                            if (status == 1){
-                                localizationPermission = false;
-                            }else {
-                                localizationPermission = true;
-                            }
-                        }
                     }
-                        if (localizationPermission){
-                            Intent localizedActivity = new Intent(EventActivity.this, LocalizedActivity.class);
-                            localizedActivity.putExtra("id", eventID);
-                            localizedActivity.putExtra("users_quantity", String.valueOf(localizedUserList.size()));
-                            localizedActivity.putExtra("event_name", eventTitle);
-                            localizedActivity.putExtra("isMyEvent", false);
-                            localizedActivity.putParcelableArrayListExtra("data", localizedUserList);
-                            startActivity(localizedActivity);
-                        }else {
-                            Toast.makeText(getApplicationContext(), getString(R.string.ban_notofocation), Toast.LENGTH_SHORT).show();
-                        }
 
+                    Log.i(TAG, "РАЗМЕР СПИСКА ЛОКАЛИЗОВАНЫХ ЮЗЕРОВ - " + localizedUserList.size());
 
+                    Intent localizedActivity = new Intent(MyEventActivity.this, LocalizedActivity.class);
+                    localizedActivity.putExtra("id", eventID);
+                    localizedActivity.putExtra("users_quantity", String.valueOf(localizedUserList.size()));
+                    localizedActivity.putExtra("event_name", eventTitle);
+                    localizedActivity.putExtra("isMyEvent", true);
+                    localizedActivity.putParcelableArrayListExtra("data", localizedUserList);
+                    startActivity(localizedActivity);
 
                 }else {
-                    Toast.makeText(EventActivity.this, "Треба бути у зоні івенту, щоб локалізуватись!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MyEventActivity.this, "Треба бути у зоні івенту, щоб локалізуватись!", Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -324,7 +322,7 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
 
                 eventPhoto.setBackground(null);
                 Glide
-                        .with(EventActivity.this)
+                        .with(MyEventActivity.this)
                         .load(eventCoverURL)
                         .thumbnail(0.1f)
                         .apply(RequestOptions
@@ -341,7 +339,7 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
                             userAvatarThird.setVisibility(View.INVISIBLE);
 
                             Glide
-                                    .with(EventActivity.this)
+                                    .with(MyEventActivity.this)
                                     .load(eventSubscribers.get(0).getUser().getAvatarMob())
                                     .thumbnail(0.1f) //shows mini image which weight 0.1 from real image while real image is downloading
                                     .apply(RequestOptions
@@ -349,7 +347,7 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
                                     //      .placeholder(R.drawable.oval)) //shows drawable while real/mini image is downloading
                                     .into(userAvatar);
                             Glide
-                                    .with(EventActivity.this)
+                                    .with(MyEventActivity.this)
                                     .load(eventSubscribers.get(1).getUser().getAvatarMob())
                                     .thumbnail(0.1f) //shows mini image which weight 0.1 from real image while real image is downloading
                                     .apply(RequestOptions
@@ -364,7 +362,7 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
                             userQuantityThird.setText("+" + String.valueOf(eventUserQuantity));
 
                             Glide
-                                    .with(EventActivity.this)
+                                    .with(MyEventActivity.this)
                                     .load(eventSubscribers.get(0).getUser().getAvatarMob())
                                     .thumbnail(0.1f) //shows mini image which weight 0.1 from real image while real image is downloading
                                     .apply(RequestOptions
@@ -372,7 +370,7 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
                                     //      .placeholder(R.drawable.oval)) //shows drawable while real/mini image is downloading
                                     .into(userAvatar);
                             Glide
-                                    .with(EventActivity.this)
+                                    .with(MyEventActivity.this)
                                     .load(eventSubscribers.get(1).getUser().getAvatarMob())
                                     .thumbnail(0.1f) //shows mini image which weight 0.1 from real image while real image is downloading
                                     .apply(RequestOptions
@@ -380,7 +378,7 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
                                     //      .placeholder(R.drawable.oval)) //shows drawable while real/mini image is downloading
                                     .into(userAvatarSecond);
                             Glide
-                                    .with(EventActivity.this)
+                                    .with(MyEventActivity.this)
                                     .load(eventSubscribers.get(2).getUser().getAvatarMob())
                                     .thumbnail(0.1f) //shows mini image which weight 0.1 from real image while real image is downloading
                                     .apply(RequestOptions
@@ -399,7 +397,7 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
                     userAvatarThird.setVisibility(View.INVISIBLE);
 
                     Glide
-                            .with(EventActivity.this)
+                            .with(MyEventActivity.this)
                             .load(eventSubscribers.get(0).getUser().getAvatarMob())
                             .thumbnail(0.1f) //shows mini image which weight 0.1 from real image while real image is downloading
                             .apply(RequestOptions
@@ -473,9 +471,9 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
                             subsAvatars));
                 }
 
-                RecyclerViewAdapter adapter = new RecyclerViewAdapter(EventActivity.this, similarEventList);
+                RecyclerViewAdapter adapter = new RecyclerViewAdapter(MyEventActivity.this, similarEventList);
                 recyclerView.setAdapter(adapter);
-                recyclerView.setLayoutManager(new LinearLayoutManager(EventActivity.this, LinearLayoutManager.HORIZONTAL, false));
+                recyclerView.setLayoutManager(new LinearLayoutManager(MyEventActivity.this, LinearLayoutManager.HORIZONTAL, false));
             }
 
             @Override

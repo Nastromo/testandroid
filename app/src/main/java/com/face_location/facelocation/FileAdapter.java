@@ -65,6 +65,9 @@ public class FileAdapter extends ArrayAdapter<Files> {
             }
 
             holder.name.setText(name);
+
+
+
             return convertView;
 
         }catch (IllegalArgumentException e){

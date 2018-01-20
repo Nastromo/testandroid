@@ -1,20 +1,31 @@
 package com.face_location.facelocation.model.PostLocalization;
 
+import com.face_location.facelocation.model.GetEvent.User;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class LocalizationResponse {
 
-    @SerializedName("success")
+    @SerializedName("user")
     @Expose
-    private Integer success;
+    private User user;
+    @SerializedName("status")
+    @Expose
+    private int status;
 
-    public Integer getSuccess() {
-        return success;
+    public User getUser() {
+        return user;
     }
 
-    public void setSuccess(Integer success) {
-        this.success = success;
+    public void setUser(User user) {
+        this.user = user;
     }
 
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
 }

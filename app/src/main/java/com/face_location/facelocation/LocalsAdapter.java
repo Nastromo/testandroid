@@ -7,9 +7,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.face_location.facelocation.model.DataBase.DataBaseHelper;
+import com.face_location.facelocation.model.FacelocationAPI;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by admin on 30.11.17.
@@ -20,17 +34,26 @@ public class LocalsAdapter extends ArrayAdapter<ChatUser> {
     private static final String TAG = "LocalsAdapter";
     private Context mContext;
     private int mResource;
+    String[] applicationData;
+    DataBaseHelper applicationDB;
+    String userID, eventID, url, token;
+    boolean isMyEventActivity;
+    ArrayList<ChatUser> chatUsers;
 
 
     private static class ViewHolder {
         TextView userName;
+        TextView someText;
+        ImageView imageView2, banUser;
     }
 
 
-    public LocalsAdapter(Context context, int resource, ArrayList<ChatUser> objects) {
-        super(context, resource, objects);
+    public LocalsAdapter(Context context, int resource, ArrayList<ChatUser> chatUsers, boolean isMyEventActivity) {
+        super(context, resource, chatUsers);
         mContext = context;
         mResource = resource;
+        this.isMyEventActivity = isMyEventActivity;
+        this.chatUsers = chatUsers;
     }
 
 
@@ -39,6 +62,21 @@ public class LocalsAdapter extends ArrayAdapter<ChatUser> {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         String userName = getItem(position).getName();
+        String userEmail = getItem(position).getEmail();
+        String userAvatar = getItem(position).getAvatar();
+        eventID = getItem(position).getEventID();
+        userID = chatUsers.get(position).getUserID();
+
+        applicationDB = DataBaseHelper.getInstance(getContext());
+        applicationData = applicationDB.retrieveFirstLoginValues();
+
+        url = "https://face-location.com/";
+        token = applicationData[5];
+
+
+        if (userName == null){
+            userName = "Ім'я не вказано";
+        }
 
         if (userName.length() > 25){
             userName = userName.substring(0, Math.min(userName.length(), 25)).trim() + "...";
@@ -56,6 +94,9 @@ public class LocalsAdapter extends ArrayAdapter<ChatUser> {
 
                 holder= new ViewHolder();
                 holder.userName = (TextView) convertView.findViewById(R.id.userName);
+                holder.someText = (TextView) convertView.findViewById(R.id.someText);
+                holder.imageView2 = (ImageView) convertView.findViewById(R.id.imageView2);
+                holder.banUser = (ImageView) convertView.findViewById(R.id.banUser);
 
                 convertView.setTag(holder);
 
@@ -65,22 +106,30 @@ public class LocalsAdapter extends ArrayAdapter<ChatUser> {
             }
 
             holder.userName.setText(userName);
+            holder.someText.setText(userEmail);
+            Glide
+                    .with(mContext)
+                    .load(userAvatar)
+                    .apply(RequestOptions
+                            .circleCropTransform())
+                    .into(holder.imageView2);
 
+            holder.banUser.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    banUser(userID, eventID);
+                }
+            });
 
-            //create the imageloader object
-//            ImageLoader imageLoader = ImageLoader.getInstance();
-//
-//            int defaultImage = mContext.getResources().getIdentifier("@drawable/image_failed",null,mContext.getPackageName());
-//
-//            //create display options
-//            DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
-//                    .cacheOnDisc(true).resetViewBeforeLoading(true)
-//                    .showImageForEmptyUri(defaultImage)
-//                    .showImageOnFail(defaultImage)
-//                    .showImageOnLoading(defaultImage).build();
-//
-//            //download and display image from url
-//            imageLoader.displayImage(imgUrl, holder.image, options);
+            if (isMyEventActivity){
+
+            }else {
+                holder.banUser.setVisibility(View.INVISIBLE);
+            }
+
+            if (position == 0){
+                holder.banUser.setVisibility(View.INVISIBLE);
+            }
 
             return convertView;
 
@@ -91,23 +140,35 @@ public class LocalsAdapter extends ArrayAdapter<ChatUser> {
 
     }
 
-    /**
-     * Required for setting up the Universal Image loader Library
-     */
-//    private void setupImageLoader(){
-//        // UNIVERSAL IMAGE LOADER SETUP
-//        DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
-//                .cacheOnDisc(true).cacheInMemory(true)
-//                .imageScaleType(ImageScaleType.EXACTLY)
-//                .displayer(new FadeInBitmapDisplayer(300)).build();
-//
-//        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
-//                mContext)
-//                .defaultDisplayImageOptions(defaultOptions)
-//                .memoryCache(new WeakMemoryCache())
-//                .discCacheSize(100 * 1024 * 1024).build();
-//
-//        ImageLoader.getInstance().init(config);
-//        // END - UNIVERSAL IMAGE LOADER SETUP
-//    }
+    private void banUser(final String userID, final String eventID){
+        Log.i(TAG, "ID ВНУТРИ МЕТОДА: " + userID);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(url)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+
+        FacelocationAPI api = retrofit.create(FacelocationAPI.class);
+
+        HashMap<String, String> headers = new HashMap<String, String>();
+        headers.put("Content-Type", "application/json");
+        headers.put("X-Auth", token);
+
+        Call<ResponseBody> call = api.userBan(headers, eventID, userID);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Log.i(TAG, "ЗАБАНИТЬ ЮЗЕРА: " + response.toString());
+                Log.i(TAG, "EVENTID ГДЕ ЕСТЬ БАНЫ: " + eventID);
+                Log.i(TAG, "ЗАБАНЕНЫЙ ЮЗЕР: " + userID);
+                Log.i(TAG, "ТОКЕН: " + token);
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.i(TAG, "ЗАБАНИТЬ ЮЗЕРА ОШИБКА: " + t.toString());
+
+            }
+        });
+    }
 }

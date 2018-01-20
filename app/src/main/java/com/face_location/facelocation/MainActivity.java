@@ -198,6 +198,7 @@ public class MainActivity extends AppCompatActivity
 
         String[] userInfo = applicationDB.retrieveFirstLoginValues();
         token = userInfo[5];
+        Log.i(TAG, "ТООООКЕН: " + token);
 
         FacelocationAPI api = retrofit.create(FacelocationAPI.class);
 
@@ -490,7 +491,6 @@ public class MainActivity extends AppCompatActivity
     public void onLocationChanged(Location location) {
 
         counter++;
-        Log.i(TAG, "ВЫЗВАЛСЯ onLocationChanged: " + counter);
         mLastLocation = location;
         if (mCurrLocationMarker != null) {
             mCurrLocationMarker.remove();

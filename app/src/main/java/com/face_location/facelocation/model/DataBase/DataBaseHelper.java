@@ -131,10 +131,8 @@ public class DataBaseHelper extends SQLiteOpenHelper{
         String orderBy = null;
 
         Cursor cursor = db.query(USER_DATA_TABLE, columns, selection, selectionArgs, groupBy, having, orderBy);
-        Log.i(TAG, "ЕСТЬ ЛИ СТРОКИ В ВЫБОРКЕ? - " + cursor.moveToFirst());
 
         if(cursor != null && cursor.getCount() > 0){
-            Log.i(TAG, "Сколько строк?: " + cursor.getCount());
             cursor.moveToFirst();
             userArrayData = new String[]{
                     cursor.getString(cursor.getColumnIndex(USER_ID)),           //0

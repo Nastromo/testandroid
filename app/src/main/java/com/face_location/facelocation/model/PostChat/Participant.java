@@ -1,13 +1,9 @@
-package com.face_location.facelocation.model.Registration;
-
-/**
- * Created by admin on 01.12.17.
- */
+package com.face_location.facelocation.model.PostChat;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class User {
+public class Participant {
 
     @SerializedName("_id")
     @Expose
@@ -15,22 +11,24 @@ public class User {
     @SerializedName("email")
     @Expose
     private String email;
-
-
     @SerializedName("avatar")
     @Expose
     private String avatar;
-
     @SerializedName("avatar_mob")
     @Expose
     private String avatarMob;
-
     @SerializedName("role")
     @Expose
     private String role;
     @SerializedName("status")
     @Expose
     private Integer status;
+    @SerializedName("hide")
+    @Expose
+    private Hide hide;
+    @SerializedName("username")
+    @Expose
+    private String username;
 
     public String getId() {
         return id;
@@ -56,6 +54,14 @@ public class User {
         this.avatar = avatar;
     }
 
+    public String getAvatarMob() {
+        return avatarMob;
+    }
+
+    public void setAvatarMob(String avatarMob) {
+        this.avatarMob = avatarMob;
+    }
+
     public String getRole() {
         return role;
     }
@@ -72,11 +78,20 @@ public class User {
         this.status = status;
     }
 
-    public String getAvatarMob() {
-        return avatarMob;
+    public Hide getHide() {
+        return hide;
     }
 
-    public void setAvatarMob(String avatarMob) {
-        this.avatarMob = avatarMob;
+    public void setHide(Hide hide) {
+        this.hide = hide;
     }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
 }

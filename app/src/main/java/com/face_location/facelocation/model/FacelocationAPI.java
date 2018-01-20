@@ -2,6 +2,7 @@ package com.face_location.facelocation.model;
 
 import com.face_location.facelocation.model.Events.MyEventResponse;
 import com.face_location.facelocation.model.GetEvent.EventResponse;
+import com.face_location.facelocation.model.GetMainChat.MainChatResponse;
 import com.face_location.facelocation.model.GetNearestEvents.NearestEventResponse;
 import com.face_location.facelocation.model.Issue.IssueBody;
 import com.face_location.facelocation.model.Location.LocationBody;
@@ -10,6 +11,8 @@ import com.face_location.facelocation.model.Location.LocationPutResponse;
 import com.face_location.facelocation.model.Location.LocationResponse;
 import com.face_location.facelocation.model.MyProfile.ProfileBody;
 import com.face_location.facelocation.model.MyProfile.ProfileResponse;
+import com.face_location.facelocation.model.PostChat.ChatBody;
+import com.face_location.facelocation.model.PostChat.ChatResponse;
 import com.face_location.facelocation.model.PostEvent.EventBody;
 import com.face_location.facelocation.model.PostLocalization.LocalizationBody;
 import com.face_location.facelocation.model.PostLocalization.LocalizationResponse;
@@ -167,9 +170,31 @@ public interface FacelocationAPI {
 
     //Localize User on Event
     @POST("api/events/{eventID}/activate")
-    Call<LocalizationResponse> localizUser(
+    Call <List<LocalizationResponse>> localizUser(
             @HeaderMap Map<String, String> headers,
             @Path("eventID") String eventID,
             @Body LocalizationBody body
+    );
+
+    //Ban user on event
+    @GET("api/events/{eventID}/ban/{userID}")
+    Call <ResponseBody> userBan(
+            @HeaderMap Map<String, String> headers,
+            @Path("eventID") String eventID,
+            @Path("userID") String userID
+    );
+
+    //Get Main Event Chat
+    @GET("api/chat/")
+    Call <List<MainChatResponse>> getMainChat(
+            @HeaderMap Map<String, String> headers,
+            @Query("event") String eventID
+    );
+
+    //Create chat
+    @POST("api/chat")
+    Call<ChatResponse> createChat(
+            @HeaderMap Map<String, String> headers,
+            @Body ChatBody body
     );
 }
