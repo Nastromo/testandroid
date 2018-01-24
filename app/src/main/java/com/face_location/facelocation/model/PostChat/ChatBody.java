@@ -6,11 +6,13 @@ package com.face_location.facelocation.model.PostChat;
 
 public class ChatBody {
     String title, event;
-    String[] users;
+    String[] user;
+    int type;
 
-    public ChatBody(String title, String event, String[] user) {
+    public ChatBody(String title, String event, String[] user, int type) {
         this.title = title;
         this.event = event;
-        this.users = user;
+        this.user = user;
+        this.type = type;
     }
 }

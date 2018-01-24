@@ -15,6 +15,8 @@ import com.face_location.facelocation.model.GetEvent.User;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 public class GroupChatUserChose extends AppCompatActivity {
 
@@ -27,7 +29,8 @@ public class GroupChatUserChose extends AppCompatActivity {
     private static final String TAG = "GroupChatUserChose";
     String chatName, eventID, url, token;
     String[] applicationData;
-    public static String[] usersIDs;
+    public static String[]usersIDarray;
+    public static Set usersIDs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,66 +85,20 @@ public class GroupChatUserChose extends AppCompatActivity {
 
     private void createGroupChat(HashMap<String, Boolean> checkedUsersID){
 
-        usersIDs = checkedUsersID.keySet().toArray(new String[checkedUsersID.size()]);
+        usersIDs = checkedUsersID.keySet();
+        List<String> idList = new ArrayList(usersIDs);
+        usersIDarray = new String[idList.size()];
+
+        for (int i = 0; i < idList.size(); i++) {
+            usersIDarray[i] = idList.get(i);
+        }
 
         Intent chatActivity = new Intent(GroupChatUserChose.this, ChatActivity.class);
         chatActivity.putExtra("chat_name", chatName);
-        chatActivity.putExtra("quantity", usersIDs.length);
+        chatActivity.putExtra("quantity", idList.size());
+        chatActivity.putExtra("eventID", eventID);
         startActivity(chatActivity);
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//    private void createGroupChat(HashMap<String, Boolean> checkedUsersID){
-//        Log.i(TAG, "ПРОВЕРЯЕМ ID перед созданием группового чата: " + checkedUsersID.size());
-//
-//        final String[] usersIDs = checkedUsersID.keySet().toArray(new String[checkedUsersID.size()]);
-//
-//        ChatBody chatBody = new ChatBody(chatName, eventID, usersIDs);
-//
-//        Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl(url)
-//                .addConverterFactory(GsonConverterFactory.create())
-//                .build();
-//
-//
-//        FacelocationAPI api = retrofit.create(FacelocationAPI.class);
-//
-//        HashMap<String, String> headers = new HashMap<String, String>();
-//        headers.put("Content-Type", "application/json");
-//        headers.put("X-Auth", token);
-//
-//        Call<ChatResponse> call = api.createChat(headers, chatBody);
-//        call.enqueue(new Callback<ChatResponse>() {
-//            @Override
-//            public void onResponse(Call<ChatResponse> call, Response<ChatResponse> response) {
-//                Log.i(TAG, "СОЗДАТЬ ГРУППОЙ ЧАТ " + response.toString());
-//
-//                if (response.code() == 200){
-//                    Intent chatActivity = new Intent(GroupChatUserChose.this, ChatActivity.class);
-//                    chatActivity.putExtra("chat_name", chatName);
-//                    chatActivity.putExtra("quantity", usersIDs.length);
-//                    startActivity(chatActivity);
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<ChatResponse> call, Throwable t) {
-//                Log.i(TAG, "onFailure: " + t.toString());
-//            }
-//        });
-//    }
 }

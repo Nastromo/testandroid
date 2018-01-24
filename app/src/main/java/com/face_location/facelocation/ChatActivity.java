@@ -35,8 +35,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.face_location.facelocation.GroupChatUserChose.usersIDs;
-
 public class ChatActivity extends AppCompatActivity {
 
     ImageView avatar;
@@ -69,6 +67,7 @@ public class ChatActivity extends AppCompatActivity {
         token = userArrayData[5];
         myID = userArrayData[0];
         userAvatar = userArrayData[10];
+        eventID = getIntent().getStringExtra("eventID");
 
         chatMessages.clear();
         senders.clear();
@@ -216,13 +215,16 @@ public class ChatActivity extends AppCompatActivity {
         headers.put("Content-Type", "application/json");
         headers.put("X-Auth", token);
 
-        ChatBody chatBody = new ChatBody(chatName, eventID, usersIDs);
+        Log.i(TAG, "АЙДИ ИВЕНТА В КОТОРОМ СОЗДАЕМ ЧАТ: " + eventID);
+        Log.i(TAG, "Список юзеров в чате: " + GroupChatUserChose.usersIDarray.length);
+
+        ChatBody chatBody = new ChatBody(chatName, eventID, GroupChatUserChose.usersIDarray, 2);
 
         Call<ChatResponse> call = api.createChat(headers, chatBody);
         call.enqueue(new Callback<ChatResponse>() {
             @Override
             public void onResponse(Call<ChatResponse> call, Response<ChatResponse> response) {
-                Log.i(TAG, "ОТВЕТ СЕРВЕРА - ПОЛУЧИТЬ ЧАТ: " + response.toString());
+                Log.i(TAG, "ОТВЕТ СЕРВЕРА - СОЗДАТЬ ЧАТ ГРУППОВОЙ: " + response.toString());
 
                 String chatID = response.body().getId();
 

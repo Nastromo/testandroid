@@ -183,7 +183,7 @@ public class ChatFragment extends Fragment {
         headers.put("Content-Type", "application/json");
         headers.put("X-Auth", token);
 
-        Call <List<MainChatResponse>> call = api.getMainChat(headers, eventID);
+        Call <List<MainChatResponse>> call = api.getChat(headers, eventID);
         call.enqueue(new Callback<List<MainChatResponse>>() {
             @Override
             public void onResponse(Call<List<MainChatResponse>> call, Response<List<MainChatResponse>> response) {
