@@ -9,9 +9,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -39,10 +39,16 @@ public class LocalsFragment extends Fragment{
 
     ListView groupList, localsList;
     ArrayList<User> parcelables;
-    String eventID, url, token;
+    String eventID, url, token, myID;
     String[] applicationData;
     View rootView;
-    LinearLayout groupLayout;
+    List<String> chatID;
+    ArrayList<String> usersIDS, groupChatNames;
+    ArrayList<Integer> quantitys;
+    List<ArrayList<String>> usersIDSarray;
+    String groupChatName;
+    int quantity;
+    ArrayList<ChatUser> users;
 
     private static final String TAG = "LocalsFragment";
 
@@ -59,6 +65,7 @@ public class LocalsFragment extends Fragment{
         DataBaseHelper applicationDB = DataBaseHelper.getInstance(getContext());
         applicationData = applicationDB.retrieveFirstLoginValues();
         token = applicationData[5];
+        myID = applicationData[0];
 
         FloatingActionButton createGroupChatFab = (FloatingActionButton) rootView.findViewById(R.id.createGroupChatFab);
         createGroupChatFab.setOnClickListener(new View.OnClickListener() {
@@ -98,7 +105,7 @@ public class LocalsFragment extends Fragment{
             }
         });
 
-        ArrayList<ChatUser> users = new ArrayList<>();
+        users = new ArrayList<>();
 
         getGroupChatList();
 
@@ -117,6 +124,33 @@ public class LocalsFragment extends Fragment{
         localsList = (ListView) rootView.findViewById(R.id.localsListView);
         LocalsAdapter localsAdapter = new LocalsAdapter(getContext(), R.layout.locals_card, users, isMyEventActivity);
         localsList.setAdapter(localsAdapter);
+
+        final ArrayList<User> newParcelables = new ArrayList<>();
+        for (int i = 0; i < parcelables.size(); i++) {
+            if (parcelables.get(i).getStatus() != 1){
+                newParcelables.add(parcelables.get(i));
+            }
+        }
+
+
+        localsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                ArrayList<String> usersIDS = new ArrayList<>();
+                usersIDS.add(myID);
+                usersIDS.add(users.get(i).getUserID());
+
+                Intent chatActivity = new Intent(getContext(), ChatActivity.class);
+                chatActivity.putStringArrayListExtra("usersIDS", usersIDS);
+                chatActivity.putExtra("eventID", eventID);
+                chatActivity.putExtra("chat_name", newParcelables.get(i).getEmail());
+                chatActivity.putExtra("quantity", 3);
+                chatActivity.putExtra("isNewChat", true);
+                chatActivity.putExtra("one_on_one", true);
+                startActivity(chatActivity);
+            }
+        });
 
         return rootView;
     }
@@ -141,21 +175,39 @@ public class LocalsFragment extends Fragment{
                 ArrayList<Group> groups = new ArrayList<>();
                 List<MainChatResponse> chatResponses = response.body();
 
+                chatID = new ArrayList<>();
+                usersIDS = new ArrayList<>();
+                usersIDSarray = new ArrayList<>();
+                groupChatNames = new ArrayList<>();
+                quantitys = new ArrayList<>();
+
                 for (int i = 0; i < chatResponses.size(); i++) {
                     MainChatResponse chatResponseBody = chatResponses.get(i);
                     if (chatResponseBody.getType() == 2){
-                        String groupChatName = chatResponseBody.getTitle();
+                        groupChatName = chatResponseBody.getTitle();
+                        quantity = chatResponseBody.getParticipants().size();
+
+                        Log.i(TAG, "ID ГРУППОВОГО ЧАТА: " + chatResponseBody.getId());
+
+                        chatID.add(chatResponseBody.getId());
 
                         StringBuilder stringBuilder = new StringBuilder();
+                        String groupChatUserId;
                         for (int j = 0; j < chatResponseBody.getParticipants().size(); j++) {
+                            groupChatUserId = chatResponseBody.getParticipants().get(j).getId();
                             stringBuilder.append(chatResponseBody.getParticipants().get(j).getEmail());
                             stringBuilder.append(" ");
+                            usersIDS.add(groupChatUserId);
                         }
+
+                        usersIDSarray.add(usersIDS);
+                        groupChatNames.add(groupChatName);
+                        quantitys.add(quantity);
 
                         String groupMembers = stringBuilder.toString();
                         Log.i(TAG, "УЧАСНИКИ ЧАТА: " + groupMembers);
 
-                        Group group = new Group(groupChatName, groupMembers);
+                        Group group = new Group(groupChatName, groupMembers, chatResponseBody.getParticipants().size());
                         groups.add(group);
                     }
                 }
@@ -163,6 +215,20 @@ public class LocalsFragment extends Fragment{
                 groupList = (ListView) rootView.findViewById(R.id.groupsListView);
                 GroupAdapter groupAdapter = new GroupAdapter(getContext(), R.layout.group_card, groups);
                 groupList.setAdapter(groupAdapter);
+
+                groupList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        Intent chatActivity = new Intent(getContext(), ChatActivity.class);
+                        chatActivity.putExtra("chatID", chatID.get(i));
+                        chatActivity.putStringArrayListExtra("usersIDS", usersIDSarray.get(i));
+                        chatActivity.putExtra("eventID", eventID);
+                        chatActivity.putExtra("chat_name", groupChatNames.get(i));
+                        chatActivity.putExtra("quantity", quantitys.get(i));
+                        chatActivity.putExtra("isNewChat", false);
+                        startActivity(chatActivity);
+                    }
+                });
             }
 
             @Override

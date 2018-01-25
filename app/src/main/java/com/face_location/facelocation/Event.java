@@ -7,7 +7,7 @@ import java.util.List;
  */
 
 public class Event {
-    String name, about, status;
+    String name, about, status, id;
     int userQuantity;
     List<String> avatars;
 
@@ -15,6 +15,15 @@ public class Event {
         this.name = name;
         this.about = about;
         this.status = status;
+        this.userQuantity = userQuantity;
+        this.avatars = avatars;
+    }
+
+    public Event(String name, String about, String status, int userQuantity, List<String> avatars, String id) {
+        this.name = name;
+        this.about = about;
+        this.status = status;
+        this.id = id;
         this.userQuantity = userQuantity;
         this.avatars = avatars;
     }
@@ -64,5 +73,13 @@ public class Event {
 
     public void setAvatars(List<String> avatars) {
         this.avatars = avatars;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

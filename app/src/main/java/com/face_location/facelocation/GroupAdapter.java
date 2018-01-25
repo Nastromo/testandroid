@@ -20,6 +20,7 @@ public class GroupAdapter extends ArrayAdapter<Group> {
     private static final String TAG = "LocalsAdapter";
     private Context mContext;
     private int mResource;
+    private ArrayList<Group> groupChatUsers;
 
 
     private static class ViewHolder {
@@ -31,6 +32,7 @@ public class GroupAdapter extends ArrayAdapter<Group> {
         super(context, resource, groupChatUsers);
         mContext = context;
         mResource = resource;
+        this.groupChatUsers = groupChatUsers;
     }
 
 
@@ -74,7 +76,7 @@ public class GroupAdapter extends ArrayAdapter<Group> {
 
             holder.groupName.setText(groupName);
             holder.membersRaw.setText(membersRaw);
-            holder.membersQuantity.setText(String.valueOf(membersQuantity));
+            holder.membersQuantity.setText(String.valueOf(membersQuantity - 1));
 
             return convertView;
 

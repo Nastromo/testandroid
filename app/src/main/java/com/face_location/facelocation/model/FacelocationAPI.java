@@ -184,7 +184,7 @@ public interface FacelocationAPI {
             @Path("userID") String userID
     );
 
-    //Get Chat
+    //Get Main Event Chat
     @GET("api/chat")
     Call <List<MainChatResponse>> getChat(
             @HeaderMap Map<String, String> headers,
@@ -196,5 +196,12 @@ public interface FacelocationAPI {
     Call<ChatResponse> createChat(
             @HeaderMap Map<String, String> headers,
             @Body ChatBody body
+    );
+
+    //Get Main Event Chat
+    @GET("api/chat/")
+    Call <List<MainChatResponse>> getChatByID(
+            @HeaderMap Map<String, String> headers,
+            @Query("chatID") String chatID
     );
 }

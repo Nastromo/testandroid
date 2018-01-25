@@ -16,6 +16,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.face_location.facelocation.model.DataBase.DataBaseHelper;
 import com.face_location.facelocation.model.FacelocationAPI;
+import com.face_location.facelocation.model.GetMainChat.MainChatResponse;
+import com.face_location.facelocation.model.GetMainChat.Message;
 import com.face_location.facelocation.model.PostChat.ChatBody;
 import com.face_location.facelocation.model.PostChat.ChatResponse;
 import com.github.nkzawa.emitter.Emitter;
@@ -53,8 +55,10 @@ public class ChatActivity extends AppCompatActivity {
     List<String> chatMessages = new ArrayList<>();
     List<String> senders = new ArrayList<>();
     List<String> avatars = new ArrayList<>();
+    List<String> usersIDS = new ArrayList<>();
 
     com.github.nkzawa.socketio.client.Socket socket;
+    int type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +71,11 @@ public class ChatActivity extends AppCompatActivity {
         token = userArrayData[5];
         myID = userArrayData[0];
         userAvatar = userArrayData[10];
+        chatID = getIntent().getStringExtra("chatID");
         eventID = getIntent().getStringExtra("eventID");
+        usersIDS = getIntent().getStringArrayListExtra("usersIDS");
+        Log.i(TAG, "ДЛИННА ЛИСТА usersIDS: " + usersIDS.size());
+        Log.i(TAG, "ID ГРУППВОГО ЧАТА ПОЛУЧЕННОЕ С ЭКСТРА: " + chatID);
 
         chatMessages.clear();
         senders.clear();
@@ -110,7 +118,7 @@ public class ChatActivity extends AppCompatActivity {
         eventName.setText(chatName);
 
         usersQuantity = (TextView) findViewById(R.id.usersQuantity);
-        usersQuantity.setText(String.valueOf(getIntent().getIntExtra("quantity", -1)));
+        usersQuantity.setText(String.valueOf(getIntent().getIntExtra("quantity", -1) - 1));
 
         messageEditText = (EditText) findViewById(R.id.messageEditText);
 
@@ -120,7 +128,26 @@ public class ChatActivity extends AppCompatActivity {
             Log.i(TAG, "ОШИБКА СОКЕТА: ");
         }
 
-        createChat();
+        boolean isNewChat = getIntent().getBooleanExtra("isNewChat", true);
+        Log.i(TAG, "ПРИШЕЛ С ЛОКАЛАЙЗЕД?: " + isNewChat);
+
+        boolean isOneOnOne = getIntent().getBooleanExtra("one_on_one", true);
+
+        if (isNewChat){
+            Log.i(TAG, "isNewChat: " + isNewChat);
+            if (isOneOnOne){
+                Log.i(TAG, "isOneOnOne: " + isOneOnOne);
+                createChat();
+                type = 1;
+            }else {
+                createChat();
+                type = 2;
+            }
+        }else {
+            Log.i(TAG, "ID которое прошло в элсе: " + chatID);
+            getChat();
+        }
+
 
         sendBtn = (Button) findViewById(R.id.sendBtn);
         sendBtn.setOnClickListener(new View.OnClickListener() {
@@ -216,18 +243,25 @@ public class ChatActivity extends AppCompatActivity {
         headers.put("X-Auth", token);
 
         Log.i(TAG, "АЙДИ ИВЕНТА В КОТОРОМ СОЗДАЕМ ЧАТ: " + eventID);
-        Log.i(TAG, "Список юзеров в чате: " + GroupChatUserChose.usersIDarray.length);
+        Log.i(TAG, "Список юзеров в чате: " + usersIDS.size());
 
-        ChatBody chatBody = new ChatBody(chatName, eventID, GroupChatUserChose.usersIDarray, 2);
+        String[] usersIDarray = new String[usersIDS.size()];
+
+        for (int i = 0; i < usersIDS.size(); i++) {
+            usersIDarray[i] = usersIDS.get(i);
+        }
+
+        ChatBody chatBody = new ChatBody(chatName, eventID, usersIDarray, type);
 
         Call<ChatResponse> call = api.createChat(headers, chatBody);
         call.enqueue(new Callback<ChatResponse>() {
             @Override
             public void onResponse(Call<ChatResponse> call, Response<ChatResponse> response) {
-                Log.i(TAG, "ОТВЕТ СЕРВЕРА - СОЗДАТЬ ЧАТ ГРУППОВОЙ: " + response.toString());
+                Log.i(TAG, "ОТВЕТ СЕРВЕРА - СОЗДАТЬ ЧАТ: " + type + " " + response.toString());
 
-                String chatID = response.body().getId();
+                chatID = response.body().getId();
 
+                socket.connect();
                 JSONObject chatRoom = new JSONObject();
                 try {
                     chatRoom.put("chat", chatID);
@@ -236,28 +270,6 @@ public class ChatActivity extends AppCompatActivity {
                     Log.i(TAG, "ОШИБКА СОЗДАНИЯ JSON: " + e.toString());
                 }
                 socket.emit("join", chatRoom);
-
-//                List<Message> messages = response.body().getMessages();
-//
-//                String userID;
-//                String userMessage;
-//                String userAvatar;
-//
-//                for (int j = 0; j < messages.size(); j++) {
-//                    Message message = messages.get(j);
-//
-//                    userID = message.getUser().getId();
-//                    Log.i(TAG, "ID ЮЕЗАРА В ЧАТЕ: " + userID);
-//                    senders.add(userID);
-//
-//                    userMessage = message.getText();
-//                    Log.i(TAG, "СООБЩЕНИЕ ЮЕЗАРА В ЧАТЕ: " + userMessage);
-//                    chatMessages.add(userMessage);
-//
-//                    userAvatar = message.getUser().getAvatarMob();
-//                    Log.i(TAG, "АВАТАР ЮЕЗАРА В ЧАТЕ: " + userAvatar);
-//                    avatars.add(userAvatar);
-//                }
 
                 recyclerView = (RecyclerView) findViewById(R.id.mainChat);
                 adapter = new ChatAdapter(chatMessages, senders, avatars, myID);
@@ -271,6 +283,81 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<ChatResponse> call, Throwable t) {
                 Log.i(TAG, "ОШИБКА НА ПОЛУЧЕНИЕ НОВОГО ЧАТА: " + t.toString());
+
+            }
+        });
+    }
+
+    private void getChat(){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(url)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        FacelocationAPI api = retrofit.create(FacelocationAPI.class);
+
+        HashMap<String, String> headers = new HashMap<String, String>();
+        headers.put("Content-Type", "application/json");
+        headers.put("X-Auth", token);
+
+        Call <List<MainChatResponse>> call = api.getChatByID(headers, chatID);
+        call.enqueue(new Callback<List<MainChatResponse>>() {
+            @Override
+            public void onResponse(Call<List<MainChatResponse>> call, Response<List<MainChatResponse>> response) {
+                Log.i(TAG, "ОТВЕТ СЕРВЕРА - ПОЛУЧИТЬ ГРУППОВОЙ ЧАТ: " + response.toString());
+                List<MainChatResponse> chatResponse = response.body();
+
+                for (int i = 0; i < chatResponse.size(); i++) {
+                    MainChatResponse mainChat = chatResponse.get(i);
+
+                    if (mainChat.getId().equals(chatID)){
+                        socket.connect();
+                        JSONObject chatRoom = new JSONObject();
+                        try {
+                            chatRoom.put("chat", chatID);
+                            chatRoom.put("user", myID);
+                        } catch (JSONException e) {
+                            Log.i(TAG, "ОШИБКА СОЗДАНИЯ JSON: " + e.toString());
+                        }
+                        socket.emit("join", chatRoom);
+
+                        List<Message> messages = mainChat.getMessages();
+
+                        String userID;
+                        String userMessage;
+                        String userAvatar;
+
+                        for (int j = 0; j < messages.size(); j++) {
+                            Message message = messages.get(j);
+
+                            userID = message.getUser().getId();
+                            Log.i(TAG, "ID ЮЕЗАРА В ЧАТЕ: " + userID);
+                            senders.add(userID);
+
+                            userMessage = message.getText();
+                            Log.i(TAG, "СООБЩЕНИЕ ЮЕЗАРА В ЧАТЕ: " + userMessage);
+                            chatMessages.add(userMessage);
+
+                            userAvatar = message.getUser().getAvatarMob();
+                            Log.i(TAG, "АВАТАР ЮЕЗАРА В ЧАТЕ: " + userAvatar);
+                            avatars.add(userAvatar);
+                        }
+
+                        recyclerView = (RecyclerView) findViewById(R.id.mainChat);
+                        adapter = new ChatAdapter(chatMessages, senders, avatars, myID);
+                        recyclerView.setAdapter(adapter);
+
+                        manager = new LinearLayoutManager(ChatActivity.this);
+                        recyclerView.setLayoutManager(manager);
+                        recyclerView.scrollToPosition(chatMessages.size() - 1);
+
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<MainChatResponse>> call, Throwable t) {
+                Log.i(TAG, "ОШИБКА НА ПОЛУЧЕНИЕ ГРУППОВОГО ЧАТА: " + t.toString());
 
             }
         });

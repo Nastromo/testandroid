@@ -15,7 +15,6 @@ import com.face_location.facelocation.model.GetEvent.User;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 public class GroupChatUserChose extends AppCompatActivity {
@@ -29,7 +28,7 @@ public class GroupChatUserChose extends AppCompatActivity {
     private static final String TAG = "GroupChatUserChose";
     String chatName, eventID, url, token;
     String[] applicationData;
-    public static String[]usersIDarray;
+    public static String[] usersIDarray;
     public static Set usersIDs;
 
     @Override
@@ -86,7 +85,7 @@ public class GroupChatUserChose extends AppCompatActivity {
     private void createGroupChat(HashMap<String, Boolean> checkedUsersID){
 
         usersIDs = checkedUsersID.keySet();
-        List<String> idList = new ArrayList(usersIDs);
+        ArrayList<String> idList = new ArrayList(usersIDs);
         usersIDarray = new String[idList.size()];
 
         for (int i = 0; i < idList.size(); i++) {
@@ -97,6 +96,7 @@ public class GroupChatUserChose extends AppCompatActivity {
         chatActivity.putExtra("chat_name", chatName);
         chatActivity.putExtra("quantity", idList.size());
         chatActivity.putExtra("eventID", eventID);
+        chatActivity.putStringArrayListExtra("usersIDS", idList);
         startActivity(chatActivity);
     }
 
