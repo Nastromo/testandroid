@@ -131,7 +131,7 @@ public class ChatActivity extends AppCompatActivity {
         boolean isNewChat = getIntent().getBooleanExtra("isNewChat", true);
         Log.i(TAG, "ПРИШЕЛ С ЛОКАЛАЙЗЕД?: " + isNewChat);
 
-        boolean isOneOnOne = getIntent().getBooleanExtra("one_on_one", true);
+        boolean isOneOnOne = getIntent().getBooleanExtra("one_on_one", false);
 
         if (isNewChat){
             Log.i(TAG, "isNewChat: " + isNewChat);
@@ -270,6 +270,30 @@ public class ChatActivity extends AppCompatActivity {
                     Log.i(TAG, "ОШИБКА СОЗДАНИЯ JSON: " + e.toString());
                 }
                 socket.emit("join", chatRoom);
+
+                List<Message> messages = response.body().getMessages();
+
+                String userID;
+                String userMessage;
+                String userAvatar;
+
+                if (!messages.isEmpty()){
+                    for (int j = 0; j < messages.size(); j++) {
+                        Message message = messages.get(j);
+
+                        userID = message.getUser().getId();
+                        Log.i(TAG, "ID ЮЕЗАРА В ЧАТЕ: " + userID);
+                        senders.add(userID);
+
+                        userMessage = message.getText();
+                        Log.i(TAG, "СООБЩЕНИЕ ЮЕЗАРА В ЧАТЕ: " + userMessage);
+                        chatMessages.add(userMessage);
+
+                        userAvatar = message.getUser().getAvatarMob();
+                        Log.i(TAG, "АВАТАР ЮЕЗАРА В ЧАТЕ: " + userAvatar);
+                        avatars.add(userAvatar);
+                    }
+                }
 
                 recyclerView = (RecyclerView) findViewById(R.id.mainChat);
                 adapter = new ChatAdapter(chatMessages, senders, avatars, myID);
