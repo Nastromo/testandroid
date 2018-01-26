@@ -260,6 +260,7 @@ public class ChatActivity extends AppCompatActivity {
 
                 chatID = response.body().getId();
                 Log.i(TAG, "ТАЙП В СОЗДАНОМ ЧАТЕ: " + type);
+                Log.i(TAG, "ID ЧАТА КОТОРИЙ ВЕРНУЛСЯ: " + chatID);
 
                 socket.connect();
                 JSONObject chatRoom = new JSONObject();
