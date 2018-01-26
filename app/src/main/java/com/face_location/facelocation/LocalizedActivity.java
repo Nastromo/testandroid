@@ -152,6 +152,4 @@ public class LocalizedActivity extends AppCompatActivity {
                 return 4;
             }
     }
-
-
 }

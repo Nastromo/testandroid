@@ -5,25 +5,17 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.face_location.facelocation.model.DataBase.DataBaseHelper;
-import com.face_location.facelocation.model.FacelocationAPI;
 import com.face_location.facelocation.model.GetEvent.User;
-import com.face_location.facelocation.model.PostChat.ChatBody;
-import com.face_location.facelocation.model.PostChat.ChatResponse;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+import java.util.Iterator;
+import java.util.Set;
 
 public class GroupChatUserChose extends AppCompatActivity {
 
@@ -36,6 +28,8 @@ public class GroupChatUserChose extends AppCompatActivity {
     private static final String TAG = "GroupChatUserChose";
     String chatName, eventID, url, token;
     String[] applicationData;
+    public static String[] usersIDarray;
+    public static Set usersIDs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +41,15 @@ public class GroupChatUserChose extends AppCompatActivity {
         token = applicationData[5];
 
         localizedUsers = getIntent().getParcelableArrayListExtra("data");
+
+        Iterator<User> iterUser = localizedUsers.iterator();
+        while(iterUser.hasNext()){
+            User user = iterUser.next();
+            if (user.getStatus() == 1){
+                iterUser.remove();
+            }
+        }
+
         chatName = getIntent().getStringExtra("chat_name");
         eventID = getIntent().getStringExtra("eventID");
         url = getString(R.string.base_url);
@@ -80,42 +83,22 @@ public class GroupChatUserChose extends AppCompatActivity {
     }
 
     private void createGroupChat(HashMap<String, Boolean> checkedUsersID){
-        Log.i(TAG, "ПРОВЕРЯЕМ ID перед созданием группового чата: " + checkedUsersID.size());
 
-        final String[] usersIDs = checkedUsersID.keySet().toArray(new String[checkedUsersID.size()]);
+        usersIDs = checkedUsersID.keySet();
+        ArrayList<String> idList = new ArrayList(usersIDs);
+        usersIDarray = new String[idList.size()];
 
-        ChatBody chatBody = new ChatBody(chatName, eventID, usersIDs);
+        for (int i = 0; i < idList.size(); i++) {
+            usersIDarray[i] = idList.get(i);
+        }
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(url)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-
-        FacelocationAPI api = retrofit.create(FacelocationAPI.class);
-
-        HashMap<String, String> headers = new HashMap<String, String>();
-        headers.put("Content-Type", "application/json");
-        headers.put("X-Auth", token);
-
-        Call<ChatResponse> call = api.createChat(headers, chatBody);
-        call.enqueue(new Callback<ChatResponse>() {
-            @Override
-            public void onResponse(Call<ChatResponse> call, Response<ChatResponse> response) {
-                Log.i(TAG, "СОЗДАТЬ ГРУППОЙ ЧАТ " + response.toString());
-
-                if (response.code() == 200){
-                    Intent chatActivity = new Intent(GroupChatUserChose.this, ChatActivity.class);
-                    chatActivity.putExtra("chat_name", chatName);
-                    chatActivity.putExtra("quantity", usersIDs.length);
-                    startActivity(chatActivity);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ChatResponse> call, Throwable t) {
-                Log.i(TAG, "onFailure: " + t.toString());
-            }
-        });
+        Intent chatActivity = new Intent(GroupChatUserChose.this, ChatActivity.class);
+        chatActivity.putExtra("chat_name", chatName);
+        chatActivity.putExtra("quantity", idList.size());
+        chatActivity.putExtra("eventID", eventID);
+        chatActivity.putStringArrayListExtra("usersIDS", idList);
+        startActivity(chatActivity);
     }
+
+
 }

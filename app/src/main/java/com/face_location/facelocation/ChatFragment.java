@@ -183,7 +183,7 @@ public class ChatFragment extends Fragment {
         headers.put("Content-Type", "application/json");
         headers.put("X-Auth", token);
 
-        Call <List<MainChatResponse>> call = api.getMainChat(headers, eventID);
+        Call <List<MainChatResponse>> call = api.getChat(headers, eventID);
         call.enqueue(new Callback<List<MainChatResponse>>() {
             @Override
             public void onResponse(Call<List<MainChatResponse>> call, Response<List<MainChatResponse>> response) {
@@ -216,15 +216,12 @@ public class ChatFragment extends Fragment {
                             Message message = messages.get(j);
 
                             userID = message.getUser().getId();
-                            Log.i(TAG, "ID ЮЕЗАРА В ЧАТЕ: " + userID);
                             senders.add(userID);
 
                             userMessage = message.getText();
-                            Log.i(TAG, "СООБЩЕНИЕ ЮЕЗАРА В ЧАТЕ: " + userMessage);
                             chatMessages.add(userMessage);
 
                             userAvatar = message.getUser().getAvatarMob();
-                            Log.i(TAG, "АВАТАР ЮЕЗАРА В ЧАТЕ: " + userAvatar);
                             avatars.add(userAvatar);
                         }
 

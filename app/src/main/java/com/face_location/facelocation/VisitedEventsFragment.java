@@ -38,7 +38,7 @@ public class VisitedEventsFragment extends Fragment{
 
     ListView listView;
     private static final String TAG = "VisitedEventsFragment";
-    String url, token, name, about, statusString, eventStartTime;
+    String url, token, name, about, statusString, eventStartTime, eventID;
     int status;
     String[] applicationData;
     ArrayList<Event> events;
@@ -98,6 +98,7 @@ public class VisitedEventsFragment extends Fragment{
                 for (MyEventResponse event: myEvents){
                     name = event.getTitle();
                     about = event.getText();
+                    eventID = event.getId();
                     List<Subscriber> subscribers = event.getSubscribers();
 
                     subscribersAvatars = new ArrayList<>();
@@ -132,7 +133,7 @@ public class VisitedEventsFragment extends Fragment{
 
 
                     }
-                    events.add(new Event(name, about, statusString, subscribers.size(), subscribersAvatars));
+                    events.add(new Event(name, about, statusString, subscribers.size(), subscribersAvatars, eventID));
                 }
 
                 Log.i(TAG, "РАЗМЕР EVENTS: " + events.size());
@@ -144,8 +145,9 @@ public class VisitedEventsFragment extends Fragment{
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        Intent eventdActivity = new Intent(getContext(), EventActivity.class);
-                        startActivity(eventdActivity);
+                        Intent eventActivity = new Intent(getContext(), EventActivity.class);
+                        eventActivity.putExtra("id", events.get(i).getId());
+                        startActivity(eventActivity);
                     }
                 });
             }

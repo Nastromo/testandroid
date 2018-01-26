@@ -20,6 +20,7 @@ public class GroupAdapter extends ArrayAdapter<Group> {
     private static final String TAG = "LocalsAdapter";
     private Context mContext;
     private int mResource;
+    private ArrayList<Group> groupChatUsers;
 
 
     private static class ViewHolder {
@@ -27,10 +28,11 @@ public class GroupAdapter extends ArrayAdapter<Group> {
     }
 
 
-    public GroupAdapter(Context context, int resource, ArrayList<Group> objects) {
-        super(context, resource, objects);
+    public GroupAdapter(Context context, int resource, ArrayList<Group> groupChatUsers) {
+        super(context, resource, groupChatUsers);
         mContext = context;
         mResource = resource;
+        this.groupChatUsers = groupChatUsers;
     }
 
 
@@ -44,8 +46,8 @@ public class GroupAdapter extends ArrayAdapter<Group> {
         }
 
         String membersRaw = getItem(position).getGroupMembers();
-        if (membersRaw.length() > 25){
-            membersRaw = membersRaw.substring(0, Math.min(membersRaw.length(), 25)).trim() + "...";
+        if (membersRaw.length() > 20){
+            membersRaw = membersRaw.substring(0, Math.min(membersRaw.length(), 20)).trim() + "...";
         }
 
         int membersQuantity = getItem(position).getMembersQuantity();

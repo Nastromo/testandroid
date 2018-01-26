@@ -1,5 +1,6 @@
 package com.face_location.facelocation.model.PostChat;
 
+import com.face_location.facelocation.model.GetMainChat.Message;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -24,7 +25,7 @@ public class ChatResponse {
     private String createdAt;
     @SerializedName("messages")
     @Expose
-    private List<Object> messages = null;
+    private List<Message> messages = null;
     @SerializedName("participants")
     @Expose
     private List<Participant> participants = null;
@@ -81,11 +82,11 @@ public class ChatResponse {
         this.createdAt = createdAt;
     }
 
-    public List<Object> getMessages() {
+    public List<Message> getMessages() {
         return messages;
     }
 
-    public void setMessages(List<Object> messages) {
+    public void setMessages(List<Message> messages) {
         this.messages = messages;
     }
 

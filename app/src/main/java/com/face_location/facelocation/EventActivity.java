@@ -411,7 +411,7 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
 
             @Override
             public void onFailure(Call<EventResponse> call, Throwable t) {
-                Log.i(TAG, "onFailure: " + t.toString());
+                Log.i(TAG, "onFailure getEvent(): " + t.toString());
             }
         });
     }
@@ -480,7 +480,7 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
 
             @Override
             public void onFailure(Call<List<EventResponse>> call, Throwable t) {
-                Log.i(TAG, "onFailure: " + t.toString());
+                Log.i(TAG, "onFailure getSimilarEvent: " + t.toString());
             }
         });
     }
