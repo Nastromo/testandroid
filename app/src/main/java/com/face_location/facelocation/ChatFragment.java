@@ -216,15 +216,12 @@ public class ChatFragment extends Fragment {
                             Message message = messages.get(j);
 
                             userID = message.getUser().getId();
-                            Log.i(TAG, "ID ЮЕЗАРА В ЧАТЕ: " + userID);
                             senders.add(userID);
 
                             userMessage = message.getText();
-                            Log.i(TAG, "СООБЩЕНИЕ ЮЕЗАРА В ЧАТЕ: " + userMessage);
                             chatMessages.add(userMessage);
 
                             userAvatar = message.getUser().getAvatarMob();
-                            Log.i(TAG, "АВАТАР ЮЕЗАРА В ЧАТЕ: " + userAvatar);
                             avatars.add(userAvatar);
                         }
 

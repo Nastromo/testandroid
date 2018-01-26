@@ -76,7 +76,7 @@ public class GroupAdapter extends ArrayAdapter<Group> {
 
             holder.groupName.setText(groupName);
             holder.membersRaw.setText(membersRaw);
-            holder.membersQuantity.setText(String.valueOf(membersQuantity - 1));
+            holder.membersQuantity.setText(String.valueOf(membersQuantity));
 
             return convertView;
 

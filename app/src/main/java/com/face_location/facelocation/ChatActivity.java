@@ -74,8 +74,6 @@ public class ChatActivity extends AppCompatActivity {
         chatID = getIntent().getStringExtra("chatID");
         eventID = getIntent().getStringExtra("eventID");
         usersIDS = getIntent().getStringArrayListExtra("usersIDS");
-        Log.i(TAG, "ДЛИННА ЛИСТА usersIDS: " + usersIDS.size());
-        Log.i(TAG, "ID ГРУППВОГО ЧАТА ПОЛУЧЕННОЕ С ЭКСТРА: " + chatID);
 
         chatMessages.clear();
         senders.clear();
@@ -118,7 +116,7 @@ public class ChatActivity extends AppCompatActivity {
         eventName.setText(chatName);
 
         usersQuantity = (TextView) findViewById(R.id.usersQuantity);
-        usersQuantity.setText(String.valueOf(getIntent().getIntExtra("quantity", -1) - 1));
+        usersQuantity.setText(String.valueOf(getIntent().getIntExtra("quantity", -1)));
 
         messageEditText = (EditText) findViewById(R.id.messageEditText);
 
@@ -129,19 +127,19 @@ public class ChatActivity extends AppCompatActivity {
         }
 
         boolean isNewChat = getIntent().getBooleanExtra("isNewChat", true);
-        Log.i(TAG, "ПРИШЕЛ С ЛОКАЛАЙЗЕД?: " + isNewChat);
-
         boolean isOneOnOne = getIntent().getBooleanExtra("one_on_one", false);
 
         if (isNewChat){
             Log.i(TAG, "isNewChat: " + isNewChat);
             if (isOneOnOne){
                 Log.i(TAG, "isOneOnOne: " + isOneOnOne);
-                createChat();
                 type = 1;
-            }else {
                 createChat();
+                usersQuantity.setText(String.valueOf(2));
+            }else {
                 type = 2;
+                createChat();
+                Log.i(TAG, "СРАБОТАЛО СОЗДАТЬ ГРУППОВОЙ ЧАТ: " + type);
             }
         }else {
             Log.i(TAG, "ID которое прошло в элсе: " + chatID);
@@ -244,6 +242,7 @@ public class ChatActivity extends AppCompatActivity {
 
         Log.i(TAG, "АЙДИ ИВЕНТА В КОТОРОМ СОЗДАЕМ ЧАТ: " + eventID);
         Log.i(TAG, "Список юзеров в чате: " + usersIDS.size());
+        Log.i(TAG, "ТАЙП ЦІФРА: " + type);
 
         String[] usersIDarray = new String[usersIDS.size()];
 
@@ -260,6 +259,7 @@ public class ChatActivity extends AppCompatActivity {
                 Log.i(TAG, "ОТВЕТ СЕРВЕРА - СОЗДАТЬ ЧАТ: " + type + " " + response.toString());
 
                 chatID = response.body().getId();
+                Log.i(TAG, "ТАЙП В СОЗДАНОМ ЧАТЕ: " + type);
 
                 socket.connect();
                 JSONObject chatRoom = new JSONObject();

@@ -59,8 +59,6 @@ public class GroupChatAdapter extends RecyclerView.Adapter<GroupChatAdapter.View
             }
         }
 
-        Log.i(TAG, "Длинна старого списка: " + localizedUsers.size());
-        Log.i(TAG, "Длинна нового списка: " + cutedLocalizedUsers.size());
 
         return new GroupChatAdapter.ViewHolder(view);
     }

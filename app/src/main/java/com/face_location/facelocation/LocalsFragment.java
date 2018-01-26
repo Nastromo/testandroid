@@ -182,20 +182,24 @@ public class LocalsFragment extends Fragment{
                 quantitys = new ArrayList<>();
 
                 for (int i = 0; i < chatResponses.size(); i++) {
-                    MainChatResponse chatResponseBody = chatResponses.get(i);
-                    if (chatResponseBody.getType() == 2){
-                        groupChatName = chatResponseBody.getTitle();
-                        quantity = chatResponseBody.getParticipants().size();
+                    MainChatResponse groupResponseBody = chatResponses.get(i);
 
-                        Log.i(TAG, "ID ГРУППОВОГО ЧАТА: " + chatResponseBody.getId());
+                    Log.i(TAG, "ТАЙП В ПОЛУЧЕННОМ ЧАТЕ: " + groupResponseBody.getType());
 
-                        chatID.add(chatResponseBody.getId());
+
+                    if (groupResponseBody.getType() == 2){
+                        groupChatName = groupResponseBody.getTitle();
+                        quantity = groupResponseBody.getParticipants().size();
+
+                        Log.i(TAG, "ID ГРУППОВОГО ЧАТА: " + groupResponseBody.getId());
+
+                        chatID.add(groupResponseBody.getId());
 
                         StringBuilder stringBuilder = new StringBuilder();
                         String groupChatUserId;
-                        for (int j = 0; j < chatResponseBody.getParticipants().size(); j++) {
-                            groupChatUserId = chatResponseBody.getParticipants().get(j).getId();
-                            stringBuilder.append(chatResponseBody.getParticipants().get(j).getEmail());
+                        for (int j = 0; j < groupResponseBody.getParticipants().size(); j++) {
+                            groupChatUserId = groupResponseBody.getParticipants().get(j).getId();
+                            stringBuilder.append(groupResponseBody.getParticipants().get(j).getEmail());
                             stringBuilder.append(" ");
                             usersIDS.add(groupChatUserId);
                         }
@@ -207,7 +211,7 @@ public class LocalsFragment extends Fragment{
                         String groupMembers = stringBuilder.toString();
                         Log.i(TAG, "УЧАСНИКИ ЧАТА: " + groupMembers);
 
-                        Group group = new Group(groupChatName, groupMembers, chatResponseBody.getParticipants().size());
+                        Group group = new Group(groupChatName, groupMembers, groupResponseBody.getParticipants().size());
                         groups.add(group);
                     }
                 }

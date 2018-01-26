@@ -9,17 +9,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.face_location.facelocation.model.DataBase.DataBaseHelper;
 import com.face_location.facelocation.model.FacelocationAPI;
 import com.face_location.facelocation.model.Issue.IssueBody;
-import com.face_location.facelocation.model.MyProfile.ProfileBody;
-import com.face_location.facelocation.model.MyProfile.ProfileResponse;
 
 import java.util.HashMap;
 
