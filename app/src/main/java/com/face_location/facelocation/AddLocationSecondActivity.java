@@ -38,6 +38,7 @@ public class AddLocationSecondActivity extends AppCompatActivity implements View
     public static final String LOCATION_LONGITUDE = "longitude";
     String locationID;
     private static final String TAG = "AddLocationSecond";
+    boolean isForEdit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,20 +60,9 @@ public class AddLocationSecondActivity extends AppCompatActivity implements View
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        //Read from SharedPreferences file
-//        TextView textView2 = (TextView) findViewById(R.id.textView2);
-//        SharedPreferences sharedPref = getSharedPreferences(AddLocationFirstActivity.FILE_LOCATION_DETAILS, Context.MODE_PRIVATE);
-//        String savedValue = sharedPref.getString(AddLocationFirstActivity.LOCATION_TITLE, "Ничего нету");
-//        textView2.setText(savedValue);
+        isForEdit = getIntent().getBooleanExtra("from_my_location_activity", false);
+        Log.i(TAG, "(2 ШАГ) ПРИШЛИ С ЭКРАНА МОИ ЛОКАЦИИ?: " + isForEdit);
 
-        //Converts bytes to Bitmap
-//        byte[] bytesArray = readBytesFromFile(AddLocationFirstActivity.imgFilePath);
-//        Bitmap decodedByte = BitmapFactory.decodeByteArray(bytesArray, 0, bytesArray.length);
-
-        //Display the Bitmap as an ImageView
-//        ImageView imageView2 = (ImageView) findViewById(R.id.imageView2);
-//        imageView2.setImageBitmap(decodedByte);
-//        imageView2.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -86,6 +76,9 @@ public class AddLocationSecondActivity extends AppCompatActivity implements View
                 // TODO need to add logic for cheking if there are marker coordinates
                 Intent thirdStep = new Intent(this, AddLocationThirdActivity.class);
                 thirdStep.putExtra("id", locationID);
+                if (isForEdit){
+                    thirdStep.putExtra("from_my_location_activity", true);
+                }
                 startActivity(thirdStep);
                 break;
 
@@ -93,7 +86,7 @@ public class AddLocationSecondActivity extends AppCompatActivity implements View
                 //Getting autocomplete overlay for geo search
                 try {
                     Intent intent =
-                            new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN) //TODO remove this comment before Release: don't change MODE_FULLSCREEN on MODE_OVERLAY
+                            new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
                                     .build(this);
                     startActivityForResult(intent, MainActivity.PLACE_AUTOCOMPLETE_REQUEST_CODE);
                 } catch (GooglePlayServicesRepairableException e) {
@@ -108,7 +101,8 @@ public class AddLocationSecondActivity extends AppCompatActivity implements View
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 //        mMap.setOnMapLongClickListener(this);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(MainActivity.mDefaultLocation, MainActivity.DEFAULT_ZOOM));
+        final LatLng mDefaultLocation = new LatLng(50.40, 30.39);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, 5));
 
     }
 

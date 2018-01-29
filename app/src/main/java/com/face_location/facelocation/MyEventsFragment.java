@@ -120,15 +120,6 @@ public class MyEventsFragment extends Fragment {
                             break;
 
                         case 2:
-//                            eventStartTime = event.getScheduleTime().getStart();
-//                            Log.i(TAG, "ВРЕМЯ ПОЛУЧИЛ: " + eventStartTime);
-//
-//                            String dateTime = "2017-08-23T08:08:00Z"; //TODO всавить сюда eventStartTime, когда сервер будет возвращать правильную дату
-//                            DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ssZ");
-//                            DateTime jodatime = dtf.parseDateTime(dateTime);
-//                            DateTimeFormatter dtfOut = DateTimeFormat.forPattern("dd.MM.yyyy");
-//
-//                            Log.i(TAG, "ПЕРЕФОРМАТИРОВАЛ: " + dtfOut.print(jodatime));
                             statusString = getString(R.string.will_be);
                     }
                     events.add(new Event(name, about, statusString, subscribers.size(), subscribersAvatars));

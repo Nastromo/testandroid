@@ -23,6 +23,8 @@ public class NewEventFifthActivity extends AppCompatActivity implements View.OnC
     public static final String EVENT_END_DATE = "end";
     public static final String TAG = "newEvent";
     String startDate, endDate;
+    boolean isForEdit;
+    TextView titleForNewLocationAddingTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +61,12 @@ public class NewEventFifthActivity extends AppCompatActivity implements View.OnC
         Log.i(TAG, "ДАТА: " + endYear + " " + endMonth + " " + endDay);
         endDate = createEndDate(endYear, endMonth, endDay);
         calendarEnd.setOnDateChangeListener(this);
+
+        isForEdit = getIntent().getBooleanExtra("from_my_event_activity", false);
+        if (isForEdit){
+            titleForNewLocationAddingTextView = (TextView) findViewById(R.id.titleForNewLocationAddingTextView);
+            titleForNewLocationAddingTextView.setText(R.string.edit_event);
+        }
     }
 
     @Override
@@ -143,6 +151,9 @@ public class NewEventFifthActivity extends AppCompatActivity implements View.OnC
                 editor.commit();
 
                 Intent newEventSixthActivity = new Intent (this, NewEventSixthActivity.class);
+                if (isForEdit){
+                    newEventSixthActivity.putExtra("from_my_event_activity", true);
+                }
                 startActivity(newEventSixthActivity);
                 break;
 

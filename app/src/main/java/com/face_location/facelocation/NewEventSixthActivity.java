@@ -47,6 +47,8 @@ public class NewEventSixthActivity extends AppCompatActivity implements View.OnC
     File image;
     private static final String NEW_EVENT_ID = "new_event_id";
     boolean published = true;
+    boolean isForEdit;
+    TextView titleForNewLocationAddingTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +70,12 @@ public class NewEventSixthActivity extends AppCompatActivity implements View.OnC
         createEvent.setOnClickListener(this);
 
         url = getString(R.string.base_url);
+
+        isForEdit = getIntent().getBooleanExtra("from_my_event_activity", false);
+        if (isForEdit){
+            titleForNewLocationAddingTextView = (TextView) findViewById(R.id.titleForNewLocationAddingTextView);
+            titleForNewLocationAddingTextView.setText(R.string.edit_event);
+        }
     }
 
     @Override

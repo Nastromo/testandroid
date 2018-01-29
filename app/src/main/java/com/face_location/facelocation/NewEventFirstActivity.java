@@ -17,9 +17,8 @@ public class NewEventFirstActivity extends AppCompatActivity implements View.OnC
 
     EditText eventName;
     Button cancelEventCreation, successEventCreation;
-//    final CharSequence[] items = {"Red", "Green", "Blue"}; //For AlertDialog
     Spinner spinnerEventType;
-    TextView buttonBackView;
+    TextView buttonBackView, addNewEventTitle;
     int type;
 
     private static final String TAG = "newEvent";
@@ -29,6 +28,7 @@ public class NewEventFirstActivity extends AppCompatActivity implements View.OnC
     public static final String EVENT_TYPE = "type";
     public static final String EVENT_LOCATION_ID = "location_id";
     String locationID;
+    boolean isForEdit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +61,12 @@ public class NewEventFirstActivity extends AppCompatActivity implements View.OnC
         myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerEventType.setAdapter(myAdapter);
 
+        isForEdit = getIntent().getBooleanExtra("from_my_event_activity", false);
+        if (isForEdit){
+            addNewEventTitle = (TextView) findViewById(R.id.addNewEventTitle);
+            addNewEventTitle.setText(R.string.edit_event);
+        }
+
     }
 
     @Override
@@ -74,8 +80,6 @@ public class NewEventFirstActivity extends AppCompatActivity implements View.OnC
 
           case R.id.successEventCreation:
               String titleEvent = eventName.getText().toString().trim();
-              Log.i(TAG, "Название события: " + titleEvent);
-
               String typeEvent = spinnerEventType.getSelectedItem().toString();
               type = 57;
               switch (typeEvent){
@@ -121,19 +125,11 @@ public class NewEventFirstActivity extends AppCompatActivity implements View.OnC
               editor.commit();
 
               Intent secondStepEventCreation = new Intent(this, NewEventSecondActivity.class);
+              if (isForEdit){
+                  secondStepEventCreation.putExtra("from_my_event_activity", true);
+              }
               startActivity(secondStepEventCreation);
               break;
-
-                //AlertDialog
-//              AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//              builder.setTitle("Pick a color");
-//              builder.setItems(items, new DialogInterface.OnClickListener() {
-//                  public void onClick(DialogInterface dialog, int item) {
-//                      Toast.makeText(getApplicationContext(), items[item], Toast.LENGTH_SHORT).show();
-//                  }
-//              });
-//              AlertDialog alert = builder.create();
-//              alert.show();
       }
     }
 }

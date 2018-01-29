@@ -12,8 +12,9 @@ import android.widget.TextView;
 
 public class NewEventSecondActivity extends AppCompatActivity implements View.OnClickListener{
 
-    TextView btnBackView, forwardButtonView;
+    TextView btnBackView, forwardButtonView, titleForNewLocationAddingTextView;
     EditText somethingAbout;
+    boolean isForEdit;
 
     //TODO проверить чтобы все ключи в файле FILE_EVENT_DETAILS и FILE_LOCATION_DETAILS были уникальными
     public static final String EVENT_ABOUT = "about_event";
@@ -31,6 +32,12 @@ public class NewEventSecondActivity extends AppCompatActivity implements View.On
         forwardButtonView.setOnClickListener(this);
 
         somethingAbout = (EditText) findViewById(R.id.somethingAbout);
+
+        isForEdit = getIntent().getBooleanExtra("from_my_event_activity", false);
+        if (isForEdit){
+            titleForNewLocationAddingTextView = (TextView) findViewById(R.id.titleForNewLocationAddingTextView);
+            titleForNewLocationAddingTextView.setText(R.string.edit_event);
+        }
 
     }
 
@@ -53,6 +60,9 @@ public class NewEventSecondActivity extends AppCompatActivity implements View.On
                 editor.commit();
 
                 Intent newEventThirdActivity = new Intent (this, NewEventThirdActivity.class);
+                if (isForEdit){
+                    newEventThirdActivity.putExtra("from_my_event_activity", true);
+                }
                 startActivity(newEventThirdActivity);
                 break;
         }

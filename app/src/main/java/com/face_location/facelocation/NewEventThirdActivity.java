@@ -46,6 +46,8 @@ public class NewEventThirdActivity extends AppCompatActivity implements View.OnC
     DataBaseHelper applicationDB;
     String[] userArrayData;
     Intent getIntent, chooserIntent;
+    boolean isForEdit;
+    TextView titleForNewLocationAddingTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +78,12 @@ public class NewEventThirdActivity extends AppCompatActivity implements View.OnC
                 getResources().getStringArray(R.array.event_publicity));
         myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerEventPublicity.setAdapter(myAdapter);
+
+        isForEdit = getIntent().getBooleanExtra("from_my_event_activity", false);
+        if (isForEdit){
+            titleForNewLocationAddingTextView = (TextView) findViewById(R.id.titleForNewLocationAddingTextView);
+            titleForNewLocationAddingTextView.setText(R.string.edit_event);
+        }
     }
 
     @Override
@@ -104,18 +112,15 @@ public class NewEventThirdActivity extends AppCompatActivity implements View.OnC
                 editor.commit();
 
                 Intent newEventFourthActivity = new Intent(this, NewEventFourthActivity.class);
+                if (isForEdit){
+                    newEventFourthActivity.putExtra("from_my_event_activity", true);
+                }
                 startActivity(newEventFourthActivity);
                 break;
 
             case R.id.buttonChosePhoto:
                 ActivityCompat.requestPermissions(NewEventThirdActivity.this,
                         new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},1);
-
-
-//                Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
-//                getIntent.setType("image/*");
-//                Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
-//                startActivityForResult(chooserIntent, PICK_IMAGE);
         }
     }
     @Override

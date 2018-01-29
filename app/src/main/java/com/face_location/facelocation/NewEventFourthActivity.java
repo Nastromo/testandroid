@@ -22,6 +22,8 @@ public class NewEventFourthActivity extends AppCompatActivity implements View.On
     public static final String EVENT_PERIOD = "frequency";
 //    ImageView imageView2;
     int frequency;
+    boolean isForEdit;
+    TextView titleForNewLocationAddingTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,16 +47,11 @@ public class NewEventFourthActivity extends AppCompatActivity implements View.On
 
         placesQuantity = (EditText) findViewById(R.id.placesQuantity);
 
-        //Show saved images from byte array
-//        imageView2 = (ImageView) findViewById(R.id.imageView2);
-//
-//        //Converts bytes to Bitmap
-//                byte[] bytesArray = readBytesFromFile(NewEventThirdActivity.imgFilePath);
-//                Bitmap decodedByte = BitmapFactory.decodeByteArray(bytesArray, 0, bytesArray.length);
-//
-//                //Display the Bitmap as an ImageView
-//                imageView2.setImageBitmap(decodedByte);
-//                imageView2.setVisibility(View.VISIBLE);
+        isForEdit = getIntent().getBooleanExtra("from_my_event_activity", false);
+        if (isForEdit){
+            titleForNewLocationAddingTextView = (TextView) findViewById(R.id.titleForNewLocationAddingTextView);
+            titleForNewLocationAddingTextView.setText(R.string.edit_event);
+        }
     }
 
     @Override
@@ -98,39 +95,11 @@ public class NewEventFourthActivity extends AppCompatActivity implements View.On
                 editor.commit();
 
                 Intent newEventFifthActivity = new Intent(this, NewEventFifthActivity.class);
+                if (isForEdit){
+                    newEventFifthActivity.putExtra("from_my_event_activity", true);
+                }
                 startActivity(newEventFifthActivity);
         }
     }
-
-    // delete after tests
-//    private static byte[] readBytesFromFile(String filePath) {
-//
-//        FileInputStream fileInputStream = null;
-//        byte[] bytesArray = null;
-//
-//        try {
-//
-//            Files file = new Files(filePath);
-//            bytesArray = new byte[(int) file.length()];
-//
-//            //read file into bytes[]
-//            fileInputStream = new FileInputStream(file);
-//            fileInputStream.read(bytesArray);
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } finally {
-//            if (fileInputStream != null) {
-//                try {
-//                    fileInputStream.close();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-//
-//        return bytesArray;
-//
-//    }
 }
 

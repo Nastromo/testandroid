@@ -186,5 +186,7 @@
     <string name="chose_users">Виберіть учасників чату</string>
     <string name="ban_notofocation">Ви були заблоковані на цьому івенті</string>
     <string name="group_chats">ГРУПОВІ ЧАТИ</string>
+    <string name="edit_location">Редагувати локацію</string>
+    <string name="edit_event">Редагувати подію</string>
 
 </resources>

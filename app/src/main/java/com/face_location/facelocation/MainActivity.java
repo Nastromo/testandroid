@@ -128,7 +128,6 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Intent newLocation = new Intent(getApplicationContext(), AddLocationFirstActivity.class);
                 startActivity(newLocation);
             }
@@ -198,7 +197,7 @@ public class MainActivity extends AppCompatActivity
 
         String[] userInfo = applicationDB.retrieveFirstLoginValues();
         token = userInfo[5];
-        Log.i(TAG, "ТООООКЕН: " + token);
+        Log.i(TAG, "ТОКЕН ЮЗЕРА ПРИ ВХОДЕ: " + token);
 
         FacelocationAPI api = retrofit.create(FacelocationAPI.class);
 
@@ -254,7 +253,7 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onFailure(Call<List<NearestEventResponse>> call, Throwable t) {
-                Log.i(TAG, "onFailure: ++++++++" + t.toString());
+                Log.i(TAG, "ОШИБКА ПОЛУЧАНИЯ БЛИЖАЙШИХ ЛОКАЦИЙ НА КАРТЕ" + t.toString());
             }
         });
 
@@ -274,10 +273,8 @@ public class MainActivity extends AppCompatActivity
                     Glide
                             .with(MainActivity.this)
                             .load(userAvatar)
-                            .thumbnail(0.1f) //shows mini image which weight 0.1 from real image while real image is downloading
-                            .apply(RequestOptions
-                                    .circleCropTransform())
-//                            .placeholder(R.drawable.oval)) //shows drawable while real/mini image is downloading
+                            .thumbnail(0.1f)
+                            .apply(RequestOptions.circleCropTransform())
                             .into(myProfileImageView);
                 }
             }
@@ -420,15 +417,18 @@ public class MainActivity extends AppCompatActivity
                         Manifest.permission.ACCESS_FINE_LOCATION)
                         == PackageManager.PERMISSION_GRANTED) {
                     String eventID = marker.getSnippet();
-                    Intent eventActivity = new Intent(MainActivity.this, EventActivity.class);
-                    Log.i(TAG, "onMarkerClick EVENTID: " + eventID);
-                    eventActivity.putExtra("id", eventID);
-                    eventActivity.putExtra("latitude", latitude);
-                    eventActivity.putExtra("longitude", longitude);
-                    startActivity(eventActivity);
+                    Log.i(TAG, "СНИПЕТ МАРКЕРА НА КОТОРЫЙ НАЖАЛИ: " + eventID);
+
+                    if (eventID != null){
+                        Intent eventActivity = new Intent(MainActivity.this, EventActivity.class);
+                        Log.i(TAG, "ID ИВЕНТА НА КОТОРЫЙ НАЖАЛИ: " + eventID);
+                        eventActivity.putExtra("id", eventID);
+                        eventActivity.putExtra("latitude", latitude);
+                        eventActivity.putExtra("longitude", longitude);
+                        startActivity(eventActivity);
+                    }
                     return true;
                 } else {
-                    //Request LocationForAdapter Permission
                     checkLocationPermission();
                 }
                 return true;
@@ -706,15 +706,6 @@ public class MainActivity extends AppCompatActivity
         if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 Place place = PlaceAutocomplete.getPlace(this, data);
-
-                //TODO Delete this block off code
-                // Uncomment this if you need LocationForAdapter Title and details
-//                placeNameString = place.getName().toString();
-//                placeAddressString =  place.getAddress().toString();
-//
-//                placeName.setText(placeNameString);
-//                placeAddress.setText(placeAddressString);
-
                 LatLng toLatLng = place.getLatLng();
 
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(toLatLng, DEFAULT_ZOOM));
