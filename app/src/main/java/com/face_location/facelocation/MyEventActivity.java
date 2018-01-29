@@ -73,6 +73,7 @@ public class MyEventActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onClick(View view) {
                 Intent editEvent = new Intent(MyEventActivity.this, SearchLocationActivity.class);
+                editEvent.putExtra("from_my_event_activity", true);
                 startActivity(editEvent);
             }
         });

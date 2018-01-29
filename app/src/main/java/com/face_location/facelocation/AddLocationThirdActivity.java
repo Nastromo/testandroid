@@ -13,12 +13,13 @@ import android.widget.TextView;
 
 public class AddLocationThirdActivity extends AppCompatActivity implements View.OnClickListener {
 
-    TextView backButtonView, forwardButtonView;
+    TextView backButtonView, forwardButtonView, titleForNewLocationAddingTextView;
     ImageView cancel;
     EditText somethingAbout;
     public static final String LOCATION_ABOUT = "text";
     String locationID;
     private static final String TAG = "AddLocationThird";
+    boolean isForEdit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,13 @@ public class AddLocationThirdActivity extends AppCompatActivity implements View.
         forwardButtonView.setOnClickListener(this);
 
         somethingAbout = (EditText) findViewById(R.id.somethingAbout);
+
+        isForEdit = getIntent().getBooleanExtra("from_my_location_activity", false);
+        Log.i(TAG, "(3 ШАГ) ПРИШЛИ С ЭКРАНА МОИ ЛОКАЦИИ?: " + isForEdit);
+        if (isForEdit){
+            titleForNewLocationAddingTextView = (TextView) findViewById(R.id.titleForNewLocationAddingTextView);
+            titleForNewLocationAddingTextView.setText(R.string.edit_location);
+        }
     }
 
     @Override
@@ -58,6 +66,9 @@ public class AddLocationThirdActivity extends AppCompatActivity implements View.
 
                 Intent fourthStep = new Intent(this, AddLocationFourthActivity.class);
                 fourthStep.putExtra("id", locationID);
+                if (isForEdit){
+                    fourthStep.putExtra("from_my_location_activity", true);
+                }
                 startActivity(fourthStep);
                 break;
             case R.id.cancel:

@@ -24,13 +24,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class SearchLocationActivity extends AppCompatActivity implements View.OnClickListener{
 
-    TextView buttonBackView, locationTitleSearch, locationAbout, enterTitleLocationTip;
+    TextView buttonBackView, locationTitleSearch, locationAbout, enterTitleLocationTip, titleForNewLocationAddingTextView;
     EditText newLocationTitle;
     Button buttonSearch;
     public static final String TAG = "SearchLocationActivity";
     String url, searchedLocationTitle;
     Intent newEventFirstActivity;
     String locationID;
+    boolean isForEdit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +63,12 @@ public class SearchLocationActivity extends AppCompatActivity implements View.On
                 searchLocation();
             }
         });
+
+        isForEdit = getIntent().getBooleanExtra("from_my_event_activity", false);
+        if (isForEdit){
+            titleForNewLocationAddingTextView = (TextView) findViewById(R.id.titleForNewLocationAddingTextView);
+            titleForNewLocationAddingTextView.setText(R.string.edit_event);
+        }
     }
 
     public void searchLocation(){
@@ -131,11 +138,17 @@ public class SearchLocationActivity extends AppCompatActivity implements View.On
             case R.id.locationTitleSearch:
                 newEventFirstActivity = new Intent(this, NewEventFirstActivity.class);
                 newEventFirstActivity.putExtra("locationID", locationID);
+                if (isForEdit){
+                    newEventFirstActivity.putExtra("from_my_event_activity", true);
+                }
                 startActivity(newEventFirstActivity);
 
             case R.id.locationAbout:
                 newEventFirstActivity = new Intent(this, NewEventFirstActivity.class);
                 newEventFirstActivity.putExtra("locationID", locationID);
+                if (isForEdit){
+                    newEventFirstActivity.putExtra("from_my_event_activity", true);
+                }
                 startActivity(newEventFirstActivity);
         }
     }

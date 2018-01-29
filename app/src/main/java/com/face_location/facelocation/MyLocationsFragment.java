@@ -114,6 +114,7 @@ public class MyLocationsFragment extends Fragment {
                         Log.i(TAG, "РАЗМЕР СПИСКА: " + locationID.size());
                         Intent addLocationFirstActivity = new Intent(getContext(), AddLocationFirstActivity.class);
                         addLocationFirstActivity.putExtra("id", locationID.get(i));
+                        addLocationFirstActivity.putExtra("from_my_location_activity", true);
                         startActivity(addLocationFirstActivity);
                     }
                 });
